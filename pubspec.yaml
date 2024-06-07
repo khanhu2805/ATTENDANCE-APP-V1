@@ -41,10 +41,23 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   iconsax: ^0.0.8
+  google_fonts: ^6.2.1
 
   #State management
   get: ^4.6.5
   get_storage: ^2.1.1
+  lottie: ^3.1.2
+  connectivity_plus: ^6.0.3
+
+  #Firebase
+  firebase_core: ^3.0.0
+  firebase_auth: ^5.0.0
+  cloud_firestore: ^5.0.0
+  firebase_storage: ^12.0.0
+
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -72,6 +85,8 @@ flutter:
     - assets/logos/
 #    - assets/icons/
     - assets/images/on_boarding/
+    - assets/images/content/
+    - assets/images/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -87,22 +102,39 @@ flutter:
   fonts:
      - family: BeVietnamPro
        fonts:
-         - asset: assets/font/BeVietnamPro-Light.ttf
+         - asset: assets/font/bevietnampro/BeVietnamPro-Light.ttf
            weight: 300
-         - asset: assets/font/BeVietnamPro-Regular.ttf
+         - asset: assets/font/bevietnampro/BeVietnamPro-Regular.ttf
            weight: 400
-         - asset: assets/font/BeVietnamPro-Italic.ttf
+         - asset: assets/font/bevietnampro/BeVietnamPro-Italic.ttf
            style: italic
-         - asset: assets/font/BeVietnamPro-Medium.ttf
+         - asset: assets/font/bevietnampro/BeVietnamPro-Medium.ttf
            weight: 500
-         - asset: assets/font/BeVietnamPro-MediumItalic.ttf
+         - asset: assets/font/bevietnampro/BeVietnamPro-MediumItalic.ttf
            weight: 500
            style: italic
-         - asset: assets/font/BeVietnamPro-SemiBold.ttf
+         - asset: assets/font/bevietnampro/BeVietnamPro-SemiBold.ttf
            weight: 600
-         - asset: assets/font/BeVietnamPro-Bold.ttf
+         - asset: assets/font/bevietnampro/BeVietnamPro-Bold.ttf
            weight: 800
 
+     - family: Urbanist
+       fonts:
+         - asset: assets/font/urbanist/Urbanist-Light.ttf
+           weight: 300
+         - asset: assets/font/urbanist/Urbanist-Regular.ttf
+           weight: 400
+         - asset: assets/font/urbanist/Urbanist-Italic.ttf
+           style: italic
+         - asset: assets/font/urbanist/Urbanist-Medium.ttf
+           weight: 500
+         - asset: assets/font/urbanist/Urbanist-MediumItalic.ttf
+           weight: 500
+           style: italic
+         - asset: assets/font/urbanist/Urbanist-SemiBold.ttf
+           weight: 600
+         - asset: assets/font/urbanist/Urbanist-Bold.ttf
+           weight: 800
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
