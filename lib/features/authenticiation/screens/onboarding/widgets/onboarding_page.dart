@@ -20,14 +20,14 @@ class OnBoardingPage extends StatelessWidget {
           children: [
             Image(
               image: AssetImage(image),
-              width: DeviceUtils.getScreenWidth() * 0.8,
-              height: DeviceUtils.getScreenHeight() * 0.6,
+              width: DeviceUtils.getScreenWidth()/2,
+              height: DeviceUtils.getScreenHeight()/3,
             ),
             Text(title,
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center),
             Text(subTitle,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center)
           ],
         ));
