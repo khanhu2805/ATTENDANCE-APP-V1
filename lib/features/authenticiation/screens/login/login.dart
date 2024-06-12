@@ -15,17 +15,19 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: Header_Login.paddingwithAppBarHeight,
-            child: Column(
-                children: [
-                  TLoginHeader(),
-                  TLoginForm(),
-                  TFormDivider(dividerText: AppTexts.orSignInWith),
-                  const SizedBox(height: AppSizes.spaceBtwSections),
-                  AppSocialButtons(),
-                ]
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: Header_Login.paddingwithAppBarHeight,
+              child: Column(
+                  children: [
+                    TLoginHeader(),
+                    TLoginForm(),
+                    TFormDivider(dividerText: AppTexts.orSignInWith),
+                    SizedBox(height: AppSizes.spaceBtwSections),
+                    AppSocialButtons(),
+                  ]
+              ),
             ),
           ),
         )

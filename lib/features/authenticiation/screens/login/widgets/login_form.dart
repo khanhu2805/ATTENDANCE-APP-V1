@@ -62,10 +62,10 @@ class TLoginForm extends StatelessWidget {
                     const Text(AppTexts.rememberMe),
                   ],
                 ),
-                TextButton(onPressed: () {}, child: const Text(AppTexts.forgetPassword))
               ],
             ),
-            const SizedBox(height: AppSizes.spaceBtwSections),
+            TextButton(onPressed: () {}, child: const Text(AppTexts.forgetPassword)),
+            const SizedBox(height: AppSizes.spaceBtwItems),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

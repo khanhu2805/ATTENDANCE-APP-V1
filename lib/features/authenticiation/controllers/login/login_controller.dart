@@ -25,8 +25,8 @@ class LoginController extends GetxController{
     super.onInit();
     // Retrieve default values (if any)
     Get.lazyPut(() => NetworkManager());
-    email.text = localStorage.read("REMEMBER_ME_EMAIL") ?? "admin1@gmail.com";
-    password.text = localStorage.read("REMEMBER_ME_PASSWORD") ?? "Thanh123.";
+    email.text = localStorage.read("REMEMBER_ME_EMAIL") ?? "";
+    password.text = localStorage.read("REMEMBER_ME_PASSWORD") ?? "";
   }
   Future<void> emailAndPasswordSignIn() async {
     try {
