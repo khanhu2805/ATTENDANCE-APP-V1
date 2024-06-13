@@ -6,7 +6,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../../features/action/screens/home/home_screen.dart';
 import '../../features/authenticiation/screens/login/login.dart';
 import '../../features/authenticiation/screens/onboarding/onboarding.dart';
 import '../exceptions/firebase_auth_exceptions.dart';
