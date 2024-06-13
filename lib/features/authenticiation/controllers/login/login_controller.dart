@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ class LoginController extends GetxController{
   }
   Future<void> emailAndPasswordSignIn() async {
     try {
-      TFullScreenLoader.openLoadingDialog("Logging you in...", AppImages.docerAnimation);
+      TFullScreenLoader.openLoadingDialog("Đang đăng nhập ...", AppImages.securityAnimation);
       if (!loginFormKey.currentState!.validate()){
         TFullScreenLoader.stopLoading();
         return;

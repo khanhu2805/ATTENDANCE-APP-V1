@@ -12,15 +12,16 @@ class TFullScreenLoader {
       barrierDismissible: false,
       builder: (_) => PopScope(
         canPop: false,
-        child: Container(
-          color: THelperFunctions.isDarkMode(Get.context!) ? AppColors.dark : Colors.white,
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              const SizedBox(height: 250),
-              TAnimationLoaderWidget(text: text, animation: animation),
-            ],
+        child: SafeArea(
+          child: Container(
+            color: THelperFunctions.isDarkMode(Get.context!) ? AppColors.dark : Colors.white,
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              children: [
+                TAnimationLoaderWidget(text: text, animation: animation),
+              ],
+            ),
           ),
         ),
       ),

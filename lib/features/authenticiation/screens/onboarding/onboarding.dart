@@ -6,6 +6,7 @@ import 'package:fe_attendance_app/features/authenticiation/screens/onboarding/wi
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class OnBoardingScreeen extends StatelessWidget {
@@ -45,12 +46,16 @@ class OnBoardingScreeen extends StatelessWidget {
                   ],
                 ),
               ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  OnBoardingDotNavigation(),
-                  OnBoardingNextButton(),
-                ],
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    OnBoardingDotNavigation(),
+                    OnBoardingNextButton(),
+                  ],
+                ),
               ),
             ],
           ),

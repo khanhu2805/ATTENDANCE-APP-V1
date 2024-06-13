@@ -23,9 +23,11 @@ class OnBoardingPage extends StatelessWidget {
               width: DeviceUtils.getScreenWidth()/2,
               height: DeviceUtils.getScreenHeight()/3,
             ),
+            const SizedBox(height: 10.0,),
             Text(title,
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center),
+            const SizedBox(height: 10.0,),
             Text(subTitle,
                 style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center)
