@@ -19,6 +19,7 @@ class MicrosoftControlller extends GetxController {
   Future<void> signInWithMicrosoft() async {
     final provider = OAuthProvider('microsoft.com');
     provider.setCustomParameters({
+      'prompt': 'consent',
       'tenant': '98ada680-e3f4-48cb-8fbb-c8b10cb97aed',
     });
     final scopes = [
