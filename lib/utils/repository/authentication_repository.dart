@@ -1,3 +1,4 @@
+import 'package:fe_attendance_app/features/main_feature/screens/home/home_screen.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,6 +24,10 @@ class AuthenticationRepository extends GetxController {
   void onReady() {
     FlutterNativeSplash.remove();
     screenRedirect();
+  }
+
+  Future<void> logout() async {
+    await _auth.signOut();
   }
 
   void screenRedirect() async{
