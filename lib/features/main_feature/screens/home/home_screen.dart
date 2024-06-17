@@ -1,13 +1,12 @@
 import 'dart:async';
+import 'package:fe_attendance_app/features/main_feature/controllers/home/home_controller.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
-import '../checkin/checkin_screen.dart';
-import '../log/log_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Timer? _timer;
   late final PageController pageController;
   late NavigationController navigationController;
-
+  late HomeController homeController;
+  late final FirebaseAuth auth;
   void startTime() {
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (pageController.page == description.length - 1) {
@@ -43,6 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     navigationController = NavigationController.instance;
     pageController = PageController(initialPage: 0);
+    homeController = Get.put(HomeController());
+    auth = FirebaseAuth.instance;
     description = [
       '\u2022 Ứng dụng yêu cầu kết nối internet để đồng bộ dữ liệu.\n\u2022 Hãy chắc chắn rằng thiết bị của thầy cô luôn có kết nối mạng ổn định khi sử dụng ứng dụng.',
       '\u2022 Tuân thủ các quy trình và chính sách về điểm danh của trường để đảm bảo tính nhất quán và minh bạch trong việc quản lý lớp học.',
@@ -88,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text('Xin chào giảng viên',
                                 style: Theme.of(context).textTheme.titleSmall),
-                            Text('Nguyễn Thị Mỹ Hạnh',
+                            Text(auth.currentUser!.displayName ?? '',
                                 style: Theme.of(context).textTheme.titleLarge),
                           ],
                         ),
