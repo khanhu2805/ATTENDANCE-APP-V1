@@ -23,17 +23,16 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return AiBarcodeScanner(
+      scanWindow: Rect.fromCenter(center: Offset(THelperFunctions.screenWidth()/2, THelperFunctions.screenHeight()*0.7/2), width: THelperFunctions.screenWidth() * 0.8, height: THelperFunctions.screenHeight()/4),
       cutOutSize: 0.0,
       cutOutHeight: THelperFunctions.screenHeight()/4,
       cutOutWidth: THelperFunctions.screenWidth() * 0.8,
       cutOutBottomOffset: THelperFunctions.screenHeight()/30,
-      validator: (p0) => p0.barcodes.first.rawValue?.contains('DH') ?? false,
       fit: BoxFit.cover,
-      onDetect: (p0) {
+      onDetect: (p0) async {
         String barcode = p0.barcodes.first.rawValue.toString();
-        controller.studentCode.value = barcode;
+        controller.checkStudentCode(barcode);
       },
-      // fit: BoxFit.scaleDown,
     );
   }
 }

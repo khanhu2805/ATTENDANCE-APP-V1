@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text('Xin chào giảng viên',
                                 style: Theme.of(context).textTheme.titleSmall),
-                            Text(auth.currentUser!.displayName ?? '',
+                            Text(auth.currentUser?.displayName ?? '',
                                 style: Theme.of(context).textTheme.titleLarge),
                           ],
                         ),

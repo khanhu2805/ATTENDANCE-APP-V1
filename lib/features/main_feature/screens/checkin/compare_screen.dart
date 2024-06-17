@@ -18,7 +18,7 @@ class _CompareScreenState extends State<CompareScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = Get.put(CheckinController());
+    controller = CheckinController.instance;
   }
 
   @override
