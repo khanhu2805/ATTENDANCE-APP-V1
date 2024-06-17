@@ -42,7 +42,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
           backgroundColor: isDark ? Colors.blue : Colors.blue[200],
           elevation: 0,
           onPressed: () {
-            Get.to(() => const CheckinScreen());
+            controller.selectedIndex.value = 4;
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
@@ -170,5 +170,6 @@ class NavigationController extends GetxController {
     const LogScreen(),
     const NotificationScreeen(),
     const ProfileScreen(),
+    const CheckinScreen()
   ];
 }

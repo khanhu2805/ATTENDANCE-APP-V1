@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(35.0),
                           bottomRight: Radius.circular(35.0))),
-                  height: THelperFunctions.screenHeight() / 6,
+                  height: THelperFunctions.screenHeight() / 8,
                   width: THelperFunctions.screenWidth(),
                   constraints: const BoxConstraints(
                     minHeight: 130,
@@ -154,8 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Get.to(() => const CheckinScreen());
+                    onTap: () => {
+                      navigationController.selectedIndex.value = 4
                     },
                     child: Card(
                       elevation: 6,

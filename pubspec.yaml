@@ -56,7 +56,8 @@ dependencies:
   firebase_storage: ^12.0.0
   shared_preferences: ^2.2.3
 
-
+  #Barcode
+  ai_barcode_scanner: ^5.1.1
 
 
 dev_dependencies:
