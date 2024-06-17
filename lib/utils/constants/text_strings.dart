@@ -3,24 +3,17 @@ class AppTexts {
 
 
   // -- Authentication Forms
-  static const String email = "E-Mail";
-  static const String password = "Password";
-  static const String username = "Username";
-  static const String rememberMe = "Remember Me";
-  static const String forgetPassword = "Forget Password?";
-  static const String signIn = "Sign In";
-  static const String orSignInWith = "or sign in with";
-  static const String iAgreeTo = "I agree to";
-  static const String privacyPolicy = "Privacy Policy";
-  static const String termsOfUse = "Terms of use";
-
+  static const String email = "Email";
+  static const String password = "Mật khẩu";
+  static const String username = "Tên tài khoản";
+  static const String rememberMe = "Ghi nhớ đăng nhập";
+  static const String forgetPassword = "Quên mật khẩu?";
+  static const String signIn = "Đăng nhập";
+  static const String orSignInWith = "Hoặc đang nhập với";
 
   // -- Authentication Headings
-  static const String loginTitle = "Welcome back,";
-  static const String loginSubTitle = "Discover Limitless Choices and Unmatched Convenience.";
-  static const String forgetPasswordTitle = "Forget password";
-  static const String forgetPasswordSubTitle = "Don’t worry sometimes people can forget too, enter your email and we will send you a password reset link.";
-  static const String changeYourPasswordTitle = "Password Reset Email Sent";
+  static const String loginTitle = "Chào mừng quay trở lại,";
+  static const String forgetPasswordTitle = "Quên mật khaiar";
 
 
 }

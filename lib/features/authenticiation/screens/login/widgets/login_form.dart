@@ -9,7 +9,9 @@ import '../../../../../utils/validators/validation.dart';
 import '../../../controllers/login/login_controller.dart';
 
 class TLoginForm extends StatelessWidget {
-  const TLoginForm({super.key,});
+  const TLoginForm({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,8 @@ class TLoginForm extends StatelessWidget {
     return Form(
       key: controller.loginFormKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSizes.spaceBtwSections),
+        padding:
+            const EdgeInsets.symmetric(vertical: AppSizes.spaceBtwSections),
         child: Column(
           children: [
             TextFormField(
@@ -25,51 +28,53 @@ class TLoginForm extends StatelessWidget {
               validator: (value) => AppValidator.validateEmail(value),
               decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.direct_right),
-                  labelText: AppTexts.username
-              ),
+                  labelText: AppTexts.username),
             ),
             const SizedBox(height: AppSizes.spaceBtwInputFields),
-            
             Obx(
               () => TextFormField(
                 validator: (value) => AppValidator.validatePassword(value),
                 controller: controller.password,
                 obscureText: controller.hidePassword.value,
-                decoration:  InputDecoration(
+                decoration: InputDecoration(
                   labelText: AppTexts.password,
                   prefixIcon: const Icon(Iconsax.password_check),
                   suffixIcon: IconButton(
-                    onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
-                    icon: Icon(controller.hidePassword.value ? Iconsax.eye_slash : Iconsax.eye),
+                    onPressed: () => controller.hidePassword.value =
+                        !controller.hidePassword.value,
+                    icon: Icon(controller.hidePassword.value
+                        ? Iconsax.eye_slash
+                        : Iconsax.eye),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: AppSizes.spaceBtwInputFields),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     Obx(
-                        () => Checkbox(
-                            value: controller.rememberMe.value,
-                            onChanged: (value) => controller.rememberMe.value = !controller.rememberMe.value,
-                        ),
+                      () => Checkbox(
+                        value: controller.rememberMe.value,
+                        onChanged: (value) => controller.rememberMe.value =
+                            !controller.rememberMe.value,
+                      ),
                     ),
-
                     const Text(AppTexts.rememberMe),
                   ],
                 ),
               ],
             ),
-            TextButton(onPressed: () {}, child: const Text(AppTexts.forgetPassword)),
+            TextButton(
+                onPressed: () {}, child: const Text(AppTexts.forgetPassword)),
             const SizedBox(height: AppSizes.spaceBtwItems),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => controller.emailAndPasswordSignIn(),
+                onPressed: () => controller
+                    .emailAndPasswordSignIn(controller.rememberMe.value),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1D30D9),
                   minimumSize: const Size(250, 50),
