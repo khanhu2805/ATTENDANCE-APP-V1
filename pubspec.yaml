@@ -55,7 +55,8 @@ dependencies:
   cloud_firestore: ^5.0.0
   firebase_storage: ^12.0.0
 
-
+  #Barcode
+  ai_barcode_scanner: ^5.1.1
 
 
 dev_dependencies:
