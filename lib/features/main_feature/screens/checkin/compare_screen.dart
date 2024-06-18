@@ -28,9 +28,9 @@ class _CompareScreenState extends State<CompareScreen> {
         body:
         Obx(
           () => Container(
-            child: controller.screen[controller.screenIndex.value],
             height: THelperFunctions.screenHeight() * 0.7,
             width: THelperFunctions.screenWidth(),
+            child: controller.screen[controller.screenIndex.value],
           ),
         ),
         bottomSheet: Obx(() => Text(controller.studentCode.value)),

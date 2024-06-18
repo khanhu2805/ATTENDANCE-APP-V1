@@ -20,7 +20,7 @@ class CheckinController extends GetxController {
 
   void getClassInfo() async {
     loading.value =true;
-    var querySnapshot = await _firestore.collection(_auth!.uid).where('day_of_class', isEqualTo: 'Moesday').get();
+    var querySnapshot = await _firestore.collection(_auth!.uid).where('day_of_class', isEqualTo: 'Tuesday').get();
     if (querySnapshot.docs.isNotEmpty) {
       info = 'Ca điểm danh\nMã lớp học phần: ${querySnapshot.docs.single.id}\nNgày: 16/06/2024 - Buổi 1';
     }

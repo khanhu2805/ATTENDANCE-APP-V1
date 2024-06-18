@@ -9,7 +9,7 @@ class AppTexts {
   static const String rememberMe = "Ghi nhớ đăng nhập";
   static const String forgetPassword = "Quên mật khẩu?";
   static const String signIn = "Đăng nhập";
-  static const String orSignInWith = "Hoặc đang nhập với";
+  static const String orSignInWith = "Hoặc đăng nhập với";
 
   // -- Authentication Headings
   static const String loginTitle = "Chào mừng quay trở lại,";

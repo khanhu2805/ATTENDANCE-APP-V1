@@ -38,7 +38,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                 showAction: true,
                 actionText: 'Bắt đầu',
                 onActionPressed: () => {Get.to(() => const CompareScreen())},
-              ): TAnimationLoaderWidget(text: text, animation: animation)
+              ): TAnimationLoaderWidget(text: 'Chưa tới ca điểm danh\nVui lòng quay lại sau', animation: AppImages.searchAnimation )
             : Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
