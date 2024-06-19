@@ -52,12 +52,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     startTime();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     _timer?.cancel();
   }
+
   @override
   Widget build(BuildContext context) {
     isDark = THelperFunctions.isDarkMode(context);
@@ -96,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         IconButton(
                           icon: const Icon(Iconsax.notification),
-                          onPressed: () =>{navigationController.selectedIndex.value = 2},
+                          onPressed: () =>
+                              {navigationController.selectedIndex.value = 2},
                         )
                       ],
                     ),
@@ -151,22 +154,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.all(THelperFunctions.screenWidth()/30),
+              padding: EdgeInsets.all(THelperFunctions.screenWidth() / 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => {
-                      navigationController.selectedIndex.value = 4
-                    },
+                    onTap: () => {navigationController.selectedIndex.value = 4},
                     child: Card(
                       elevation: 6,
                       shadowColor: Colors.grey.withOpacity(0.5),
                       child: Container(
                         width: THelperFunctions.screenWidth() / 2.3,
-                        constraints: const BoxConstraints(
-                          minWidth: 160,
-                        ),
                         decoration: BoxDecoration(
                             color: isDark ? Colors.blue : Colors.white,
                             borderRadius: BorderRadius.circular(10.0)),
@@ -181,10 +179,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              height: THelperFunctions.screenHeight() / 8,
+                              width: THelperFunctions.screenWidth() / 2.3,
+                              height: THelperFunctions.screenHeight() / 5,
                               constraints: const BoxConstraints(minHeight: 90),
                               decoration: BoxDecoration(
-                                color: Colors.blue[100],
+                                color: isDark ? Colors.black : Colors.blue[200],
                                 borderRadius: const BorderRadius.only(
                                     bottomRight: Radius.circular(10.0),
                                     bottomLeft: Radius.circular(10.0)),
@@ -193,10 +192,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.all(6.0),
                                 child: Column(
                                   children: [
-                                    Text(
-                                      'Điểm danh',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                    Container(
+                                      height:
+                                          THelperFunctions.screenHeight() / 15,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Điểm danh',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 5.0,
@@ -217,15 +222,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: ()=> {navigationController.selectedIndex.value = 1},
+                    onTap: () => {navigationController.selectedIndex.value = 1},
                     child: Card(
                       elevation: 6,
                       shadowColor: Colors.grey.withOpacity(0.5),
                       child: Container(
                         width: THelperFunctions.screenWidth() / 2.3,
-                        constraints: const BoxConstraints(
-                          minWidth: 160,
-                        ),
                         decoration: BoxDecoration(
                             color: isDark ? Colors.blue : Colors.white,
                             borderRadius: BorderRadius.circular(10.0)),
@@ -240,10 +242,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              height: THelperFunctions.screenHeight() / 8,
+                              width: THelperFunctions.screenWidth() / 2.3,
+                              height: THelperFunctions.screenHeight() / 5,
                               constraints: const BoxConstraints(minHeight: 90),
                               decoration: BoxDecoration(
-                                color: Colors.blue[100],
+                                color: isDark ? Colors.black : Colors.blue[200],
                                 borderRadius: const BorderRadius.only(
                                     bottomRight: Radius.circular(10.0),
                                     bottomLeft: Radius.circular(10.0)),
@@ -252,10 +255,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.all(6.0),
                                 child: Column(
                                   children: [
-                                    Text(
-                                      'Lịch sử điểm danh',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                    Container(
+                                      height:
+                                          THelperFunctions.screenHeight() / 15,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Lịch sử\nđiểm danh',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 5.0,

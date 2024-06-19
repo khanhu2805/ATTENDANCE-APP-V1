@@ -25,15 +25,25 @@ class _CompareScreenState extends State<CompareScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body:
-        Obx(
-          () => Container(
-            height: THelperFunctions.screenHeight() * 0.7,
-            width: THelperFunctions.screenWidth(),
-            child: controller.screen[controller.screenIndex.value],
-          ),
+        body: Obx(
+          () => Column(children: [
+            Container(
+              height: THelperFunctions.screenHeight() * 0.7,
+              width: THelperFunctions.screenWidth(),
+              child: controller.screen[controller.screenIndex.value],
+            ),
+            Container(
+              margin:
+                  EdgeInsets.only(top: THelperFunctions.screenHeight() * 0.05),
+              alignment: Alignment.center,
+              child: controller.studentCode.value != ''
+                  ? controller.studentCode.value != '0'
+                      ? Text('Mã sinh viên: ${controller.studentCode.value}')
+                      : Text('Sinh viên không có trong danh sách lớp')
+                  : Text('Vui lòng quét mã vạch trên thẻ sinh viên'),
+            )
+          ]),
         ),
-        bottomSheet: Obx(() => Text(controller.studentCode.value)),
       ),
     );
   }

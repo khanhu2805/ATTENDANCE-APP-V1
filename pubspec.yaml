@@ -45,7 +45,6 @@ dependencies:
 
   #State management
   get: ^4.6.5
-  get_storage: ^2.1.1
   lottie: ^3.1.2
   connectivity_plus: ^6.0.3
 
@@ -59,6 +58,9 @@ dependencies:
   #Barcode
   ai_barcode_scanner: ^5.1.1
 
+  #Camera
+  camera: ^0.8.1+7
+  image: ^4.1.7
 
 dev_dependencies:
   flutter_test:
