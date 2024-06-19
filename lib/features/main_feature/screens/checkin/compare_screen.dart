@@ -18,22 +18,33 @@ class _CompareScreenState extends State<CompareScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = Get.put(CheckinController());
+    controller = CheckinController.instance;
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body:
-        Obx(
-          () => Container(
-            child: controller.screen[controller.screenIndex.value],
-            height: THelperFunctions.screenHeight() * 0.7,
-            width: THelperFunctions.screenWidth(),
-          ),
+        body: Obx(
+          () => Column(children: [
+            Container(
+              height: THelperFunctions.screenHeight() * 0.7,
+              width: THelperFunctions.screenWidth(),
+              child: controller.screen[controller.screenIndex.value],
+            ),
+            Container(
+              margin:
+                  EdgeInsets.only(top: THelperFunctions.screenHeight() * 0.05),
+              alignment: Alignment.center,
+              child: controller.studentCode.value != ''
+                  ? controller.studentCode.value != '0'
+                      ? Text(
+                          'Mã sinh viên: ${controller.studentCode.value}\nVui lòng đưa gương mặt vào khung quy định')
+                      : Text('Sinh viên không có trong danh sách lớp')
+                  : Text('Vui lòng quét mã vạch trên thẻ sinh viên'),
+            )
+          ]),
         ),
-        bottomSheet: Obx(() => Text(controller.studentCode.value)),
       ),
     );
   }

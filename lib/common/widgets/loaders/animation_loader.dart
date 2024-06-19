@@ -11,7 +11,10 @@ class TAnimationLoaderWidget extends StatelessWidget {
     required this.animation,
     this.showAction = false,
     this.actionText,
-    this.onActionPressed, this.height, this.width, this.style,
+    this.onActionPressed,
+    this.height,
+    this.width,
+    this.style,
   });
 
   final String text;
@@ -28,7 +31,9 @@ class TAnimationLoaderWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset(animation, height: height ?? MediaQuery.of(context).size.height * 0.5, width: width), // Display Lottie animation
+          Lottie.asset(animation,
+              height: height ?? MediaQuery.of(context).size.height * 0.5,
+              width: width), // Display Lottie animation
           const SizedBox(height: AppSizes.defaultSpace),
           Text(
             text,

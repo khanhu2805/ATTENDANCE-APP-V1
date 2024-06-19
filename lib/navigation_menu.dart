@@ -2,9 +2,7 @@ import 'package:fe_attendance_app/features/main_feature/screens/log/log_screen.d
 import 'package:fe_attendance_app/features/main_feature/screens/notification/notification_screen.dart';
 import 'package:fe_attendance_app/utils/device/device_utility.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'features/main_feature/screens/checkin/checkin_screen.dart';
@@ -38,16 +36,26 @@ class _NavigationMenuState extends State<NavigationMenu> {
           () => controller.screens[controller.selectedIndex.value],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: isDark ? Colors.blue : Colors.blue[200],
-          elevation: 0,
-          onPressed: () {
-            controller.selectedIndex.value = 4;
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              // colors: isDark
+              //     ? [Colors.blue, Colors.white]
+              //     : [Colors.blue, Colors.],
+              colors: [Colors.blue, Colors.white],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-          child: const Icon(Iconsax.scan),
+          child: FloatingActionButton(
+            onPressed: () {
+              controller.selectedIndex.value = 4;
+            },
+            backgroundColor: Colors.transparent,
+            child: Icon(Iconsax.scan),
+            elevation: 0,
+          ),
         ),
         bottomNavigationBar: Obx(
           () => BottomAppBar(
@@ -55,11 +63,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
             height: DeviceUtils.getScreenHeight() / 10,
             elevation: 0,
             padding: EdgeInsets.all(4.0),
-            color: isDark ? Colors.blue : Colors.blue[200],
+            color: isDark ? Colors.blue : Colors.white,
             child: IconTheme(
               data: IconThemeData(color: isDark ? Colors.white : Colors.black),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
@@ -67,19 +75,29 @@ class _NavigationMenuState extends State<NavigationMenu> {
                     child: Container(
                       width: DeviceUtils.getScreenWidth() / 6,
                       decoration: BoxDecoration(
-                        color: controller.selectedIndex.value == 0
-                            ? Colors.black.withOpacity(0.1)
-                            : Colors.transparent,
+                        // color: controller.selectedIndex.value == 0
+                        //     ? Colors.black.withOpacity(0.1)
+                        //     : Colors.transparent,
+                        gradient: LinearGradient(
+                          colors: controller.selectedIndex.value == 0
+                              ? isDark
+                                  ? [Colors.blue, Colors.grey]
+                                  : [Colors.blue, Colors.white]
+                              : [Colors.transparent, Colors.transparent],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Icon(Iconsax.home),
                           Text(
                             'Trang chủ',
-                            style: TextStyle(fontSize: 10.0),
-                          )
+                            style: TextStyle(
+                                fontSize: DeviceUtils.getScreenWidth() / 40),
+                          ),
                         ],
                       ),
                     ),
@@ -89,46 +107,77 @@ class _NavigationMenuState extends State<NavigationMenu> {
                     child: Container(
                         width: DeviceUtils.getScreenWidth() / 6,
                         decoration: BoxDecoration(
-                          color: controller.selectedIndex.value == 1
-                              ? Colors.black.withOpacity(0.1)
-                              : Colors.transparent,
+                          // color: controller.selectedIndex.value == 0
+                          //     ? Colors.black.withOpacity(0.1)
+                          //     : Colors.transparent,
+                          gradient: LinearGradient(
+                            colors: controller.selectedIndex.value == 1
+                                ? isDark
+                                    ? [Colors.blue, Colors.grey]
+                                    : [Colors.blue, Colors.white]
+                                : [Colors.transparent, Colors.transparent],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Icon(Iconsax.calendar),
+                              Icon(
+                                Iconsax.calendar,
+                                color: Colors.grey,
+                              ),
                               Text(
                                 'Lịch sử',
-                                style: TextStyle(fontSize: 10.0),
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize:
+                                        DeviceUtils.getScreenWidth() / 40),
                               )
                             ])),
                   ),
-                  Container(
-                    width: DeviceUtils.getScreenWidth() / 4,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Điểm danh',
-                      style: TextStyle(fontSize: 10.0),
-                    ),
+                  SizedBox(
+                    width: 35.0,
                   ),
+                  // Container(
+                  //   width: DeviceUtils.getScreenWidth() / 4,
+                  //   alignment: Alignment.bottomCenter,
+                  //   margin: EdgeInsets.only(),
+                  //   child: Text(
+                  //     'Điểm danh',
+                  //     style: TextStyle(
+                  //         fontSize: DeviceUtils.getScreenWidth() / 40),
+                  //   ),
+                  // ),
                   InkWell(
                     onTap: () => {controller.selectedIndex.value = 2},
                     child: Container(
                         width: DeviceUtils.getScreenWidth() / 6,
                         decoration: BoxDecoration(
-                          color: controller.selectedIndex.value == 2
-                              ? Colors.black.withOpacity(0.1)
-                              : Colors.transparent,
+                          // color: controller.selectedIndex.value == 0
+                          //     ? Colors.black.withOpacity(0.1)
+                          //     : Colors.transparent,
+                          gradient: LinearGradient(
+                            colors: controller.selectedIndex.value == 2
+                                ? isDark
+                                    ? [Colors.blue, Colors.grey]
+                                    : [Colors.blue, Colors.yellow]
+                                : [Colors.transparent, Colors.transparent],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Icon(Iconsax.notification),
                               Text(
                                 'Thông báo',
-                                style: TextStyle(fontSize: 10.0),
+                                style: TextStyle(
+                                    fontSize:
+                                        DeviceUtils.getScreenWidth() / 40),
                               )
                             ])),
                   ),
@@ -137,18 +186,29 @@ class _NavigationMenuState extends State<NavigationMenu> {
                     child: Container(
                         width: DeviceUtils.getScreenWidth() / 6,
                         decoration: BoxDecoration(
-                          color: controller.selectedIndex.value == 3
-                              ? Colors.black.withOpacity(0.1)
-                              : Colors.transparent,
+                          // color: controller.selectedIndex.value == 0
+                          //     ? Colors.black.withOpacity(0.1)
+                          //     : Colors.transparent,
+                          gradient: LinearGradient(
+                            colors: controller.selectedIndex.value == 3
+                                ? isDark
+                                    ? [Colors.blue, Colors.grey]
+                                    : [Colors.blue, Colors.yellow]
+                                : [Colors.transparent, Colors.transparent],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Icon(Iconsax.user),
                               Text(
                                 'Tài khoản',
-                                style: TextStyle(fontSize: 10.0),
+                                style: TextStyle(
+                                    fontSize:
+                                        DeviceUtils.getScreenWidth() / 40),
                               )
                             ])),
                   ),

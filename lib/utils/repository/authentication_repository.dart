@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/authenticiation/screens/login/login.dart';
 import '../../features/authenticiation/screens/onboarding/onboarding.dart';
@@ -13,11 +13,10 @@ import '../exceptions/firebase_auth_exceptions.dart';
 import '../exceptions/format_exceptions.dart';
 import '../exceptions/platform_exceptions.dart';
 
-
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
 
-  final deviceStorage = GetStorage();
+  // final deviceStorage = GetStorage();
   final _auth = FirebaseAuth.instance;
 
   @override
@@ -30,33 +29,41 @@ class AuthenticationRepository extends GetxController {
     await _auth.signOut();
   }
 
-  void screenRedirect() async{
+  void screenRedirect() async {
     final user = _auth.currentUser;
-    if (user != null){
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? firstTime = prefs.getBool('IsFirstTime');
+    if (user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.offAll(() => const NavigationMenu());
       });
-
     } else {
-      deviceStorage.writeIfNull("IsFirstTime", true);
-
-      deviceStorage.read("IsFirstTime") != true
-        ? Get.offAll(() => const LoginScreen())
-        : Get.offAll(() => const OnBoardingScreeen());
+      if (firstTime != null) {
+        firstTime == true
+            ? Get.offAll(() => const OnBoardingScreeen())
+            : Get.offAll(() => const LoginScreen());
+      }
+      else {
+        Get.offAll(() => const OnBoardingScreeen());
+      }
+      prefs.setBool('IsFirstTime', false);
     }
   }
-  Future<UserCredential> loginWithEmailAndPassword(String email, String password) async{
+
+  Future<UserCredential> loginWithEmailAndPassword(
+      String email, String password) async {
     try {
-      return await _auth.signInWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e){
+      return await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+    } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
-    }on FirebaseException catch (e) {
+    } on FirebaseException catch (e) {
       throw TFirebaseAuthException(e.code).message;
-    }on FormatException catch (e) {
+    } on FormatException catch (e) {
       throw const TFormatException();
-    }on PlatformException catch (e) {
+    } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
-    } catch(e){
+    } catch (e) {
       throw 'Somthing went wrong. Please try again';
     }
   }

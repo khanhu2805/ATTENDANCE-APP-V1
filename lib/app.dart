@@ -23,7 +23,7 @@ class App extends StatelessWidget {
       home: FutureBuilder<bool>(
         future: SharedPreferences.getInstance().then((prefs) => prefs.getBool('rememberMe') ?? false),
         builder: (context, snapshot) {
-          return snapshot.data == true ? NavigationMenu() : LoginScreen();
+          return snapshot.data == true ? const NavigationMenu() : const LoginScreen();
         },
       ),
     );
