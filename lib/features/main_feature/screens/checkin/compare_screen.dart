@@ -38,7 +38,8 @@ class _CompareScreenState extends State<CompareScreen> {
               alignment: Alignment.center,
               child: controller.studentCode.value != ''
                   ? controller.studentCode.value != '0'
-                      ? Text('Mã sinh viên: ${controller.studentCode.value}')
+                      ? Text(
+                          'Mã sinh viên: ${controller.studentCode.value}\nVui lòng đưa gương mặt vào khung quy định')
                       : Text('Sinh viên không có trong danh sách lớp')
                   : Text('Vui lòng quét mã vạch trên thẻ sinh viên'),
             )

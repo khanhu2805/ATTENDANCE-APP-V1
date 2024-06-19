@@ -3,6 +3,8 @@ import 'package:fe_attendance_app/features/main_feature/controllers/checkin/chec
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
+import 'widgets/my_mobile_scanner.dart';
+
 class BarcodeScannerScreen extends StatefulWidget {
   const BarcodeScannerScreen({super.key});
 
@@ -20,6 +22,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     controller = CheckinController.instance;
     mobileScannerController = MobileScannerController();
   }
+
   @override
   Widget build(BuildContext context) {
     // return AiBarcodeScanner(
@@ -54,7 +57,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       ),
       body: Stack(
         children: [
-          MobileScanner(
+          MyMobileScanner(
             onDetect: (p0) async {
               String barcode = p0.barcodes.first.rawValue.toString();
               controller.checkStudentCode(barcode);

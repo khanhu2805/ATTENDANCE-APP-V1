@@ -20,7 +20,6 @@ class CheckinController extends GetxController {
   final _auth = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   QueryDocumentSnapshot? documentSnapshot;
-
   void getClassInfo() async {
     loading.value = true;
     var querySnapshot = await _firestore
@@ -49,5 +48,4 @@ class CheckinController extends GetxController {
       studentCode.value = '0';
     }
   }
-
 }
