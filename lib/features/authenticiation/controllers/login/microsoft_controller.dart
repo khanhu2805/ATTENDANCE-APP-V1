@@ -1,4 +1,5 @@
 import 'package:fe_attendance_app/features/main_feature/screens/home/home_screen.dart';
+import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,13 @@ class MicrosoftControlller extends GetxController {
       'mail.read',
       'calendars.read',
     ];
+
     try {
+      TFullScreenLoader.openLoadingDialog(
+            "Đang đăng nhập ...", AppImages.securityAnimation);
       final userCredential = await FirebaseAuth.instance.signInWithProvider(
         provider..addScope(scopes.join(' ')),
       );
-
       print('Token: ${userCredential.credential!.accessToken}');
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -45,10 +48,6 @@ class MicrosoftControlller extends GetxController {
 
         print('Name: ${FirebaseAuth.instance.currentUser?.displayName}');
         print('profile: ${userCredential.additionalUserInfo?.profile}');
-
-        TFullScreenLoader.openLoadingDialog(
-            "Đang đăng nhập ...", AppImages.securityAnimation);
-
         AuthenticationRepository.instance.screenRedirect();
       } else {
         print('Đăng nhập lỗi: tài khoản không tồn tại');
