@@ -10,8 +10,7 @@ import 'features/main_feature/screens/home/home_screen.dart';
 import 'features/main_feature/screens/profile/profile_screen.dart';
 
 class NavigationMenu extends StatefulWidget {
-  const NavigationMenu({super.key});
-
+  const NavigationMenu({ super.key});
   @override
   State<NavigationMenu> createState() => _NavigationMenuState();
 }

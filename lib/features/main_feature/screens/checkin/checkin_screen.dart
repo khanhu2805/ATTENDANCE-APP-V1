@@ -1,10 +1,12 @@
 import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
+import 'package:fe_attendance_app/features/main_feature/controllers/checkin/camera_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/compare_screen.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
 import 'package:fe_attendance_app/utils/formatters/formatter.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gmt/gmt.dart';
 import '../../controllers/checkin/checkin_controller.dart';
 
 class CheckinScreen extends StatefulWidget {
@@ -16,12 +18,13 @@ class CheckinScreen extends StatefulWidget {
 
 class _CheckinScreenState extends State<CheckinScreen> {
   late CheckinController controller;
-
+  late MyCameraController cameraController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller = Get.put(CheckinController());
+    cameraController = Get.put(MyCameraController());
     controller.getClassInfo();
   }
 
@@ -81,8 +84,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
-                                  Text(
-                                      '${AppFormatter.formatDate(controller.documentSnapshot!.get('start_date').toDate())}'),
+                                  Text(AppFormatter.formatDate(controller
+                                      .documentSnapshot!
+                                      .get('start_date')
+                                      .toDate())),
                                 ],
                               ),
                               Row(
@@ -94,8 +99,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
-                                  Text(
-                                      '${AppFormatter.formatDate(controller.documentSnapshot!.get('end_date').toDate())}'),
+                                  Text(AppFormatter.formatDate(controller
+                                      .documentSnapshot!
+                                      .get('end_date')
+                                      .toDate())),
                                 ],
                               ),
                               Padding(
@@ -103,13 +110,14 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       vertical:
                                           THelperFunctions.screenHeight() / 15),
                                   child: Text(
-                                      'BUỔI ${AppFormatter.numberOfWeek(controller.documentSnapshot!.get('start_date').toDate())} - ${AppFormatter.formatDate(null)}'))
+                                      'BUỔI ${AppFormatter.numberOfWeek(controller.documentSnapshot!.get('start_date').toDate(), controller.dateTime)} - ${AppFormatter.formatDate(controller.dateTime)}'))
                             ],
                           ),
                         ),
                         OutlinedButton(
                             onPressed: () {
-                              Get.to(() => CompareScreen());
+                              // Get.to(() => CompareScreen());
+                              controller.startCheckin();
                             },
                             child: Text(
                               'Bắt đầu',
