@@ -32,4 +32,8 @@ class AppImages {
   static String uploadingCompletedAnimation = "assets/images/animations/uploading-done.json";
   static String tickCongratulationsConfettiAnimation = "assets/images/animations/tick-confetti.json";
 
+  //Profile
+  static const erroImageProfile = "assets/images/content/user.png";
+  
+
 }
