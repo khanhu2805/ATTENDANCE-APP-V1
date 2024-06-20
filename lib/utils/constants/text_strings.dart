@@ -13,7 +13,13 @@ class AppTexts {
 
   // -- Authentication Headings
   static const String loginTitle = "Chào mừng quay trở lại,";
-  static const String forgetPasswordTitle = "Quên mật khaiar";
+  static const String forgetPasswordTitle = "Quên mật khẩu";
+
+  //Profile
+  static const String myProfileTitle = "Thông tin tài khoản";
+  static const String settingTitle = "Cài đặt";
+  static const String termsTitle = "Điều khoản & điều kiện";
+  static const String privacyPolicyTitle = "Chính sách bảo mật";
 
 
 }
