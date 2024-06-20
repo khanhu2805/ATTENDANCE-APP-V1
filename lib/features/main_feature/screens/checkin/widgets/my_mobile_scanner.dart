@@ -187,7 +187,7 @@ class _MobileScannerState extends State<MyMobileScanner>
       builder: (BuildContext context, MobileScannerState value, Widget? child) {
         if (!value.isInitialized) {
           Widget defaultPlaceholder = Container(
-            child: CircularProgressIndicator(),
+            child: Center(child: CircularProgressIndicator()),
             alignment: Alignment.center,
           );
 

@@ -7,18 +7,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'firebase_options.dart';
 
-Future<void> main()async{
-  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async {
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   final prefs = await SharedPreferences.getInstance();
   final rememberMe = prefs.getBool('rememberMe') ?? false;
 
-  await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform
-  ).then(
-          (FirebaseApp value) => Get.put(AuthenticationRepository())
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then((FirebaseApp value) => Get.put(AuthenticationRepository()));
 
   if (!rememberMe) {
     await AuthenticationRepository.instance.logout();
@@ -26,4 +24,3 @@ Future<void> main()async{
 
   runApp(const App());
 }
-
