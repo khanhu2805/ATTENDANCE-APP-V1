@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/barcode_scanner.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/checkin/compare_screen.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/face_recognition_screen.dart';
 import 'package:fe_attendance_app/utils/formatters/formatter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,33 +20,45 @@ class CheckinController extends GetxController {
   final _auth = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   QueryDocumentSnapshot? documentSnapshot;
-  RxBool checkin = false.obs;
+  bool checkin = false;
   DateTime dateTime = DateTime.now();
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    date();
-  }
-
-  Future<void> date() async {
-    dateTime = await GMT.now() ?? DateTime.now();
-  }
+  DocumentReference? documentReference;
 
   void getClassInfo() async {
     loading.value = true;
-    DateTime? now = await GMT.now();
+    DateTime? d = await GMT.now();
+    dateTime = d!.toLocal();
+    documentSnapshot = null;
     var querySnapshot = await _firestore
         .collection(_auth!.uid)
-        .where('day_of_class', isEqualTo: AppFormatter.formatDateToWeekDay(now))
+        .where('day_of_class',
+            isEqualTo: AppFormatter.formatDateToWeekDay(dateTime))
         .where('start_date',
-            isLessThanOrEqualTo: AppFormatter.formatToTimeStamp(now))
+            isLessThanOrEqualTo: AppFormatter.formatToTimeStamp(dateTime))
         .where('end_date',
-            isGreaterThanOrEqualTo: AppFormatter.formatToTimeStamp(now))
+            isGreaterThanOrEqualTo: AppFormatter.formatToTimeStamp(dateTime))
         .get()
         .then((querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
-        documentSnapshot = querySnapshot.docs.single;
+        for (var doc in querySnapshot.docs) {
+          if (((dateTime.hour * 60 + dateTime.minute) -
+                      AppFormatter.formatStringToTime(doc.get('start_hour'))) <=
+                  15 &&
+              ((dateTime.hour * 60 + dateTime.minute) -
+                      AppFormatter.formatStringToTime(doc.get('start_hour'))) >=
+                  0) {
+            documentSnapshot = doc;
+            checkin = true;
+          } else if ((AppFormatter.formatStringToTime(doc.get('end_hour')) -
+                      (dateTime.hour * 60 + dateTime.minute)) <=
+                  15 &&
+              (AppFormatter.formatStringToTime(doc.get('end_hour')) -
+                      (dateTime.hour * 60 + dateTime.minute)) >=
+                  0) {
+            documentSnapshot = doc;
+            checkin = false;
+          }
+        }
       }
     }, onError: (e) {
       print('Error Class: ' + e.toString());
@@ -54,7 +67,7 @@ class CheckinController extends GetxController {
   }
 
   void checkStudentCode(String barcode) {
-    List<dynamic> studentList = documentSnapshot!.get('student');
+    List<dynamic> studentList = documentSnapshot!.get('students');
     if (studentList.contains(barcode)) {
       studentCode.value = barcode;
       screenIndex.value = 1;
@@ -72,12 +85,40 @@ class CheckinController extends GetxController {
         .get()
         .then((value) {
       if (value.docs.isNotEmpty) {
-        print('co');
+        if (checkin) {
+          documentReference = _firestore
+              .collection(_auth.uid)
+              .doc(documentSnapshot!.id)
+              .collection(
+                  'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
+              .doc('check_in');
+        } else {
+          documentReference = _firestore
+              .collection(_auth.uid)
+              .doc(documentSnapshot!.id)
+              .collection(
+                  'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
+              .doc('check_out');
+        }
       } else {
-        print('ko');
+        _firestore
+            .collection(_auth.uid)
+            .doc(documentSnapshot!.id)
+            .collection(
+                'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
+            .doc('check_in')
+            .set({});
+        _firestore
+            .collection(_auth.uid)
+            .doc(documentSnapshot!.id)
+            .collection(
+                'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
+            .doc('check_out')
+            .set({});
       }
     }, onError: (error) {
       print("Error when start checkin ${error.message}");
     });
+    Get.to(() => CompareScreen());
   }
 }

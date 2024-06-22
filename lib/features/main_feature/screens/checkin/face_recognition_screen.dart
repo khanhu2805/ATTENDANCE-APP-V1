@@ -1,6 +1,6 @@
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:camera/camera.dart';
-import 'package:fe_attendance_app/features/main_feature/controllers/checkin/camera_controller.dart';
+import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face_recognition_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,12 +13,12 @@ class FaceRecognitionScreen extends StatefulWidget {
 }
 
 class _FaceRecognitionState extends State<FaceRecognitionScreen> {
-  late MyCameraController cameraController;
+  late FaceRecognitionController cameraController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    cameraController = MyCameraController.instance;
+    cameraController = Get.put(FaceRecognitionController());
   }
 
   @override
@@ -35,7 +35,7 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
               },
               icon: Icon(Icons.cameraswitch_rounded),
             ),
-            GetBuilder<MyCameraController>(
+            GetBuilder<FaceRecognitionController>(
               builder: (controller) {
                 return IconButton(
                   icon: Icon(
@@ -56,7 +56,7 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
               cameraController.sendImageToAPI();
             },
             child: Text('API')),
-        body: GetBuilder<MyCameraController>(
+        body: GetBuilder<FaceRecognitionController>(
           builder: (controller) {
             if (controller.cameraController == null ||
                 !controller.cameraController!.value.isInitialized) {

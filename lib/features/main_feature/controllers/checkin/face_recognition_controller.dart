@@ -3,14 +3,15 @@ import 'dart:typed_data';
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
+import 'package:gmt/gmt.dart';
 import 'package:http/http.dart' as http;
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MyCameraController extends GetxController {
-  static MyCameraController get instance => Get.find();
+class FaceRecognitionController extends GetxController {
+  static FaceRecognitionController get instance => Get.find();
   CheckinController checkinController = CheckinController.instance;
   CameraController? cameraController;
   List<CameraDescription>? cameras;
@@ -102,6 +103,8 @@ class MyCameraController extends GetxController {
   }
 
   Future<void> sendImageToAPI() async {
+    DateTime? d = await GMT.now();
+    DateTime now = d!.toLocal();
     loading.value = true;
     const String apiUrl =
         'http://113.161.88.238:81/'; // Replace with your API URL
@@ -123,7 +126,9 @@ class MyCameraController extends GetxController {
           if (response.body != 'Khong nhan dien duoc') {
             studentCode.value = response.body;
             if (checkinController.studentCode.value == studentCode.value) {
-              
+              checkinController.documentReference
+                  ?.update({studentCode.value: now});
+              checkinController.screenIndex.value = 0;
             }
             loading.value = false;
             return;
