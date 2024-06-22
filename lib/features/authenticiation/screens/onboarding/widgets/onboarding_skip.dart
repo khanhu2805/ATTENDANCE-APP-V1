@@ -19,15 +19,12 @@ class OnBoardingSkip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-        top: DeviceUtils.getAppBarHeight(),
-        right: AppSizes.defaultSpace,
-        child: TextButton(
+    return TextButton(
           onPressed: () => _handleSkip(context),
           style: TextButton.styleFrom(foregroundColor: Colors.blue),
           child: const Text(
             'Bỏ qua',
           ),
-        ));
+        );
   }
 }

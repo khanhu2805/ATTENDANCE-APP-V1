@@ -4,7 +4,6 @@ import 'package:gmt/gmt.dart';
 import 'package:intl/intl.dart';
 
 class AppFormatter {
-  
   static String formatDate(DateTime? date) {
     return DateFormat('dd/MM/yyyy').format(date ?? DateTime.now());
   }
@@ -22,5 +21,10 @@ class AppFormatter {
     return (dateNow.difference(date).inDays / 7).ceil() + 1;
   }
 
-  // static TimeOfDay formatStringToTime
+  static int formatStringToTime(String time) {
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+    return hours * 60 + minutes;
+  }
 }
