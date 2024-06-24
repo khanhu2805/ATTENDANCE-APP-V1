@@ -1,9 +1,8 @@
 import 'package:fe_attendance_app/features/authenticiation/controllers/onboarding/onboarding_controller.dart';
+import 'package:fe_attendance_app/utils/constants/colors.dart';
+import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../../utils/constants/sizes.dart';
-import '../../../../../utils/device/device_utility.dart';
 import '../../login/login.dart';
 
 class OnBoardingSkip extends StatelessWidget {
@@ -20,11 +19,16 @@ class OnBoardingSkip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-          onPressed: () => _handleSkip(context),
-          style: TextButton.styleFrom(foregroundColor: Colors.blue),
-          child: const Text(
-            'Bỏ qua',
-          ),
-        );
+      onPressed: () => _handleSkip(context),
+      style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all(Colors.transparent)),
+      child: Text(
+        'Bỏ qua',
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge
+            ?.copyWith(fontSize: THelperFunctions.screenWidth() * 0.04),
+      ),
+    );
   }
 }

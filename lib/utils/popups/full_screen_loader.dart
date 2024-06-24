@@ -14,10 +14,13 @@ class TFullScreenLoader {
         canPop: false,
         child: SafeArea(
           child: Container(
-            color: THelperFunctions.isDarkMode(Get.context!) ? AppColors.dark : Colors.white,
+            color: THelperFunctions.isDarkMode(Get.context!)
+                ? AppColors.dark
+                : Colors.white,
             width: double.infinity,
             height: double.infinity,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TAnimationLoaderWidget(text: text, animation: animation),
               ],
