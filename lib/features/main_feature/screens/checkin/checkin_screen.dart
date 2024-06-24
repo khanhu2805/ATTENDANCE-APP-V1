@@ -1,5 +1,5 @@
 import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
-import 'package:fe_attendance_app/features/main_feature/controllers/checkin/camera_controller.dart';
+import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face_recognition_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/compare_screen.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
 import 'package:fe_attendance_app/utils/formatters/formatter.dart';
@@ -18,13 +18,11 @@ class CheckinScreen extends StatefulWidget {
 
 class _CheckinScreenState extends State<CheckinScreen> {
   late CheckinController controller;
-  late MyCameraController cameraController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller = Get.put(CheckinController());
-    cameraController = Get.put(MyCameraController());
     controller.getClassInfo();
   }
 
@@ -110,7 +108,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       vertical:
                                           THelperFunctions.screenHeight() / 15),
                                   child: Text(
-                                      'BUỔI ${AppFormatter.numberOfWeek(controller.documentSnapshot!.get('start_date').toDate(), controller.dateTime)} - ${AppFormatter.formatDate(controller.dateTime)}'))
+                                      'BUỔI ${AppFormatter.numberOfWeek(controller.documentSnapshot!.get('start_date').toDate(), controller.dateTime)} - ${AppFormatter.formatDate(controller.dateTime)}')),
+                              Text(controller.checkin ? 'Checkin' : 'Checkout'),
                             ],
                           ),
                         ),
