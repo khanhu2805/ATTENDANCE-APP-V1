@@ -4,6 +4,7 @@ import 'package:fe_attendance_app/features/authenticiation/screens/onboarding/wi
 import 'package:fe_attendance_app/features/authenticiation/screens/onboarding/widgets/onboarding_page.dart';
 import 'package:fe_attendance_app/features/authenticiation/screens/onboarding/widgets/onboarding_skip.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
+import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -46,9 +47,11 @@ class OnBoardingScreeen extends StatelessWidget {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Row(
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: THelperFunctions.screenWidth() / 20,
+                    vertical: THelperFunctions.screenHeight() / 50),
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -64,4 +67,3 @@ class OnBoardingScreeen extends StatelessWidget {
     );
   }
 }
-

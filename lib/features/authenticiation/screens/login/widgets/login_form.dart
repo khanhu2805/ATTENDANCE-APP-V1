@@ -1,3 +1,5 @@
+import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -62,32 +64,39 @@ class TLoginForm extends StatelessWidget {
                             !controller.rememberMe.value,
                       ),
                     ),
-                    const Text(AppTexts.rememberMe),
+                    GestureDetector(
+                      onTap: () {
+                        controller.rememberMe.value =
+                            !controller.rememberMe.value;
+                      },
+                      child: Text(
+                        AppTexts.rememberMe,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontSize: THelperFunctions.screenWidth() * 0.035),
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
             TextButton(
-                onPressed: () {}, child: const Text(AppTexts.forgetPassword)),
+                onPressed: () {},
+                style: ButtonStyle(
+                    overlayColor:
+                        MaterialStateProperty.all(Colors.transparent)),
+                child: Text(
+                  AppTexts.forgetPassword,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontSize: THelperFunctions.screenWidth() * 0.035),
+                )),
             const SizedBox(height: AppSizes.spaceBtwItems),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () => controller
                     .emailAndPasswordSignIn(controller.rememberMe.value),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1D30D9),
-                  minimumSize: const Size(250, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
                 child: const Text(
                   AppTexts.signIn,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
               ),
             ),

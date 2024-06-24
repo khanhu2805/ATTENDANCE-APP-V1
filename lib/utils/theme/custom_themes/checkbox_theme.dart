@@ -1,3 +1,4 @@
+import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class AppCheckboxTheme {
@@ -14,7 +15,7 @@ class AppCheckboxTheme {
       }),
       fillColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.selected)) {
-          return Colors.blue;
+          return AppColors.secondary;
         } else {
           return Colors.transparent;
         }

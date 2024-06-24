@@ -16,7 +16,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  
   @override
   void initState() {
     super.initState();
@@ -26,33 +25,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              
-              const TProfileHeader(),
-              const SizedBox(height: 10),
-
-              const Flexible(child: Divider(color: AppColors.darkGrey , thickness: 0.5, indent: 5, endIndent: 5)),
-              const SizedBox(height: 10),
-
-              TProfileMenuTitle(icon: Iconsax.frame_1 ,title: AppTexts.myProfileTitle,onTap: () {Get.to(const AccountInfoScreen());},),
-              const SizedBox(height: 20),
-
-              TProfileMenuTitle(icon: Iconsax.setting ,title: AppTexts.settingTitle,onTap: () {},),
-              const SizedBox(height: 20),
-
-              TProfileMenuTitle(icon: Iconsax.receipt_2_1 ,title: AppTexts.termsTitle,onTap: () {},),
-              const SizedBox(height: 20),
-
-              TProfileMenuTitle(icon: Iconsax.shield_tick ,title: AppTexts.privacyPolicyTitle,onTap: () {},),
-              const SizedBox(height: 20),
-
-              const TProfileMenuLogout(),
-              
-            ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const TProfileHeader(),
+                const SizedBox(height: 10),
+                Divider(
+                    color: AppColors.darkGrey,
+                    thickness: 0.5,
+                    indent: 5,
+                    endIndent: 5),
+                const SizedBox(height: 10),
+                TProfileMenuTitle(
+                  icon: Iconsax.frame_1,
+                  title: AppTexts.myProfileTitle,
+                  onTap: () {
+                    Get.to(const AccountInfoScreen());
+                  },
+                ),
+                const SizedBox(height: 20),
+                TProfileMenuTitle(
+                  icon: Iconsax.setting,
+                  title: AppTexts.settingTitle,
+                  onTap: () {},
+                ),
+                const SizedBox(height: 20),
+                TProfileMenuTitle(
+                  icon: Iconsax.receipt_2_1,
+                  title: AppTexts.termsTitle,
+                  onTap: () {},
+                ),
+                const SizedBox(height: 20),
+                TProfileMenuTitle(
+                  icon: Iconsax.shield_tick,
+                  title: AppTexts.privacyPolicyTitle,
+                  onTap: () {},
+                ),
+                const SizedBox(height: 20),
+                const TProfileMenuLogout(),
+              ],
+            ),
           ),
         ),
       ),
