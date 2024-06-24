@@ -17,22 +17,26 @@ class TProfileMenuTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: const BoxDecoration(
-          color: AppColors.bkIconProfile,
-          shape: BoxShape.circle,
+    return Column(
+      children: [
+        ListTile(
+          leading: Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: const BoxDecoration(
+              color: AppColors.bkIconProfile,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: AppColors.iconProfile),
+          ),
+          title: Text(title),
+          trailing: Container(
+            padding: const EdgeInsets.all(8.0),
+            child: const Icon(Iconsax.arrow_right_3, color: AppColors.iconProfile),
+          ),
+          onTap: onTap,
         ),
-        child: Icon(icon, color: AppColors.iconProfile),
-      ),
-      title: Text(title),
-      trailing: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: const Icon(Iconsax.arrow_right_3, color: AppColors.iconProfile),
-      ),
-      onTap: onTap,
+        const SizedBox(height: 20),
+      ],
     );
-    
   }
 }

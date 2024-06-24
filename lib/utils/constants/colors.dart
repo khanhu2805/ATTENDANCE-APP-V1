@@ -4,16 +4,26 @@ class AppColors {
   AppColors._();
 
   // App theme colors
+  static const Color pastelBlue = Color.fromRGBO(58, 185, 202, 1);
+  static const Color blue = Color.fromRGBO(1, 145, 182, 1);
+  static const Color yellow = Color.fromRGBO(249, 216, 13, 1);
+  static const Color green = Color.fromRGBO(211, 222, 22, 1);
+  static const Color orange = Color.fromRGBO(255, 123, 23, 1);
+
+
   static const Color primary = Color(0xFF4b68ff);
   static const Color secondary = Color(0xFFFFE24B);
   static const Color accent = Color(0xFFb0c7ff);
+  
+
+
 
   // Icon colors
   static const Color iconPrimary = Color(0xFF8D8D8D);
   static const Color bkIconProfile = Color.fromARGB(52, 158, 158, 158);
   static const Color bkIconProfileLogout = Color.fromARGB(59, 254, 60, 60);
   static const Color iconProfile = Color.fromARGB(255, 0, 0, 0);
-  static const Color iconProfileLogout = Color.fromARGB(255, 254, 60, 60);
+  static const Color iconProfileLogout = Color(0xFFFE3C3C);
   
   // Text colors
   static const Color textPrimary = Color(0xFF272727);
