@@ -10,6 +10,7 @@ class AppImages {
   static const String appLogoMicrosoft = "assets/logos/logo_Microsoft.png";
 
   // -- Lottie Animations
+  static String byeAnimation = 'assets/images/animations/bye_animation.json';
   static String defaultLoaderAnimation = "assets/images/animations/default-loader-animation.json";
   static String cartAnimation = "assets/images/animations/lady-adding-product-in-cart-animation.json";
   static String orderCompletedAnimation = "assets/images/animations/order-complete-car-delivery-animation.json";
@@ -19,7 +20,7 @@ class AppImages {
   static String pencilAnimation = "assets/images/animations/140429-pencil-drawing.json";
   static String docerAnimation = "assets/images/animations/141594-animation-of-docer.json";
   static String searchAnimation = "assets/images/animations/72785-searching.json";
-  static String emptyAnimation = "assets/images/animations/72785-searching.json";
+  static String emptyAnimation = 'assets/images/animations/53207-empty-file.json';
   static String securityAnimation = "assets/images/animations/67263-security-icon-transparent.json";
   static String successfullyRegisterAnimation = "assets/images/animations/72462-check-register.json";
   static String thankYouAnimation = "assets/images/animations/104368-thank-you.json";
