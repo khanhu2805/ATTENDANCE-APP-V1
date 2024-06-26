@@ -31,50 +31,41 @@ class _AccountInfoScreen extends State<AccountInfoScreen> {
             const TAppBar(
               title: AppTexts.myProfileTitle,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(
+                  () => TInforHeaderScreen(
+                    displayName: controller.displayName.value,
+                    jobTitle: controller.jobTitle.value,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
                     children: [
                       Obx(
-                        () => TInforHeaderScreen(
-                          displayName: controller.displayName.value,
-                          jobTitle: controller.jobTitle.value,
+                        () => TInforScreen(
+                          title: 'Tên người dùng',
+                          content: controller.displayName.value,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(30),
-                        child: Column(
-                          children: [
-                            Obx(
-                              () => TInforScreen(
-                                title: 'Tên người dùng',
-                                content: controller.displayName.value,
-                              ),
-                            ),
-                            Obx(
-                              () => TInforScreen(
-                                title: 'Địa chỉ mail',
-                                content: controller.mail.value,
-                              ),
-                            ),
-                            Obx(
-                              () => TInforScreen(
-                                title: 'Khoa',
-                                content: controller.jobTitle.value,
-                              ),
-                            ),
-                          ],
+                      Obx(
+                        () => TInforScreen(
+                          title: 'Địa chỉ mail',
+                          content: controller.mail.value,
+                        ),
+                      ),
+                      Obx(
+                        () => TInforScreen(
+                          title: 'Khoa',
+                          content: controller.jobTitle.value,
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

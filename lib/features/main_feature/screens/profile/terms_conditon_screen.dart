@@ -55,11 +55,6 @@ class TermsConditionScreen extends StatelessWidget {
 
 \n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nếu bạn có bất kỳ câu hỏi nào về Điều khoản này, vui lòng liên hệ với NT theo địa chỉ email: nt@gmail.com
 """;
-final String termsAndConditionsText2 = """
-* Thu thập dữ liệu: NT thu thập thông tin cá nhân của bạn, bao gồm nhưng không giới hạn ở tên, địa chỉ email và số điện thoại, khi bạn đăng ký tài khoản hoặc sử dụng Ứng dụng. NT cũng thu thập thông tin về cách bạn sử dụng Ứng dụng, chẳng hạn như các tính năng bạn sử dụng và tần suất bạn sử dụng chúng.
-Sử dụng dữ liệu: NT sử dụng thông tin của bạn để cung cấp, duy trì và cải thiện Ứng dụng, cũng như để liên hệ với bạn về các sản phẩm và dịch vụ của NT. NT cũng có thể chia sẻ thông tin của bạn với các bên thứ ba để hỗ trợ cung cấp Ứng dụng và cho các mục đích tiếp thị.
-* Bảo vệ dữ liệu: NT cam kết bảo vệ thông tin của bạn và sẽ thực hiện các biện pháp hợp lý để bảo vệ thông tin của bạn khỏi bị truy cập, sử dụng hoặc tiết lộ trái phép.
-""";
 
   @override
   Widget build(BuildContext context) {
