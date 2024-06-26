@@ -19,7 +19,7 @@ class TextRow extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(icon, color: AppColors.secondary),
+            Icon(icon, color: AppColors.accent),
             SizedBox(
               width: THelperFunctions.screenWidth() * 0.01,
             ),
@@ -30,13 +30,18 @@ class TextRow extends StatelessWidget {
                   .titleMedium
                   ?.copyWith(fontSize: THelperFunctions.screenWidth() * 0.04),
             ),
-            Spacer(),
-            Text(
-              text,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontSize: THelperFunctions.screenWidth() * 0.035),
+            Expanded(
+              child: Container(
+                padding:
+                    EdgeInsets.only(left: THelperFunctions.screenWidth() / 30),
+                alignment: Alignment.centerRight,
+                child: Text(
+                  text,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: THelperFunctions.screenWidth() * 0.035),
+                ),
+              ),
             ),
           ],
         ),

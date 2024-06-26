@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 const TProfileHeader(),
                 const SizedBox(height: 10),
-                Divider(
+                const Divider(
                     color: AppColors.darkGrey,
                     thickness: 0.5,
                     indent: 5,

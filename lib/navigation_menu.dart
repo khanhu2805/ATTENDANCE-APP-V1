@@ -3,8 +3,6 @@ import 'package:fe_attendance_app/features/main_feature/screens/notification/not
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/device/device_utility.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -13,7 +11,8 @@ import 'features/main_feature/screens/home/home_screen.dart';
 import 'features/main_feature/screens/profile/profile_screen.dart';
 
 class NavigationMenu extends StatefulWidget {
-  const NavigationMenu({super.key});
+  const NavigationMenu({super.key, this.index});
+  final int? index;
   @override
   State<NavigationMenu> createState() => _NavigationMenuState();
 }
@@ -27,6 +26,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
     // TODO: implement initState
     super.initState();
     controller = Get.put(NavigationController());
+    controller.selectedIndex.value = widget.index ?? 0;
   }
 
   @override
@@ -66,41 +66,30 @@ class _NavigationMenuState extends State<NavigationMenu> {
         ),
         bottomNavigationBar: Obx(
           () => Container(
-            margin:
-                const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 20.0),
-            height: THelperFunctions.screenHeight() / 12,
+            margin: EdgeInsets.only(
+              bottom: THelperFunctions.screenHeight() / 30,
+              left: THelperFunctions.screenWidth() / 20,
+              right: THelperFunctions.screenWidth() / 20,
+            ),
+            height: THelperFunctions.screenHeight() / 15,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100.0),
                 color: AppColors.secondary),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                InkWell(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  onTap: () => {controller.selectedIndex.value = 0},
-                  child: SizedBox(
-                    // width: DeviceUtils.getScreenWidth() / 6,
-                    // decoration: BoxDecoration(
-                    //   // color: controller.selectedIndex.value == 0
-                    //   //     ? Colors.black.withOpacity(0.1)
-                    //   //     : Colors.transparent,
-                    //   gradient: LinearGradient(
-                    //     colors: controller.selectedIndex.value == 0
-                    //         ? isDark
-                    //             ? [Colors.blue, Colors.grey]
-                    //             : [Colors.blue, Colors.white]
-                    //         : [Colors.transparent, Colors.transparent],
-                    //     begin: Alignment.topLeft,
-                    //     end: Alignment.bottomRight,
-                    //   ),
-                    //   borderRadius: BorderRadius.circular(10),
-                    // ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Expanded(
+                  flex: 3,
+                  child: InkWell(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    onTap: () => {controller.selectedIndex.value = 0},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
-                          Iconsax.home,
+                          controller.selectedIndex.value == 0
+                              ? Iconsax.home_25
+                              : Iconsax.home_24,
                           color: controller.selectedIndex.value == 0
                               ? AppColors.primary
                               : AppColors.primaryBackground,
@@ -111,126 +100,25 @@ class _NavigationMenuState extends State<NavigationMenu> {
                               color: controller.selectedIndex.value == 0
                                   ? AppColors.primary
                                   : AppColors.primaryBackground,
-                              fontSize: DeviceUtils.getScreenWidth() / 40),
+                              fontSize: DeviceUtils.getScreenWidth() / 30),
                         ),
                       ],
                     ),
                   ),
                 ),
-                InkWell(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  onTap: () => {controller.selectedIndex.value = 1},
-                  child: SizedBox(
-                      // width: DeviceUtils.getScreenWidth() / 6,
-                      // decoration: BoxDecoration(
-                      //   // color: controller.selectedIndex.value == 0
-                      //   //     ? Colors.black.withOpacity(0.1)
-                      //   //     : Colors.transparent,
-                      //   gradient: LinearGradient(
-                      //     colors: controller.selectedIndex.value == 1
-                      //         ? isDark
-                      //             ? [Colors.blue, Colors.grey]
-                      //             : [Colors.blue, Colors.white]
-                      //         : [Colors.transparent, Colors.transparent],
-                      //     begin: Alignment.topLeft,
-                      //     end: Alignment.bottomRight,
-                      //   ),
-                      //   borderRadius: BorderRadius.circular(10),
-                      // ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
+                const Expanded(flex: 2, child: SizedBox()),
+                Expanded(
+                  flex: 3,
+                  child: InkWell(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    onTap: () => {controller.selectedIndex.value = 3},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
                         Icon(
-                          Iconsax.calendar,
-                          color: controller.selectedIndex.value == 1
-                              ? AppColors.primary
-                              : AppColors.primaryBackground,
-                        ),
-                        Text(
-                          'Lịch sử',
-                          style: TextStyle(
-                              color: controller.selectedIndex.value == 1
-                                  ? AppColors.primary
-                                  : AppColors.primaryBackground,
-                              fontSize: DeviceUtils.getScreenWidth() / 40),
-                        )
-                      ])),
-                ),
-                SizedBox(width: THelperFunctions.screenWidth() / 20),
-                // Container(
-                //   width: DeviceUtils.getScreenWidth() / 4,
-                //   alignment: Alignment.bottomCenter,
-                //   margin: EdgeInsets.only(),
-                //   child: Text(
-                //     'Điểm danh',
-                //     style: TextStyle(
-                //         fontSize: DeviceUtils.getScreenWidth() / 40),
-                //   ),
-                // ),
-                InkWell(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  onTap: () => {controller.selectedIndex.value = 2},
-                  child: SizedBox(
-                      // width: DeviceUtils.getScreenWidth() / 6,
-                      // decoration: BoxDecoration(
-                      //   // color: controller.selectedIndex.value == 0
-                      //   //     ? Colors.black.withOpacity(0.1)
-                      //   //     : Colors.transparent,
-                      //   gradient: LinearGradient(
-                      //     colors: controller.selectedIndex.value == 2
-                      //         ? isDark
-                      //             ? [Colors.blue, Colors.grey]
-                      //             : [Colors.blue, Colors.yellow]
-                      //         : [Colors.transparent, Colors.transparent],
-                      //     begin: Alignment.topLeft,
-                      //     end: Alignment.bottomRight,
-                      //   ),
-                      //   borderRadius: BorderRadius.circular(10),
-                      // ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                        Icon(
-                          Iconsax.notification,
-                          color: controller.selectedIndex.value == 2
-                              ? AppColors.primary
-                              : AppColors.primaryBackground,
-                        ),
-                        Text(
-                          'Thông báo',
-                          style: TextStyle(
-                              color: controller.selectedIndex.value == 2
-                                  ? AppColors.primary
-                                  : AppColors.primaryBackground,
-                              fontSize: DeviceUtils.getScreenWidth() / 40),
-                        )
-                      ])),
-                ),
-                InkWell(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  onTap: () => {controller.selectedIndex.value = 3},
-                  child: SizedBox(
-                      // width: DeviceUtils.getScreenWidth() / 6,
-                      // decoration: BoxDecoration(
-                      //   // color: controller.selectedIndex.value == 0
-                      //   //     ? Colors.black.withOpacity(0.1)
-                      //   //     : Colors.transparent,
-                      //   gradient: LinearGradient(
-                      //     colors: controller.selectedIndex.value == 3
-                      //         ? isDark
-                      //             ? [Colors.blue, Colors.grey]
-                      //             : [Colors.blue, Colors.yellow]
-                      //         : [Colors.transparent, Colors.transparent],
-                      //     begin: Alignment.topLeft,
-                      //     end: Alignment.bottomRight,
-                      //   ),
-                      //   borderRadius: BorderRadius.circular(10),
-                      // ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                        Icon(
-                          Iconsax.user,
+                          controller.selectedIndex.value == 3
+                              ? Iconsax.profile_circle5
+                              : Iconsax.profile_circle4,
                           color: controller.selectedIndex.value == 3
                               ? AppColors.primary
                               : AppColors.primaryBackground,
@@ -241,9 +129,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
                               color: controller.selectedIndex.value == 3
                                   ? AppColors.primary
                                   : AppColors.primaryBackground,
-                              fontSize: DeviceUtils.getScreenWidth() / 40),
+                              fontSize: DeviceUtils.getScreenWidth() / 30),
                         )
-                      ])),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

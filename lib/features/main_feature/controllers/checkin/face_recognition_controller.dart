@@ -87,7 +87,7 @@ class FaceRecognitionController extends GetxController {
         Uint8List imageData = await picture.readAsBytes();
         img.Image image = img.decodeImage(imageData.buffer.asUint8List())!;
 
-        int targetWidth = (image.width / 4).round();
+        int targetWidth = (image.height / 4).round();
         int targetHeight = (image.height / 4).round();
 
         int startX = (image.width - targetWidth) ~/ 2;
@@ -107,7 +107,7 @@ class FaceRecognitionController extends GetxController {
     DateTime now = d!.toLocal();
     loading.value = true;
     const String apiUrl =
-        'http://113.161.88.238:81/'; // Replace with your API URL
+        'https://121c-118-69-55-70.ngrok-free.app'; // Replace with your API URL
     int attempt = 0;
 
     while (attempt < 3) {
