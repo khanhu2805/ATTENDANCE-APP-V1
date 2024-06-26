@@ -1,7 +1,6 @@
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:camera/camera.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face_recognition_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,8 +39,8 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
                 return IconButton(
                   icon: Icon(
                     controller.flashMode == FlashMode.torch
-                        ? Icons.flash_on_rounded
-                        : Icons.flash_off_rounded,
+                        ? Icons.flashlight_on_rounded
+                        : Icons.flashlight_off_rounded,
                   ),
                   onPressed: () {
                     controller.toggleFlash();
@@ -51,6 +50,7 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
             ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
         floatingActionButton: ElevatedButton(
             onPressed: () {
               cameraController.sendImageToAPI();

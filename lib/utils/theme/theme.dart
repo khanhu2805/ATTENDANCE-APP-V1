@@ -1,5 +1,7 @@
+import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/theme/custom_themes/appbar_theme.dart';
 import 'package:fe_attendance_app/utils/theme/custom_themes/bottom_sheet_theme.dart';
+import 'package:fe_attendance_app/utils/theme/custom_themes/checkbox_theme.dart';
 import 'package:fe_attendance_app/utils/theme/custom_themes/chip_theme.dart';
 import 'package:fe_attendance_app/utils/theme/custom_themes/elevated_button_theme.dart';
 import 'package:fe_attendance_app/utils/theme/custom_themes/outlined_button_theme.dart';
@@ -14,16 +16,16 @@ class AppTheme {
       useMaterial3: true,
       fontFamily: 'BeVietnamPro',
       brightness: Brightness.light,
-      primaryColor: Colors.blue,
+      primaryColor: AppColors.primary,
       scaffoldBackgroundColor: Colors.white,
       textTheme: AppTextTheme.lightTextTheme,
       elevatedButtonTheme: AppElevatedButtonTheme.lightElevatedButtonTheme,
       chipTheme: AppChipTheme.lightChipTheme,
+      checkboxTheme: AppCheckboxTheme.lightCheckboxTheme,
       bottomSheetTheme: AppBottomSheetTheme.lightBottomSheetTheme,
       outlinedButtonTheme: AppOutlinedButtonTheme.lightOutlinedButtonTheme,
       inputDecorationTheme: AppTextFieldTheme.lightInputDecorationTheme,
-    appBarTheme: AppAppBarTheme.lightAppBarTheme
-  );
+      appBarTheme: AppAppBarTheme.lightAppBarTheme);
   static ThemeData darkTheme = ThemeData(
       useMaterial3: true,
       fontFamily: 'BeVietnamPro',
@@ -33,9 +35,9 @@ class AppTheme {
       textTheme: AppTextTheme.darkTextTheme,
       elevatedButtonTheme: AppElevatedButtonTheme.darkElevatedButtonTheme,
       chipTheme: AppChipTheme.darkChipTheme,
+      checkboxTheme: AppCheckboxTheme.darkCheckboxTheme,
       bottomSheetTheme: AppBottomSheetTheme.darkBottomSheetTheme,
       outlinedButtonTheme: AppOutlinedButtonTheme.darkOutlinedButtonTheme,
       inputDecorationTheme: AppTextFieldTheme.darkInputDecorationTheme,
-      appBarTheme: AppAppBarTheme.darkAppBarTheme
-  );
+      appBarTheme: AppAppBarTheme.darkAppBarTheme);
 }

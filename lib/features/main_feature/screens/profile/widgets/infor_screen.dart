@@ -75,7 +75,7 @@ class TInforHeaderScreen extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.pastelBlue, AppColors.yellow],
+          colors: [AppColors.secondary, AppColors.primary],
         ),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(35.0),

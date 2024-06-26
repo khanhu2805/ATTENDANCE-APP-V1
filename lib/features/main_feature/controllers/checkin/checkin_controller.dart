@@ -7,28 +7,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmt/gmt.dart';
-import 'package:intl/intl.dart';
 
 class CheckinController extends GetxController {
   static CheckinController get instance => Get.find();
 
   Rx<String> studentCode = ''.obs;
   Rx<int> screenIndex = 0.obs;
-  Rx<bool> loading = true.obs;
   Rx<bool> flashing = false.obs;
-  List<Widget> screen = [BarcodeScannerScreen(), FaceRecognitionScreen()];
+  List<Widget> screen = [const BarcodeScannerScreen(), const FaceRecognitionScreen()];
   final _auth = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  QueryDocumentSnapshot? documentSnapshot;
   bool checkin = false;
   DateTime dateTime = DateTime.now();
   DocumentReference? documentReference;
+  QueryDocumentSnapshot<Map<String, dynamic>>? documentSnapshot;
 
-  void getClassInfo() async {
-    loading.value = true;
+  Stream<QueryDocumentSnapshot<Map<String, dynamic>>?> getClassInfo() async* {
     DateTime? d = await GMT.now();
     dateTime = d!.toLocal();
-    documentSnapshot = null;
+    QueryDocumentSnapshot<Map<String, dynamic>>? query;
     var querySnapshot = await _firestore
         .collection(_auth!.uid)
         .where('day_of_class',
@@ -47,23 +44,25 @@ class CheckinController extends GetxController {
               ((dateTime.hour * 60 + dateTime.minute) -
                       AppFormatter.formatStringToTime(doc.get('start_hour'))) >=
                   0) {
-            documentSnapshot = doc;
             checkin = true;
+            documentSnapshot = doc;
+            query = doc;
           } else if ((AppFormatter.formatStringToTime(doc.get('end_hour')) -
                       (dateTime.hour * 60 + dateTime.minute)) <=
                   15 &&
               (AppFormatter.formatStringToTime(doc.get('end_hour')) -
                       (dateTime.hour * 60 + dateTime.minute)) >=
                   0) {
-            documentSnapshot = doc;
             checkin = false;
+            documentSnapshot = doc;
+            query = doc;
           }
         }
       }
     }, onError: (e) {
       print('Error Class: ' + e.toString());
     });
-    loading.value = false;
+    yield query;
   }
 
   void checkStudentCode(String barcode) {
@@ -119,6 +118,6 @@ class CheckinController extends GetxController {
     }, onError: (error) {
       print("Error when start checkin ${error.message}");
     });
-    Get.to(() => CompareScreen());
+    Get.to(() => const CompareScreen());
   }
 }

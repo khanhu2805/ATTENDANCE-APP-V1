@@ -35,13 +35,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
               onPressed: () {
                 mobileScannerController.switchCamera();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.cameraswitch_rounded,
               )),
           IconButton(

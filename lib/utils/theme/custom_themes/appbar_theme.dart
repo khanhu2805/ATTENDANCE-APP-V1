@@ -1,3 +1,4 @@
+import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class AppAppBarTheme {
@@ -7,10 +8,10 @@ class AppAppBarTheme {
     elevation: 0,
     centerTitle: false,
     scrolledUnderElevation: 0,
-    backgroundColor: Colors.transparent,
+    backgroundColor: AppColors.secondary,
     surfaceTintColor: Colors.transparent,
-    iconTheme: IconThemeData(color: Colors.black, size: 24),
-    actionsIconTheme: IconThemeData(color: Colors.black, size: 24),
+    iconTheme: IconThemeData(color: AppColors.white, size: 24),
+    actionsIconTheme: IconThemeData(color: AppColors.white, size: 24),
     titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.black)
   );
 

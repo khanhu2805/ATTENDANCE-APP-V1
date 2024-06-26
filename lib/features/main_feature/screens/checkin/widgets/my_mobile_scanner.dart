@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fe_attendance_app/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/src/mobile_scanner_controller.dart';
 import 'package:mobile_scanner/src/mobile_scanner_exception.dart';
@@ -187,8 +188,8 @@ class _MobileScannerState extends State<MyMobileScanner>
       builder: (BuildContext context, MobileScannerState value, Widget? child) {
         if (!value.isInitialized) {
           Widget defaultPlaceholder = Container(
-            child: Center(child: CircularProgressIndicator()),
             alignment: Alignment.center,
+            child: Center(child: AppLoaders.showCircularLoader()),
           );
 
           return widget.placeholderBuilder?.call(context, child) ??

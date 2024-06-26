@@ -1,5 +1,6 @@
 import 'package:fe_attendance_app/features/main_feature/screens/log/log_screen.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/notification/notification_screen.dart';
+import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/device/device_utility.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ import 'features/main_feature/screens/home/home_screen.dart';
 import 'features/main_feature/screens/profile/profile_screen.dart';
 
 class NavigationMenu extends StatefulWidget {
-  const NavigationMenu({ super.key});
+  const NavigationMenu({super.key, this.index});
+  final int? index;
   @override
   State<NavigationMenu> createState() => _NavigationMenuState();
 }
@@ -24,6 +26,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
     // TODO: implement initState
     super.initState();
     controller = Get.put(NavigationController());
+    controller.selectedIndex.value = widget.index ?? 0;
   }
 
   @override
@@ -38,181 +41,101 @@ class _NavigationMenuState extends State<NavigationMenu> {
         floatingActionButton: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: LinearGradient(
-              // colors: isDark
-              //     ? [Colors.blue, Colors.white]
-              //     : [Colors.blue, Colors.],
-              colors: [Colors.blue, Colors.white],
+            border: Border.all(
+                color: AppColors.secondary,
+                width: 3.0,
+                strokeAlign: BorderSide.strokeAlignOutside),
+            gradient: const LinearGradient(
+              colors: [AppColors.accent, AppColors.primary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
-          child: FloatingActionButton(
+          child: ElevatedButton(
             onPressed: () {
               controller.selectedIndex.value = 4;
             },
-            backgroundColor: Colors.transparent,
-            child: Icon(Iconsax.scan),
-            elevation: 0,
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0.0),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              backgroundColor: MaterialStateProperty.all(Colors.transparent),
+              side: MaterialStateProperty.all(BorderSide.none),
+            ),
+            child: const Icon(Iconsax.scan),
           ),
         ),
         bottomNavigationBar: Obx(
-          () => BottomAppBar(
-            shape: const CircularNotchedRectangle(),
-            height: DeviceUtils.getScreenHeight() / 10,
-            elevation: 0,
-            padding: EdgeInsets.all(4.0),
-            color: isDark ? Colors.blue : Colors.white,
-            child: IconTheme(
-              data: IconThemeData(color: isDark ? Colors.white : Colors.black),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
+          () => Container(
+            margin: EdgeInsets.only(
+              bottom: THelperFunctions.screenHeight() / 30,
+              left: THelperFunctions.screenWidth() / 20,
+              right: THelperFunctions.screenWidth() / 20,
+            ),
+            height: THelperFunctions.screenHeight() / 15,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100.0),
+                color: AppColors.secondary),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: InkWell(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     onTap: () => {controller.selectedIndex.value = 0},
-                    child: Container(
-                      width: DeviceUtils.getScreenWidth() / 6,
-                      decoration: BoxDecoration(
-                        // color: controller.selectedIndex.value == 0
-                        //     ? Colors.black.withOpacity(0.1)
-                        //     : Colors.transparent,
-                        gradient: LinearGradient(
-                          colors: controller.selectedIndex.value == 0
-                              ? isDark
-                                  ? [Colors.blue, Colors.grey]
-                                  : [Colors.blue, Colors.white]
-                              : [Colors.transparent, Colors.transparent],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          controller.selectedIndex.value == 0
+                              ? Iconsax.home_25
+                              : Iconsax.home_24,
+                          color: controller.selectedIndex.value == 0
+                              ? AppColors.primary
+                              : AppColors.primaryBackground,
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Icon(Iconsax.home),
-                          Text(
-                            'Trang chủ',
-                            style: TextStyle(
-                                fontSize: DeviceUtils.getScreenWidth() / 40),
-                          ),
-                        ],
-                      ),
+                        Text(
+                          'Trang chủ',
+                          style: TextStyle(
+                              color: controller.selectedIndex.value == 0
+                                  ? AppColors.primary
+                                  : AppColors.primaryBackground,
+                              fontSize: DeviceUtils.getScreenWidth() / 30),
+                        ),
+                      ],
                     ),
                   ),
-                  InkWell(
-                    onTap: () => {controller.selectedIndex.value = 1},
-                    child: Container(
-                        width: DeviceUtils.getScreenWidth() / 6,
-                        decoration: BoxDecoration(
-                          // color: controller.selectedIndex.value == 0
-                          //     ? Colors.black.withOpacity(0.1)
-                          //     : Colors.transparent,
-                          gradient: LinearGradient(
-                            colors: controller.selectedIndex.value == 1
-                                ? isDark
-                                    ? [Colors.blue, Colors.grey]
-                                    : [Colors.blue, Colors.white]
-                                : [Colors.transparent, Colors.transparent],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(
-                                Iconsax.calendar,
-                                color: Colors.grey,
-                              ),
-                              Text(
-                                'Lịch sử',
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize:
-                                        DeviceUtils.getScreenWidth() / 40),
-                              )
-                            ])),
-                  ),
-                  SizedBox(
-                    width: 35.0,
-                  ),
-                  // Container(
-                  //   width: DeviceUtils.getScreenWidth() / 4,
-                  //   alignment: Alignment.bottomCenter,
-                  //   margin: EdgeInsets.only(),
-                  //   child: Text(
-                  //     'Điểm danh',
-                  //     style: TextStyle(
-                  //         fontSize: DeviceUtils.getScreenWidth() / 40),
-                  //   ),
-                  // ),
-                  InkWell(
-                    onTap: () => {controller.selectedIndex.value = 2},
-                    child: Container(
-                        width: DeviceUtils.getScreenWidth() / 6,
-                        decoration: BoxDecoration(
-                          // color: controller.selectedIndex.value == 0
-                          //     ? Colors.black.withOpacity(0.1)
-                          //     : Colors.transparent,
-                          gradient: LinearGradient(
-                            colors: controller.selectedIndex.value == 2
-                                ? isDark
-                                    ? [Colors.blue, Colors.grey]
-                                    : [Colors.blue, Colors.yellow]
-                                : [Colors.transparent, Colors.transparent],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(Iconsax.notification),
-                              Text(
-                                'Thông báo',
-                                style: TextStyle(
-                                    fontSize:
-                                        DeviceUtils.getScreenWidth() / 40),
-                              )
-                            ])),
-                  ),
-                  InkWell(
+                ),
+                const Expanded(flex: 2, child: SizedBox()),
+                Expanded(
+                  flex: 3,
+                  child: InkWell(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     onTap: () => {controller.selectedIndex.value = 3},
-                    child: Container(
-                        width: DeviceUtils.getScreenWidth() / 6,
-                        decoration: BoxDecoration(
-                          // color: controller.selectedIndex.value == 0
-                          //     ? Colors.black.withOpacity(0.1)
-                          //     : Colors.transparent,
-                          gradient: LinearGradient(
-                            colors: controller.selectedIndex.value == 3
-                                ? isDark
-                                    ? [Colors.blue, Colors.grey]
-                                    : [Colors.blue, Colors.yellow]
-                                : [Colors.transparent, Colors.transparent],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          controller.selectedIndex.value == 3
+                              ? Iconsax.profile_circle5
+                              : Iconsax.profile_circle4,
+                          color: controller.selectedIndex.value == 3
+                              ? AppColors.primary
+                              : AppColors.primaryBackground,
                         ),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(Iconsax.user),
-                              Text(
-                                'Tài khoản',
-                                style: TextStyle(
-                                    fontSize:
-                                        DeviceUtils.getScreenWidth() / 40),
-                              )
-                            ])),
+                        Text(
+                          'Tài khoản',
+                          style: TextStyle(
+                              color: controller.selectedIndex.value == 3
+                                  ? AppColors.primary
+                                  : AppColors.primaryBackground,
+                              fontSize: DeviceUtils.getScreenWidth() / 30),
+                        )
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

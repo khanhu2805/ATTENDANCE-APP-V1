@@ -4,19 +4,9 @@ class AppColors {
   AppColors._();
 
   // App theme colors
-  static const Color pastelBlue = Color.fromRGBO(58, 185, 202, 1);
-  static const Color blue = Color.fromRGBO(1, 145, 182, 1);
-  static const Color yellow = Color.fromRGBO(249, 216, 13, 1);
-  static const Color green = Color.fromRGBO(211, 222, 22, 1);
-  static const Color orange = Color.fromRGBO(255, 123, 23, 1);
-
-
-  static const Color primary = Color(0xFF4b68ff);
-  static const Color secondary = Color(0xFFFFE24B);
-  static const Color accent = Color(0xFFb0c7ff);
-  
-
-
+  static const Color primary = Color(0xFFF2DE68);
+  static const Color secondary = Color(0xFF215696);
+  static const Color accent = Color(0xFF35929D);
 
   // Icon colors
   static const Color iconPrimary = Color(0xFF8D8D8D);
@@ -31,18 +21,14 @@ class AppColors {
   static const Color textWhite = Colors.white;
 
   // Background colors
-  static const Color light = Color(0xFFF6F6F6);
+  static const Color light = Color(0xFFF0EDE9);
   static const Color dark = Color(0xFF272727);
   static const Color primaryBackground = Color(0xFFF5F5F5);
 
-  // Background Container colors
-  static const Color lightContainer = Color(0xFFF6F6F6);
-  static Color darkContainer = AppColors.white.withOpacity(0.1);
-
   // Button colors
-  static const Color buttonPrimary = Color(0xFF4b68ff);
-  static const Color buttonSecondary = Color(0xFF6C757D);
-  static const Color buttonDisabled = Color(0xFFC4C4C4);
+  static const Color buttonPrimary = Color(0xFF215696);
+  static const Color buttonSecondary = Color(0xFF35929D);
+  static const Color buttonDisabled = Color(0xFF939393);
 
   // Border colors
   static const Color borderPrimary = Color(0xFFD9D9D9);
