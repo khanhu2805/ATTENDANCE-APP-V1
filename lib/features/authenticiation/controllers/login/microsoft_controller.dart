@@ -1,16 +1,9 @@
-import 'package:fe_attendance_app/features/main_feature/screens/home/home_screen.dart';
-import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../utils/constants/image_strings.dart';
-import '../../../../utils/helpers/network_manager.dart';
 import '../../../../utils/popups/full_screen_loader.dart';
-import '../../../../utils/popups/loaders.dart';
 import '../../../../utils/repository/authentication_repository.dart';
 
 class MicrosoftControlller extends GetxController {
@@ -43,11 +36,13 @@ class MicrosoftControlller extends GetxController {
           await prefs.setBool('rememberMe', true);
         }
 
-        final idTokenFuture = user.value!.getIdToken();
-        final idToken = await idTokenFuture;
-
         print('Name: ${FirebaseAuth.instance.currentUser?.displayName}');
         print('profile: ${userCredential.additionalUserInfo?.profile}');
+
+        await prefs.setString('jobTitle', userCredential.additionalUserInfo?.profile?['jobTitle'] ?? '');
+        await prefs.setString('displayName', userCredential.additionalUserInfo?.profile?['displayName'] ?? '');
+        await prefs.setString('mail', userCredential.additionalUserInfo?.profile?['mail'] ?? '');
+
         AuthenticationRepository.instance.screenRedirect();
       } else {
         print('Đăng nhập lỗi: tài khoản không tồn tại');
