@@ -1,4 +1,5 @@
 import 'package:fe_attendance_app/utils/constants/colors.dart';
+import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -17,24 +18,32 @@ class TProfileMenuTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         ListTile(
           leading: Container(
             padding: const EdgeInsets.all(8.0),
-            decoration: const BoxDecoration(
-              color: AppColors.bkIconProfile,
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.primaryBackground : AppColors.bkIconProfile,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: AppColors.iconProfile),
+            child: Icon(icon, color: AppColors.secondary),
           ),
-          title: Text(title),
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: THelperFunctions.screenWidth() * 0.045,
+                ),
+          ),
           trailing: Container(
             padding: const EdgeInsets.all(8.0),
-            child: const Icon(Iconsax.arrow_right_3, color: AppColors.iconProfile),
+            child:
+                const Icon(Iconsax.arrow_right_3, color: AppColors.secondary),
           ),
           onTap: onTap,
         ),
+        
         const SizedBox(height: 20),
       ],
     );

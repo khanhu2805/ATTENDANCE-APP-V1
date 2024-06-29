@@ -1,5 +1,8 @@
 import 'package:fe_attendance_app/features/main_feature/screens/log/log_screen.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/notification/notification_screen.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/profile/account_information_screen.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/profile/privacy_policy_screen.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/profile/terms_conditon_screen.dart';
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/device/device_utility.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
@@ -152,6 +155,9 @@ class NavigationController extends GetxController {
     const LogScreen(),
     const NotificationScreeen(),
     const ProfileScreen(),
-    const CheckinScreen()
+    const CheckinScreen(),
+    const AccountInfoScreen(),//5
+    const PrivacyPolicyScreen(),//6
+    const TermsConditionScreen(),//7
   ];
 }

@@ -17,24 +17,29 @@ class TInforScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = THelperFunctions.isDarkMode(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(  
+        Row(
           children: [
-            Text( 
+            Text(
               title,
               style: TextStyle(
                 fontSize: AppSizes.fontSizeLg,
-                color: Colors.grey[600],
+                color: isDark
+                    ? AppColors.white.withOpacity(0.6)
+                    : AppColors.secondary.withOpacity(0.6),
               ),
             ),
-            const Spacer(), 
-            SizedBox( 
-              width: MediaQuery.of(context).size.width -200, 
+            const Spacer(),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 200,
               child: Text(
                 content,
-                style: const TextStyle(fontSize: AppSizes.fontSizeLg),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: THelperFunctions.screenWidth() * 0.045,
+                    ),
                 softWrap: true,
                 textAlign: TextAlign.end,
               ),
@@ -42,11 +47,13 @@ class TInforScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        const Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey,
-          ),
+        Divider(
+          height: 1,
+          thickness: 1,
+          color: isDark
+              ? AppColors.white.withOpacity(0.4)
+              : AppColors.secondary.withOpacity(0.4),
+        ),
         const SizedBox(height: 10),
       ],
     );
@@ -65,19 +72,18 @@ class TInforHeaderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = THelperFunctions.isDarkMode(context);
     return Container(
       height: THelperFunctions.screenHeight() / 8,
       width: THelperFunctions.screenWidth(),
       constraints: const BoxConstraints(
-        minHeight: 250,
+        minHeight: 230,
       ),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppColors.secondary, AppColors.primary],
-        ),
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppColors.primaryBackgroundDark
+            : AppColors.primaryBackground,
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(35.0),
           bottomRight: Radius.circular(35.0),
         ),
@@ -92,12 +98,22 @@ class TInforHeaderScreen extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Center(
-            child: Text(displayName,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+            child: Text(
+          displayName.toUpperCase(),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontSize: THelperFunctions.screenWidth() * 0.045,
+                fontWeight: FontWeight.bold,
+              ),
+        )),
         const SizedBox(height: 5),
-        Center(child: Text(jobTitle, style: const TextStyle(fontSize: 18))),
-        const SizedBox(height: 20),
+        Center(
+            child: Text(jobTitle,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: isDark
+                      ? AppColors.white.withOpacity(0.4)
+                      : AppColors.secondary.withOpacity(0.4),
+                ))),
       ]),
     );
   }

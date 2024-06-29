@@ -1,7 +1,5 @@
 import 'package:fe_attendance_app/features/main_feature/controllers/profile/profile_controller.dart';
-import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/appbar_profile.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/infor_screen.dart';
-import 'package:fe_attendance_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,9 +26,6 @@ class _AccountInfoScreen extends State<AccountInfoScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            const TAppBar(
-              title: AppTexts.myProfileTitle,
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

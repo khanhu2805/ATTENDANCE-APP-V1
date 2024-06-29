@@ -1,12 +1,10 @@
-import 'package:fe_attendance_app/features/main_feature/screens/profile/account_information_screen.dart';
-import 'package:fe_attendance_app/features/main_feature/screens/profile/privacy_policy_screen.dart';
-import 'package:fe_attendance_app/features/main_feature/screens/profile/terms_conditon_screen.dart';
+
 import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/profile_header.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/profile_menu_logout.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/profile_menu_title.dart';
+import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:fe_attendance_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,8 +15,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late NavigationController navigationController;
+
   @override
   void initState() {
+    navigationController = NavigationController.instance;
     super.initState();
   }
 
@@ -39,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Iconsax.frame_1,
                       title: AppTexts.myProfileTitle,
                       onTap: () {
-                        Get.to(const AccountInfoScreen());
+                        navigationController.selectedIndex.value = 5;
                       },
                     ),
                     TProfileMenuTitle(
@@ -51,14 +52,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Iconsax.receipt_2_1,
                       title: AppTexts.termsTitle,
                       onTap: () {
-                        Get.to(const TermsConditionScreen());
+                        navigationController.selectedIndex.value = 7;
                       },
                     ),
                     TProfileMenuTitle(
                       icon: Iconsax.shield_tick,
                       title: AppTexts.privacyPolicyTitle,
                       onTap: () {
-                        Get.to(const PrivacyPolicyScreen());
+                        navigationController.selectedIndex.value = 6;
                       },
                     ),
                     const TProfileMenuLogout(),

@@ -1,5 +1,4 @@
-import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/appbar_profile.dart';
-import 'package:fe_attendance_app/utils/constants/text_strings.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -59,10 +58,6 @@ class TermsConditionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: TAppBar(title: AppTexts.termsTitle,),
-      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(16.0),
