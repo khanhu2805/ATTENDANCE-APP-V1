@@ -1,13 +1,11 @@
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class LogScreen extends StatefulWidget {
-  const LogScreen({super.key});
-
+  const LogScreen({super.key, this.id});
+  final String? id;
   @override
   State<LogScreen> createState() => _LogScreenState();
 }

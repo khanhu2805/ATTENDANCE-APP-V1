@@ -2,7 +2,6 @@ import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,13 +49,17 @@ class _CompareScreenState extends State<CompareScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      controller.screenIndex.value == 0
-                          ? 'Vui lòng quét thẻ sinh viên'
-                          : 'Mã sinh viên: ${controller.studentCode.value}',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontSize: THelperFunctions.screenWidth() * 0.038),
-                    ),
+                    Obx(() => Text(
+                          controller.screenIndex.value == 0
+                              ? 'Vui lòng quét thẻ sinh viên'
+                              : 'Mã sinh viên: ${controller.studentCode.value}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  fontSize:
+                                      THelperFunctions.screenWidth() * 0.038),
+                        )),
                     const SizedBox(
                       height: 10.0,
                     ),

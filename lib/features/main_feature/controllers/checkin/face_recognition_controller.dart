@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
-import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
-import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
+import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/checkin/widgets/pop_up_dialog.dart';
+import 'package:fe_attendance_app/utils/constants/colors.dart';
+import 'package:fe_attendance_app/utils/constants/image_strings.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
+import 'package:flutter/material.dart';
+import 'package:http/io_client.dart';
+import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:gmt/gmt.dart';
-import 'package:http/http.dart' as http;
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FaceRecognitionController extends GetxController {
   static FaceRecognitionController get instance => Get.find();
@@ -16,15 +20,14 @@ class FaceRecognitionController extends GetxController {
   CameraController? cameraController;
   List<CameraDescription>? cameras;
   int selectedCameraIndex = 0;
-  FlashMode flashMode = FlashMode.off;
-  RxString studentCode = ''.obs;
+  Rx<FlashMode> flashMode = FlashMode.off.obs;
   RxBool loading = false.obs;
 
   Future<void> initializeCamera() async {
     try {
       cameras = await availableCameras();
       if (cameras!.isNotEmpty) {
-        selectedCameraIndex = 0;
+        selectedCameraIndex = 1;
         await setCamera(selectedCameraIndex);
       }
     } catch (e) {
@@ -34,6 +37,7 @@ class FaceRecognitionController extends GetxController {
 
   Future<void> setCamera(int index) async {
     try {
+      loading.value = true;
       if (cameraController != null) {
         await cameraController!.dispose();
         cameraController = null;
@@ -48,18 +52,18 @@ class FaceRecognitionController extends GetxController {
         );
 
         await cameraController!.initialize();
-        update();
+        loading.value = false;
       }
     } catch (e) {
       print('Error setting camera: $e');
+      loading.value = false;
     }
   }
 
   Future<void> updateFlashMode(FlashMode mode) async {
     try {
       await cameraController?.setFlashMode(mode);
-      flashMode = mode;
-      update();
+      flashMode.value = mode;
     } catch (e) {
       print('Error setting flash mode: $e');
     }
@@ -73,7 +77,7 @@ class FaceRecognitionController extends GetxController {
   }
 
   void toggleFlash() {
-    if (flashMode == FlashMode.off) {
+    if (flashMode.value == FlashMode.off) {
       updateFlashMode(FlashMode.torch);
     } else {
       updateFlashMode(FlashMode.off);
@@ -105,14 +109,17 @@ class FaceRecognitionController extends GetxController {
   Future<void> sendImageToAPI() async {
     DateTime? d = await GMT.now();
     DateTime now = d!.toLocal();
-    loading.value = true;
     const String apiUrl =
-        'https://121c-118-69-55-70.ngrok-free.app'; // Replace with your API URL
+        'https://f397-123-21-80-124.ngrok-free.app'; // Replace with your API URL
     int attempt = 0;
 
     while (attempt < 3) {
       try {
         String base64Image = await captureImage();
+        final ioc = HttpClient();
+        ioc.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        final http = IOClient(ioc);
         final response = await http.post(
           Uri.parse(apiUrl),
           headers: {
@@ -120,36 +127,167 @@ class FaceRecognitionController extends GetxController {
           },
           body: jsonEncode({'image': base64Image}),
         );
-
         if (response.statusCode == 200) {
           print('Image sent successfully');
           if (response.body != 'Khong nhan dien duoc') {
-            studentCode.value = response.body;
-            if (checkinController.studentCode.value == studentCode.value) {
-              checkinController.documentReference
-                  ?.update({studentCode.value: now});
+            if (checkinController.studentCode.value == response.body) {
+              checkinController.documentReference?.update({response.body: now});
               checkinController.screenIndex.value = 0;
+              Get.dialog(
+                PopUpDialog(
+                  seconds: 5,
+                  result: true,
+                  widget: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TAnimationLoaderWidget(
+                        text: '',
+                        animation: AppImages.successfulAnimation,
+                        height: THelperFunctions.screenHeight() / 8,
+                      ),
+                      Text(
+                        'Điểm danh thành công',
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.secondary,
+                            fontSize: THelperFunctions.screenWidth() * 0.04),
+                      ),
+                      Text(
+                        response.body,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.secondary,
+                            fontSize: THelperFunctions.screenWidth() * 0.04),
+                      )
+                    ],
+                  ),
+                ),
+                transitionDuration: const Duration(milliseconds: 200),
+              );
+              return;
+            } else {
+              print(response.body);
             }
-            loading.value = false;
-            return;
-          } // Exit the function if successful
+          }
         } else {
-          print('Failed to send image: ${response.statusCode}');
+          Get.dialog(
+            PopUpDialog(
+              function: () async {
+                await sendImageToAPI();
+              },
+              seconds: 5,
+              result: false,
+              widget: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TAnimationLoaderWidget(
+                    text: '',
+                    animation: AppImages.failAnimation,
+                    height: THelperFunctions.screenHeight() / 8,
+                  ),
+                  Text(
+                    'Lỗi API',
+                    maxLines: 1,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.secondary,
+                        fontSize: THelperFunctions.screenWidth() * 0.04),
+                  ),
+                ],
+              ),
+            ),
+            transitionDuration: const Duration(milliseconds: 200),
+          );
         }
       } catch (e) {
-        print('Error sending image to API: $e');
+        Get.dialog(
+          PopUpDialog(
+            function: () async {
+              await sendImageToAPI();
+            },
+            seconds: 5,
+            result: false,
+            widget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TAnimationLoaderWidget(
+                  text: '',
+                  animation: AppImages.failAnimation,
+                  height: THelperFunctions.screenHeight() / 8,
+                ),
+                Text(
+                  'Lỗi API',
+                  maxLines: 1,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.secondary,
+                      fontSize: THelperFunctions.screenWidth() * 0.04),
+                ),
+              ],
+            ),
+          ),
+          transitionDuration: const Duration(milliseconds: 200),
+        );
       }
-
       attempt++;
-      await Future.delayed(const Duration(seconds: 3)); // Wait before retrying
+      await Future.delayed(const Duration(seconds: 1));
     }
-    studentCode.value = 'Không nhận diện được';
-    loading.value = false;
+    Get.dialog(
+      PopUpDialog(
+        function: () async {
+          await sendImageToAPI();
+        },
+        seconds: 5,
+        result: false,
+        widget: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TAnimationLoaderWidget(
+              text: '',
+              animation: AppImages.failAnimation,
+              height: THelperFunctions.screenHeight() / 8,
+            ),
+            Text(
+              'Chưa nhận diện được gương mặt',
+              maxLines: 1,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.secondary,
+                  fontSize: THelperFunctions.screenWidth() * 0.04),
+            ),
+            Text(
+              'Vui lòng đưa gương mặt vào đúng ô quy định',
+              maxLines: 1,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.secondary,
+                  fontSize: THelperFunctions.screenWidth() * 0.04),
+            ),
+          ],
+        ),
+      ),
+      transitionDuration: const Duration(milliseconds: 200),
+    );
+  }
+
+  void disposeCamera() {
+    cameraController?.dispose();
+    cameraController = null;
   }
 
   @override
   void onClose() {
-    cameraController?.dispose();
+    disposeCamera();
     super.onClose();
   }
 }

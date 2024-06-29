@@ -2,7 +2,6 @@ import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'widgets/my_mobile_scanner.dart';
 
@@ -21,7 +20,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     // TODO: implement initState
     super.initState();
     controller = CheckinController.instance;
-    mobileScannerController = MobileScannerController();
+    mobileScannerController = MobileScannerController(facing: CameraFacing.front);
   }
 
   @override

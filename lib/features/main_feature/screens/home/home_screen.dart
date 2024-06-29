@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/home/home_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/home/widgets/infor_class.dart';
-import 'package:fe_attendance_app/features/main_feature/screens/log/log_screen.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
@@ -447,16 +446,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     margin: EdgeInsets.only(
                                                                         top: THelperFunctions.screenHeight() /
                                                                             30),
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerRight,
-                                                                    child: ElevatedButton(
-                                                                        onPressed: () {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        },
-                                                                        child: const Text('Đóng')),
-                                                                  ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                            navigationController.selectedIndex.value =
+                                                                                1;
+                                                                          },
+                                                                          child:
+                                                                              const Text('Lịch sử điểm danh'),
+                                                                        ),
+                                                                        const Spacer(),
+                                                                        ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                          child:
+                                                                              const Text('Đóng'),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )
                                                                 ],
                                                               ),
                                                             )
@@ -468,10 +481,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   children: [
                                                     Row(
                                                       children: [
-                                                        Icon(
-                                                          Iconsax.book,
-                                                          color: isDark ? AppColors.white : AppColors.secondary,
+                                                        Container(
+                                                          width: THelperFunctions
+                                                                  .screenWidth() /
+                                                              6,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration: BoxDecoration(
+                                                              color: AppColors
+                                                                  .secondary,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0)),
+                                                          child: Text(
+                                                            pageItems[index].get(
+                                                                'start_hour'),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .titleMedium
+                                                                ?.copyWith(
+                                                                    color: AppColors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        THelperFunctions.screenWidth() *
+                                                                            0.04),
+                                                          ),
                                                         ),
+                                                        // const Icon(
+                                                        //   Iconsax.book,
+                                                        //   color: AppColors
+                                                        //       .secondary,
+                                                        // ),
                                                         SizedBox(
                                                           width: THelperFunctions
                                                                   .screenWidth() /
@@ -480,7 +522,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         SizedBox(
                                                           width: THelperFunctions
                                                                   .screenWidth() /
-                                                              1.5,
+                                                              2,
                                                           child: Text(
                                                             pageItems[index].get(
                                                                 'name_of_class'),

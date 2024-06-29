@@ -1,4 +1,3 @@
-import 'package:fe_attendance_app/features/main_feature/screens/home/home_screen.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,7 +58,7 @@ class AuthenticationRepository extends GetxController {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
       throw TFirebaseAuthException(e.code).message;
-    } on FormatException catch (e) {
+    } on FormatException {
       throw const TFormatException();
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
