@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/home/home_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/home/widgets/infor_class.dart';
-import 'package:fe_attendance_app/features/main_feature/screens/log/log_screen.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
