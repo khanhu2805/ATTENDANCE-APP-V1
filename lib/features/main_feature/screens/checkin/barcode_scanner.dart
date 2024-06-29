@@ -20,7 +20,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     // TODO: implement initState
     super.initState();
     controller = CheckinController.instance;
-    mobileScannerController = MobileScannerController();
+    mobileScannerController = MobileScannerController(facing: CameraFacing.front);
   }
 
   @override

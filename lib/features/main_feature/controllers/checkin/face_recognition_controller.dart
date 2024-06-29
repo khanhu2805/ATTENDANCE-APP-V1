@@ -1,6 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/checkin/widgets/pop_up_dialog.dart';
+import 'package:fe_attendance_app/utils/constants/colors.dart';
+import 'package:fe_attendance_app/utils/constants/image_strings.dart';
+import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
+import 'package:flutter/material.dart';
 import 'package:http/io_client.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:gmt/gmt.dart';
@@ -15,14 +21,13 @@ class FaceRecognitionController extends GetxController {
   List<CameraDescription>? cameras;
   int selectedCameraIndex = 0;
   Rx<FlashMode> flashMode = FlashMode.off.obs;
-  RxString studentCode = ''.obs;
   RxBool loading = false.obs;
 
   Future<void> initializeCamera() async {
     try {
       cameras = await availableCameras();
       if (cameras!.isNotEmpty) {
-        selectedCameraIndex = 0;
+        selectedCameraIndex = 1;
         await setCamera(selectedCameraIndex);
       }
     } catch (e) {
@@ -105,7 +110,7 @@ class FaceRecognitionController extends GetxController {
     DateTime? d = await GMT.now();
     DateTime now = d!.toLocal();
     const String apiUrl =
-        'https://a698-123-21-80-124.ngrok-free.app'; // Replace with your API URL
+        'https://f397-123-21-80-124.ngrok-free.app'; // Replace with your API URL
     int attempt = 0;
 
     while (attempt < 3) {
@@ -125,27 +130,154 @@ class FaceRecognitionController extends GetxController {
         if (response.statusCode == 200) {
           print('Image sent successfully');
           if (response.body != 'Khong nhan dien duoc') {
-            studentCode.value = response.body;
-            if (checkinController.studentCode.value == studentCode.value) {
-              checkinController.documentReference
-                  ?.update({studentCode.value: now});
+            if (checkinController.studentCode.value == response.body) {
+              checkinController.documentReference?.update({response.body: now});
               checkinController.screenIndex.value = 0;
+              Get.dialog(
+                PopUpDialog(
+                  seconds: 5,
+                  result: true,
+                  widget: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TAnimationLoaderWidget(
+                        text: '',
+                        animation: AppImages.successfulAnimation,
+                        height: THelperFunctions.screenHeight() / 8,
+                      ),
+                      Text(
+                        'Điểm danh thành công',
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.secondary,
+                            fontSize: THelperFunctions.screenWidth() * 0.04),
+                      ),
+                      Text(
+                        response.body,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.secondary,
+                            fontSize: THelperFunctions.screenWidth() * 0.04),
+                      )
+                    ],
+                  ),
+                ),
+                transitionDuration: const Duration(milliseconds: 200),
+              );
+              return;
             } else {
               print(response.body);
             }
-            return; // Exit the function if successful
           }
         } else {
-          print('Failed to send image: ${response.statusCode}');
+          Get.dialog(
+            PopUpDialog(
+              function: () async {
+                await sendImageToAPI();
+              },
+              seconds: 5,
+              result: false,
+              widget: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TAnimationLoaderWidget(
+                    text: '',
+                    animation: AppImages.failAnimation,
+                    height: THelperFunctions.screenHeight() / 8,
+                  ),
+                  Text(
+                    'Lỗi API',
+                    maxLines: 1,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.secondary,
+                        fontSize: THelperFunctions.screenWidth() * 0.04),
+                  ),
+                ],
+              ),
+            ),
+            transitionDuration: const Duration(milliseconds: 200),
+          );
         }
       } catch (e) {
-        print('Error sending image to API: $e');
+        Get.dialog(
+          PopUpDialog(
+            function: () async {
+              await sendImageToAPI();
+            },
+            seconds: 5,
+            result: false,
+            widget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TAnimationLoaderWidget(
+                  text: '',
+                  animation: AppImages.failAnimation,
+                  height: THelperFunctions.screenHeight() / 8,
+                ),
+                Text(
+                  'Lỗi API',
+                  maxLines: 1,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.secondary,
+                      fontSize: THelperFunctions.screenWidth() * 0.04),
+                ),
+              ],
+            ),
+          ),
+          transitionDuration: const Duration(milliseconds: 200),
+        );
       }
-
       attempt++;
-      await Future.delayed(const Duration(seconds: 3)); // Wait before retrying
+      await Future.delayed(const Duration(seconds: 1));
     }
-    studentCode.value = 'Không nhận diện được';
+    Get.dialog(
+      PopUpDialog(
+        function: () async {
+          await sendImageToAPI();
+        },
+        seconds: 5,
+        result: false,
+        widget: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TAnimationLoaderWidget(
+              text: '',
+              animation: AppImages.failAnimation,
+              height: THelperFunctions.screenHeight() / 8,
+            ),
+            Text(
+              'Chưa nhận diện được gương mặt',
+              maxLines: 1,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.secondary,
+                  fontSize: THelperFunctions.screenWidth() * 0.04),
+            ),
+            Text(
+              'Vui lòng đưa gương mặt vào đúng ô quy định',
+              maxLines: 1,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.secondary,
+                  fontSize: THelperFunctions.screenWidth() * 0.04),
+            ),
+          ],
+        ),
+      ),
+      transitionDuration: const Duration(milliseconds: 200),
+    );
   }
 
   void disposeCamera() {
