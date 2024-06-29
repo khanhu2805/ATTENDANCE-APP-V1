@@ -18,7 +18,7 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
   @override
   void initState() {
     super.initState();
-    cameraController = Get.put(FaceRecognitionController());
+    cameraController = Get.put(FaceRecognitionController(), permanent: true);
     cameraController.initializeCamera();
   }
 
@@ -55,13 +55,6 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
             }),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
-        floatingActionButton: ElevatedButton(
-          onPressed: () {
-            cameraController.sendImageToAPI();
-          },
-          child: const Text('API'),
-        ),
         body: Obx(() {
           if (cameraController.loading.value ||
               cameraController.cameraController == null ||
@@ -83,8 +76,7 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
                     cutOutSize: 0.0,
                     cutOutHeight: MediaQuery.of(context).size.height / 4,
                     cutOutWidth: MediaQuery.of(context).size.height / 4,
-                    cutOutBottomOffset:
-                        MediaQuery.of(context).size.height / 30,
+                    cutOutBottomOffset: MediaQuery.of(context).size.height / 30,
                     overlayColor: const Color.fromRGBO(0, 0, 0, 82),
                   ),
                 ),

@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
+import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face_recognition_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/barcode_scanner.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/compare_screen.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/face_recognition_screen.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/checkin/widgets/pop_up_dialog.dart';
+import 'package:fe_attendance_app/utils/constants/colors.dart';
+import 'package:fe_attendance_app/utils/constants/image_strings.dart';
 import 'package:fe_attendance_app/utils/formatters/formatter.dart';
+import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,14 +20,16 @@ class CheckinController extends GetxController {
   Rx<String> studentCode = ''.obs;
   Rx<int> screenIndex = 0.obs;
   Rx<bool> flashing = false.obs;
-  List<Widget> screen = [const BarcodeScannerScreen(), const FaceRecognitionScreen()];
+  List<Widget> screen = [
+    const BarcodeScannerScreen(),
+    const FaceRecognitionScreen()
+  ];
   final _auth = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool checkin = false;
   DateTime dateTime = DateTime.now();
   DocumentReference? documentReference;
   QueryDocumentSnapshot<Map<String, dynamic>>? documentSnapshot;
-
   Stream<QueryDocumentSnapshot<Map<String, dynamic>>?> getClassInfo() async* {
     DateTime? d = await GMT.now();
     dateTime = d!.toLocal();
@@ -65,13 +73,80 @@ class CheckinController extends GetxController {
     yield query;
   }
 
-  void checkStudentCode(String barcode) {
+  Future<void> checkStudentCode(String barcode) async {
     List<dynamic> studentList = documentSnapshot!.get('students');
     if (studentList.contains(barcode)) {
       studentCode.value = barcode;
       screenIndex.value = 1;
+      await Get.dialog(
+        PopUpDialog(
+          seconds: 5,
+          result: true,
+          widget: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(AppImages.onBoardingImage1),
+              Text(
+                'Vui lòng đưa gương mặt vào ô quy định',
+                maxLines: 1,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondary,
+                    fontSize: THelperFunctions.screenWidth() * 0.04),
+              ),
+              Text(
+                'và đảm bảo về ánh sáng',
+                maxLines: 1,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondary,
+                    fontSize: THelperFunctions.screenWidth() * 0.04),
+              ),
+            ],
+          ),
+        ),
+        transitionDuration: const Duration(milliseconds: 200),
+      );
+      await Future.delayed(const Duration(seconds: 3));
+      await FaceRecognitionController.instance.sendImageToAPI();
     } else {
-      studentCode.value = '0';
+      Get.dialog(
+        PopUpDialog(
+          seconds: 5,
+          result: false,
+          widget: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TAnimationLoaderWidget(
+                text: '',
+                animation: AppImages.failAnimation,
+                height: THelperFunctions.screenHeight() / 8,
+              ),
+              Text(
+                'Sinh viên không có trong danh sách',
+                maxLines: 1,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondary,
+                    fontSize: THelperFunctions.screenWidth() * 0.04),
+              ),
+              Text(
+                'Vui lòng thử lại',
+                maxLines: 1,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondary,
+                    fontSize: THelperFunctions.screenWidth() * 0.04),
+              ),
+            ],
+          ),
+        ),
+        transitionDuration: const Duration(milliseconds: 200),
+      );
     }
   }
 

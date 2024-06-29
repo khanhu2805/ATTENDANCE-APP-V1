@@ -2,7 +2,6 @@ import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
