@@ -50,13 +50,17 @@ class _CompareScreenState extends State<CompareScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      controller.screenIndex.value == 0
-                          ? 'Vui lòng quét thẻ sinh viên'
-                          : 'Mã sinh viên: ${controller.studentCode.value}',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontSize: THelperFunctions.screenWidth() * 0.038),
-                    ),
+                    Obx(() => Text(
+                          controller.screenIndex.value == 0
+                              ? 'Vui lòng quét thẻ sinh viên'
+                              : 'Mã sinh viên: ${controller.studentCode.value}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  fontSize:
+                                      THelperFunctions.screenWidth() * 0.038),
+                        )),
                     const SizedBox(
                       height: 10.0,
                     ),

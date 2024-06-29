@@ -1,5 +1,4 @@
 import 'package:fe_attendance_app/utils/constants/colors.dart';
-import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class AppTextTheme {
