@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        navigationController.selectedIndex.value = 2;
+                        navigationController.selectedIndex.value = 3;
                       },
                       child: CircleAvatar(
                         radius: THelperFunctions.screenWidth() / 10,
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        navigationController.selectedIndex.value = 2;
+                        navigationController.selectedIndex.value = 3;
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   // padding: EdgeInsets.all(THelperFunctions.screenWidth() / 30),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
-                    color: isDark ? AppColors.primaryBackgroundDark : AppColors.primaryBackground,
+                    color: isDark
+                        ? AppColors.primaryBackgroundDark
+                        : AppColors.primaryBackground,
                     // gradient: LinearGradient(
                     //   colors: [
                     //     AppColors.primary.withOpacity(0.5),
@@ -258,15 +260,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             gradient: LinearGradient(
-                              colors: isDark  ?[
-                                AppColors.accent.withOpacity(0.7),
-                                AppColors.black,
-                                AppColors.primary.withOpacity(0.7),
-                              ] : [
-                                AppColors.primary.withOpacity(0.5),
-                                AppColors.primaryBackground,
-                                AppColors.accent.withOpacity(0.5)
-                              ],
+                              colors: isDark
+                                  ? [
+                                      AppColors.accent.withOpacity(0.7),
+                                      AppColors.black,
+                                      AppColors.primary.withOpacity(0.7),
+                                    ]
+                                  : [
+                                      AppColors.primary.withOpacity(0.5),
+                                      AppColors.primaryBackground,
+                                      AppColors.accent.withOpacity(0.5)
+                                    ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -290,11 +294,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .textTheme
                                           .titleMedium
                                           ?.copyWith(
-                                              fontSize: THelperFunctions
-                                                      .screenWidth() *
-                                                  0.04, 
-                                                  ),
-                                        
+                                            fontSize:
+                                                THelperFunctions.screenWidth() *
+                                                    0.04,
+                                          ),
                                     ),
                                   );
                                 }
@@ -535,7 +538,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         const Spacer(),
                                                         Icon(
                                                           Iconsax.arrow_right,
-                                                          color: isDark ? AppColors.white : AppColors.secondary,
+                                                          color: isDark
+                                                              ? AppColors.white
+                                                              : AppColors
+                                                                  .secondary,
                                                         )
                                                       ],
                                                     ),
@@ -543,8 +549,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       height: THelperFunctions
                                                               .screenHeight() /
                                                           30,
-                                                      color: isDark ? AppColors.white.withOpacity(0.4) : AppColors.secondary
-                                                          .withOpacity(0.4),
+                                                      color: isDark
+                                                          ? AppColors.white
+                                                              .withOpacity(0.4)
+                                                          : AppColors.secondary
+                                                              .withOpacity(0.4),
                                                     )
                                                   ],
                                                 ),
