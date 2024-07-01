@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,8 @@ class PopUpDialog extends StatefulWidget {
       {super.key,
       required this.seconds,
       required this.widget,
-      required this.result, this.function});
+      required this.result,
+      this.function});
   final int seconds;
   final Widget widget;
   final bool result;
@@ -43,7 +45,9 @@ class _PopUpDialogState extends State<PopUpDialog> {
         } else {
           _timer.cancel();
           Get.back();
-          widget.function?.call();
+          widget.result
+              ? widget.function?.call()
+              : CheckinController.instance.screenIndex.value = 0;
           // Navigator.of(context).pop;
         }
       });
@@ -57,17 +61,19 @@ class _PopUpDialogState extends State<PopUpDialog> {
       insetPadding:
           EdgeInsets.symmetric(horizontal: THelperFunctions.screenWidth() / 20),
       content: widget.widget,
-      actionsAlignment: MainAxisAlignment.center,
+      actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
         ElevatedButton(
           onPressed: () {
             _timer.cancel();
             Get.back();
-            widget.function?.call();
+            widget.result
+                ? widget.function?.call()
+                : CheckinController.instance.screenIndex.value = 0;
             // Navigator.of(context).pop;
           },
           child: Text('${widget.result ? 'Đóng' : 'Thử lại'} ($seconds)'),
-        )
+        ),
       ],
     );
   }

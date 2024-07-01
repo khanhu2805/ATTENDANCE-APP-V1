@@ -27,7 +27,7 @@ class FaceRecognitionController extends GetxController {
     try {
       cameras = await availableCameras();
       if (cameras!.isNotEmpty) {
-        selectedCameraIndex = 1;
+        selectedCameraIndex = checkinController.facing ? 1 : 0;
         await setCamera(selectedCameraIndex);
       }
     } catch (e) {
@@ -73,6 +73,7 @@ class FaceRecognitionController extends GetxController {
     if (cameras != null && cameras!.isNotEmpty) {
       selectedCameraIndex = (selectedCameraIndex + 1) % cameras!.length;
       await setCamera(selectedCameraIndex);
+      checkinController.facing = !checkinController.facing;
     }
   }
 
@@ -150,14 +151,16 @@ class FaceRecognitionController extends GetxController {
                       Text(
                         'Điểm danh thành công',
                         maxLines: 1,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: AppColors.secondary,
                             fontSize: THelperFunctions.screenWidth() * 0.04),
                       ),
                       Text(
-                        response.body,
+                        'MSSV: ${response.body}',
                         maxLines: 1,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: AppColors.secondary,
@@ -167,6 +170,7 @@ class FaceRecognitionController extends GetxController {
                   ),
                 ),
                 transitionDuration: const Duration(milliseconds: 200),
+                barrierDismissible: false,
               );
               return;
             } else {
@@ -194,6 +198,7 @@ class FaceRecognitionController extends GetxController {
                   Text(
                     'Lỗi API',
                     maxLines: 1,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: AppColors.secondary,
@@ -203,7 +208,9 @@ class FaceRecognitionController extends GetxController {
               ),
             ),
             transitionDuration: const Duration(milliseconds: 200),
+            barrierDismissible: false,
           );
+          return;
         }
       } catch (e) {
         Get.dialog(
@@ -235,7 +242,9 @@ class FaceRecognitionController extends GetxController {
             ),
           ),
           transitionDuration: const Duration(milliseconds: 200),
+          barrierDismissible: false,
         );
+        return;
       }
       attempt++;
       await Future.delayed(const Duration(seconds: 1));
@@ -259,7 +268,7 @@ class FaceRecognitionController extends GetxController {
             ),
             Text(
               'Chưa nhận diện được gương mặt',
-              maxLines: 1,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppColors.secondary,
@@ -267,7 +276,7 @@ class FaceRecognitionController extends GetxController {
             ),
             Text(
               'Vui lòng đưa gương mặt vào đúng ô quy định',
-              maxLines: 1,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppColors.secondary,
@@ -277,6 +286,7 @@ class FaceRecognitionController extends GetxController {
         ),
       ),
       transitionDuration: const Duration(milliseconds: 200),
+      barrierDismissible: false,
     );
   }
 

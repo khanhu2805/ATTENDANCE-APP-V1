@@ -20,6 +20,7 @@ class CheckinController extends GetxController {
   Rx<String> studentCode = ''.obs;
   Rx<int> screenIndex = 0.obs;
   Rx<bool> flashing = false.obs;
+  bool facing = true;
   List<Widget> screen = [
     const BarcodeScannerScreen(),
     const FaceRecognitionScreen()
@@ -89,16 +90,8 @@ class CheckinController extends GetxController {
             children: [
               Image.asset(AppImages.onBoardingImage1),
               Text(
-                'Vui lòng đưa gương mặt vào ô quy định',
-                maxLines: 1,
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.secondary,
-                    fontSize: THelperFunctions.screenWidth() * 0.04),
-              ),
-              Text(
-                'và đảm bảo về ánh sáng',
-                maxLines: 1,
+                'Vui lòng đưa gương mặt vào ô quy định và đảm bảo về ánh sáng',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: AppColors.secondary,
@@ -108,6 +101,7 @@ class CheckinController extends GetxController {
           ),
         ),
         transitionDuration: const Duration(milliseconds: 200),
+        barrierDismissible: false,
       );
       await Future.delayed(const Duration(seconds: 3));
       await FaceRecognitionController.instance.sendImageToAPI();
@@ -128,7 +122,7 @@ class CheckinController extends GetxController {
               ),
               Text(
                 'Sinh viên không có trong danh sách',
-                maxLines: 1,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: AppColors.secondary,
@@ -136,7 +130,7 @@ class CheckinController extends GetxController {
               ),
               Text(
                 'Vui lòng thử lại',
-                maxLines: 1,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: AppColors.secondary,
@@ -146,6 +140,7 @@ class CheckinController extends GetxController {
           ),
         ),
         transitionDuration: const Duration(milliseconds: 200),
+        barrierDismissible: false,
       );
     }
   }

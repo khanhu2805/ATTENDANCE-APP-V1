@@ -21,7 +21,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = Get.put(CheckinController());
+    controller = Get.put(CheckinController(), permanent: true);
   }
 
   @override
