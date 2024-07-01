@@ -11,10 +11,10 @@ class LogController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   RxList<String> option = [''].obs;
   String selected = 'buoi_1';
-  String check = 'check_out';
+  String check = 'check_in';
   late DocumentReference<Map<String, dynamic>> documentReference;
   final StreamController<Map<String, dynamic>?> logStreamController =
-      StreamController<Map<String, dynamic>?>();
+      StreamController<Map<String, dynamic>?>.broadcast();
   Future<DocumentSnapshot<Map<String, dynamic>>> getClassInfo(String id) async {
     DateTime? d = await GMT.now();
     DateTime dateTime = d!.toLocal();
@@ -29,11 +29,14 @@ class LogController extends GetxController {
   }
 
   Future<void> getLog() async {
-    await documentReference
-        .collection(selected)
-        .doc(check)
-        .get()
-        .then((value) => logStreamController.add(value.data()));
+    await documentReference.collection(selected).doc(check).get().then((value) {
+      if (value.exists) {
+        logStreamController.add(value.data());
+      } else {
+        logStreamController.add({});
+      }
+    });
   }
+
   Stream<Map<String, dynamic>?> get logStream => logStreamController.stream;
 }
