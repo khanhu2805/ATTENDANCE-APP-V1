@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
+import 'package:fe_attendance_app/utils/formatters/formatter.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:fe_attendance_app/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +76,18 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             ),
                             Text(
                               '${snapshot.data?.get('start_hour')} - ${snapshot.data?.get('end_hour')}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                      fontSize: THelperFunctions.screenWidth() *
+                                          0.04),
+                            ),
+                            SizedBox(
+                              height: THelperFunctions.screenHeight() / 15,
+                            ),
+                            Text(
+                              'Buổi ${AppFormatter.numberOfWeek(snapshot.data?.get('start_date').toDate(), controller.dateTime)} - ${AppFormatter.formatDate(controller.dateTime)}',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall

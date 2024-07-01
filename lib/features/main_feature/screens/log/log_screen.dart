@@ -222,35 +222,6 @@ class _LogScreenState extends State<LogScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: THelperFunctions.screenHeight() / 30,
-                          ),
-                          StreamBuilder(
-                            stream: controller.logStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return AppLoaders.showCircularLoader();
-                              }
-                              if (snapshot.data!.isEmpty) {
-                                return Center(
-                                  child: Text(
-                                    'Chưa có thông tin lịch sử điểm danh',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                            fontSize:
-                                                THelperFunctions.screenWidth() *
-                                                    0.04),
-                                  ),
-                                );
-                              }
-                              return SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: LogDataTable(log: snapshot.data));
-                            },
-                          )
                         ],
                       );
                     } else {
@@ -258,6 +229,33 @@ class _LogScreenState extends State<LogScreen> {
                     }
                   },
                 ),
+                SizedBox(
+                  height: THelperFunctions.screenHeight() / 30,
+                ),
+                StreamBuilder(
+                  stream: controller.logStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return AppLoaders.showCircularLoader();
+                    }
+                    if (snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'Chưa có thông tin lịch sử điểm danh',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  fontSize:
+                                      THelperFunctions.screenWidth() * 0.04),
+                        ),
+                      );
+                    }
+                    return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: LogDataTable(log: snapshot.data));
+                  },
+                )
               ],
             ),
           ),
