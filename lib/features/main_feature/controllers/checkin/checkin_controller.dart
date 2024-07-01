@@ -103,7 +103,7 @@ class CheckinController extends GetxController {
         transitionDuration: const Duration(milliseconds: 200),
         barrierDismissible: false,
       );
-      await Future.delayed(const Duration(seconds: 3));
+      // await Future.delayed(const Duration(seconds: 3));
       await FaceRecognitionController.instance.sendImageToAPI();
     } else {
       Get.dialog(

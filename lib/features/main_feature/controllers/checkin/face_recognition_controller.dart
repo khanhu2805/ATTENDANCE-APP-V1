@@ -19,16 +19,13 @@ class FaceRecognitionController extends GetxController {
   CheckinController checkinController = CheckinController.instance;
   CameraController? cameraController;
   List<CameraDescription>? cameras;
-  int selectedCameraIndex = 0;
-  Rx<FlashMode> flashMode = FlashMode.off.obs;
   RxBool loading = false.obs;
 
   Future<void> initializeCamera() async {
     try {
       cameras = await availableCameras();
       if (cameras!.isNotEmpty) {
-        selectedCameraIndex = checkinController.facing ? 1 : 0;
-        await setCamera(selectedCameraIndex);
+        await setCamera(checkinController.facing ? 1 : 0);
       }
     } catch (e) {
       print('Error initializing camera: $e');
@@ -50,8 +47,8 @@ class FaceRecognitionController extends GetxController {
           enableAudio: false,
           imageFormatGroup: ImageFormatGroup.jpeg,
         );
-
         await cameraController!.initialize();
+        await cameraController?.setFlashMode(checkinController.flashing.value? FlashMode.torch: FlashMode.off);
         loading.value = false;
       }
     } catch (e) {
@@ -63,7 +60,6 @@ class FaceRecognitionController extends GetxController {
   Future<void> updateFlashMode(FlashMode mode) async {
     try {
       await cameraController?.setFlashMode(mode);
-      flashMode.value = mode;
     } catch (e) {
       print('Error setting flash mode: $e');
     }
@@ -71,17 +67,15 @@ class FaceRecognitionController extends GetxController {
 
   void switchCamera() async {
     if (cameras != null && cameras!.isNotEmpty) {
-      selectedCameraIndex = (selectedCameraIndex + 1) % cameras!.length;
-      await setCamera(selectedCameraIndex);
+      await setCamera(checkinController.facing ? 0 : 1);
       checkinController.facing = !checkinController.facing;
     }
   }
 
   void toggleFlash() {
-    if (flashMode.value == FlashMode.off) {
-      updateFlashMode(FlashMode.torch);
-    } else {
-      updateFlashMode(FlashMode.off);
+    if (!checkinController.facing) {
+      updateFlashMode(checkinController.flashing.value? FlashMode.off :FlashMode.torch);
+      checkinController.flashing.value = !checkinController.flashing.value;
     }
   }
 
@@ -180,9 +174,6 @@ class FaceRecognitionController extends GetxController {
         } else {
           Get.dialog(
             PopUpDialog(
-              function: () async {
-                await sendImageToAPI();
-              },
               seconds: 5,
               result: false,
               widget: Column(
@@ -215,9 +206,6 @@ class FaceRecognitionController extends GetxController {
       } catch (e) {
         Get.dialog(
           PopUpDialog(
-            function: () async {
-              await sendImageToAPI();
-            },
             seconds: 5,
             result: false,
             widget: Column(
@@ -251,9 +239,6 @@ class FaceRecognitionController extends GetxController {
     }
     Get.dialog(
       PopUpDialog(
-        function: () async {
-          await sendImageToAPI();
-        },
         seconds: 5,
         result: false,
         widget: Column(

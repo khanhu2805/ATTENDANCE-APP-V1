@@ -10,12 +10,10 @@ class PopUpDialog extends StatefulWidget {
       {super.key,
       required this.seconds,
       required this.widget,
-      required this.result,
-      this.function});
+      required this.result});
   final int seconds;
   final Widget widget;
   final bool result;
-  final Function? function;
   @override
   State<PopUpDialog> createState() => _PopUpDialogState();
 }
@@ -46,7 +44,7 @@ class _PopUpDialogState extends State<PopUpDialog> {
           _timer.cancel();
           Get.back();
           widget.result
-              ? widget.function?.call()
+              ? null
               : CheckinController.instance.screenIndex.value = 0;
           // Navigator.of(context).pop;
         }
@@ -68,7 +66,7 @@ class _PopUpDialogState extends State<PopUpDialog> {
             _timer.cancel();
             Get.back();
             widget.result
-                ? widget.function?.call()
+                ? null
                 : CheckinController.instance.screenIndex.value = 0;
             // Navigator.of(context).pop;
           },

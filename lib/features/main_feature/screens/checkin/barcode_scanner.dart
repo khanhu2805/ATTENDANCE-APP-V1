@@ -2,6 +2,7 @@ import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'widgets/my_mobile_scanner.dart';
 
@@ -20,7 +21,9 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     // TODO: implement initState
     super.initState();
     controller = CheckinController.instance;
-    mobileScannerController = MobileScannerController(facing: controller.facing? CameraFacing.front: CameraFacing.back, torchEnabled: controller.flashing.value);
+    mobileScannerController = MobileScannerController(
+        facing: controller.facing ? CameraFacing.front : CameraFacing.back,
+        torchEnabled: controller.flashing.value);
   }
 
   @override
@@ -44,12 +47,20 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               icon: const Icon(
                 Icons.cameraswitch_rounded,
               )),
-          IconButton(
+          Obx(
+            () => IconButton(
               icon: Icon(!controller.flashing.value
                   ? Icons.flashlight_off_rounded
                   : Icons.flashlight_on_rounded),
-              onPressed: () => {mobileScannerController.toggleTorch(),
-              controller.flashing.value = !controller.flashing.value}),
+              onPressed: () => {
+                if (!controller.facing)
+                  {
+                    mobileScannerController.toggleTorch(),
+                    controller.flashing.value = !controller.flashing.value
+                  }
+              },
+            ),
+          ),
         ],
       ),
       body: Stack(
