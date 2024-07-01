@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fe_attendance_app/utils/formatters/formatter.dart';
+import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class LogDataTable extends StatefulWidget {
@@ -13,12 +14,10 @@ class LogDataTable extends StatefulWidget {
 class _LogDataTableState extends State<LogDataTable> {
   bool sortAscending = true;
   late List<Log> logList;
-  late int index;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    index = 0;
     logList = widget.log!.entries
         .map((e) => Log(studentCode: e.key, time: e.value))
         .toList();
@@ -26,14 +25,38 @@ class _LogDataTableState extends State<LogDataTable> {
 
   @override
   Widget build(BuildContext context) {
+    int index = 0;
     List<DataRow> dataRows = logList.map((entry) {
       index++;
       return DataRow(
         cells: [
-          DataCell(Text(index.toString())), // STT
-          DataCell(Text(entry.studentCode)), // MSSV
-          DataCell(Text(
-              AppFormatter.formatTimeStampToDate(entry.time))), // Thời gian
+          DataCell(
+            Text(
+              index.toString(),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontSize: THelperFunctions.screenWidth() * 0.035),
+            ),
+          ), // STT
+          DataCell(
+            Text(
+              entry.studentCode,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontSize: THelperFunctions.screenWidth() * 0.035),
+            ),
+          ), // MSSV
+          DataCell(
+            Text(
+              AppFormatter.formatTimeStampToDate(entry.time),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontSize: THelperFunctions.screenWidth() * 0.035),
+            ),
+          ), // Thời gian
         ],
       );
     }).toList();
@@ -64,7 +87,6 @@ class _LogDataTableState extends State<LogDataTable> {
           ),
           onSort: (columnIndex, ascending) {
             setState(() {
-              index = 0;
               sortAscending = !sortAscending;
               logList.sort((a, b) => a.time.compareTo(b.time));
               if (!sortAscending) {
