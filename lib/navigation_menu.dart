@@ -14,8 +14,9 @@ import 'features/main_feature/screens/home/home_screen.dart';
 import 'features/main_feature/screens/profile/profile_screen.dart';
 
 class NavigationMenu extends StatefulWidget {
-  const NavigationMenu({super.key, this.index});
+  const NavigationMenu({super.key, this.index, this.id});
   final int? index;
+  final String? id;
   @override
   State<NavigationMenu> createState() => _NavigationMenuState();
 }
@@ -29,7 +30,9 @@ class _NavigationMenuState extends State<NavigationMenu> {
     // TODO: implement initState
     super.initState();
     controller = Get.put(NavigationController());
-    controller.selectedIndex.value = widget.index ?? 0;
+    if (widget.index == 1) {
+      controller.changeToLogScreen(widget.id ?? '');
+    }
   }
 
   @override
@@ -150,7 +153,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
 class NavigationController extends GetxController {
   static NavigationController get instance => Get.find();
   final Rx<int> selectedIndex = 0.obs;
-  final List<Widget> screens = [
+  List<Widget> screens = [
     const HomeScreen(),
     const LogScreen(),
     const NotificationScreeen(),
@@ -160,4 +163,9 @@ class NavigationController extends GetxController {
     const PrivacyPolicyScreen(),//6
     const TermsConditionScreen(),//7
   ];
+
+  void changeToLogScreen(String id) {
+    screens[1] = LogScreen(id: id);
+    selectedIndex.value = 1;
+  }
 }

@@ -393,9 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   TextRow(
                                                                       label:
                                                                           'Mã LHP',
-                                                                      text: snapshot
-                                                                          .data!
-                                                                          .docs[
+                                                                      text: pageItems[
                                                                               index]
                                                                           .id,
                                                                       icon: Iconsax
@@ -403,9 +401,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   TextRow(
                                                                       label:
                                                                           'Tên HP',
-                                                                      text: snapshot
-                                                                          .data
-                                                                          ?.docs[
+                                                                      text: pageItems[
                                                                               index]
                                                                           .get(
                                                                               'name_of_class'),
@@ -415,15 +411,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       label:
                                                                           'Ngày giờ học',
                                                                       text:
-                                                                          '${snapshot.data?.docs[index].get('day_of_class')} (${snapshot.data?.docs[index].get('start_hour')} - ${snapshot.data?.docs[index].get('end_hour')})',
+                                                                          '${pageItems[index].get('day_of_class')} (${pageItems[index].get('start_hour')} - ${pageItems[index].get('end_hour')})',
                                                                       icon: Iconsax
                                                                           .timer),
                                                                   TextRow(
                                                                       label:
                                                                           'Ngày bắt đầu HP',
-                                                                      text: AppFormatter.formatDate(snapshot
-                                                                          .data
-                                                                          ?.docs[
+                                                                      text: AppFormatter.formatDate(pageItems[
                                                                               index]
                                                                           .get(
                                                                               'start_date')
@@ -433,9 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   TextRow(
                                                                       label:
                                                                           'Ngày kết thúc HP',
-                                                                      text: AppFormatter.formatDate(snapshot
-                                                                          .data
-                                                                          ?.docs[
+                                                                      text: AppFormatter.formatDate(pageItems[
                                                                               index]
                                                                           .get(
                                                                               'end_date')
@@ -452,11 +444,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           onPressed:
                                                                               () {
                                                                             Navigator.of(context).pop();
-                                                                            navigationController.selectedIndex.value =
-                                                                                1;
+                                                                            navigationController.changeToLogScreen(pageItems[index].id);
                                                                           },
                                                                           child:
-                                                                              const Text('Lịch sử điểm danh'),
+                                                                              const Text('Xem lịch sử điểm danh'),
                                                                         ),
                                                                         const Spacer(),
                                                                         ElevatedButton(
@@ -573,44 +564,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     );
                   })),
-              GestureDetector(
-                onTap: () => navigationController.selectedIndex.value = 1,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(
-                      left: THelperFunctions.screenWidth() / 30),
-                  margin: EdgeInsets.all(THelperFunctions.screenWidth() / 30),
-                  width: THelperFunctions.screenWidth(),
-                  height: THelperFunctions.screenHeight() / 10,
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 2,
-                            blurRadius: 7,
-                            color: isDark ? AppColors.primaryBackgroundDark : AppColors.grey,
-                            offset: const Offset(5, 2.0))
-                      ],
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: isDark ? AppColors.primaryBackgroundDark : AppColors.primaryBackground,
-                      border: Border.all(color: AppColors.accent)
-                      // gradient: LinearGradient(
-                      //   colors: [
-                      //     AppColors.primary.withOpacity(0.5),
-                      //     AppColors.primaryBackground,
-                      //     AppColors.accent.withOpacity(0.5)
-                      //   ],
-                      //   begin: Alignment.topLeft,
-                      //   end: Alignment.bottomRight,
-                      // ),
-                      ),
-                  child: Text(
-                    'Lịch sử điểm danh'.toUpperCase(),
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: THelperFunctions.screenWidth() * 0.045,
-                        ),
-                  ),
-                ),
-              )
+              // GestureDetector(
+              //   onTap: () => navigationController.selectedIndex.value = 1,
+              //   child: Container(
+              //     alignment: Alignment.centerLeft,
+              //     padding: EdgeInsets.only(
+              //         left: THelperFunctions.screenWidth() / 30),
+              //     margin: EdgeInsets.all(THelperFunctions.screenWidth() / 30),
+              //     width: THelperFunctions.screenWidth(),
+              //     height: THelperFunctions.screenHeight() / 10,
+              //     decoration: BoxDecoration(
+              //         boxShadow: const [
+              //           BoxShadow(
+              //               spreadRadius: 2,
+              //               blurRadius: 7,
+              //               color: AppColors.grey,
+              //               offset: Offset(5, 2.0))
+              //         ],
+              //         borderRadius: BorderRadius.circular(20.0),
+              //         color: AppColors.primaryBackground,
+              //         border: Border.all(color: AppColors.accent)
+              //         // gradient: LinearGradient(
+              //         //   colors: [
+              //         //     AppColors.primary.withOpacity(0.5),
+              //         //     AppColors.primaryBackground,
+              //         //     AppColors.accent.withOpacity(0.5)
+              //         //   ],
+              //         //   begin: Alignment.topLeft,
+              //         //   end: Alignment.bottomRight,
+              //         // ),
+              //         ),
+              //     child: Text(
+              //       'Lịch sử điểm danh'.toUpperCase(),
+              //       style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              //             fontSize: THelperFunctions.screenWidth() * 0.045,
+              //           ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),
