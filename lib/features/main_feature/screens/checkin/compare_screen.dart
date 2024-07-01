@@ -65,8 +65,9 @@ class _CompareScreenState extends State<CompareScreen>
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Get.offAll(() => const NavigationMenu(
+                        Get.offAll(() => NavigationMenu(
                               index: 1,
+                              id: controller.documentSnapshot?.id,
                             ));
                       },
                       child: Text(

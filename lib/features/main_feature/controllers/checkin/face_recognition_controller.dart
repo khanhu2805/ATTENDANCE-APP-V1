@@ -110,7 +110,7 @@ class FaceRecognitionController extends GetxController {
     DateTime? d = await GMT.now();
     DateTime now = d!.toLocal();
     const String apiUrl =
-        'https://f397-123-21-80-124.ngrok-free.app'; // Replace with your API URL
+        'http://113.161.88.238:81/'; // Replace with your API URL
     int attempt = 0;
 
     while (attempt < 3) {
