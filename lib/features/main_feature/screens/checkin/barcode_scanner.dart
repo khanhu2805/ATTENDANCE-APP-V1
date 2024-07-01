@@ -2,6 +2,7 @@ import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'widgets/my_mobile_scanner.dart';
 
@@ -20,7 +21,9 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     // TODO: implement initState
     super.initState();
     controller = CheckinController.instance;
-    mobileScannerController = MobileScannerController(facing: CameraFacing.front);
+    mobileScannerController = MobileScannerController(
+        facing: controller.facing ? CameraFacing.front : CameraFacing.back,
+        torchEnabled: controller.flashing.value);
   }
 
   @override
@@ -39,15 +42,25 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           IconButton(
               onPressed: () {
                 mobileScannerController.switchCamera();
+                controller.facing = !controller.facing;
               },
               icon: const Icon(
                 Icons.cameraswitch_rounded,
               )),
-          IconButton(
-              icon: Icon(!mobileScannerController.torchEnabled
+          Obx(
+            () => IconButton(
+              icon: Icon(!controller.flashing.value
                   ? Icons.flashlight_off_rounded
                   : Icons.flashlight_on_rounded),
-              onPressed: () => {mobileScannerController.toggleTorch()}),
+              onPressed: () => {
+                if (!controller.facing)
+                  {
+                    mobileScannerController.toggleTorch(),
+                    controller.flashing.value = !controller.flashing.value
+                  }
+              },
+            ),
+          ),
         ],
       ),
       body: Stack(
@@ -65,8 +78,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             scanWindow: Rect.fromCenter(
                 center: Offset(THelperFunctions.screenWidth() / 2,
                     THelperFunctions.screenHeight() * 0.7 / 2),
-                width: THelperFunctions.screenWidth() * 0.8,
-                height: THelperFunctions.screenHeight() / 4),
+                width: THelperFunctions.screenWidth() * 0.9,
+                height: THelperFunctions.screenHeight() / 3),
             // key: widget.key,
             // overlayBuilder: widget.overlayBuilder,
             // scanWindowUpdateThreshold: widget.scanWindowUpdateThreshold,

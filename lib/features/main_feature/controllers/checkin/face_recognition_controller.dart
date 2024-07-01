@@ -19,16 +19,13 @@ class FaceRecognitionController extends GetxController {
   CheckinController checkinController = CheckinController.instance;
   CameraController? cameraController;
   List<CameraDescription>? cameras;
-  int selectedCameraIndex = 0;
-  Rx<FlashMode> flashMode = FlashMode.off.obs;
   RxBool loading = false.obs;
 
   Future<void> initializeCamera() async {
     try {
       cameras = await availableCameras();
       if (cameras!.isNotEmpty) {
-        selectedCameraIndex = 1;
-        await setCamera(selectedCameraIndex);
+        await setCamera(checkinController.facing ? 1 : 0);
       }
     } catch (e) {
       print('Error initializing camera: $e');
@@ -50,8 +47,8 @@ class FaceRecognitionController extends GetxController {
           enableAudio: false,
           imageFormatGroup: ImageFormatGroup.jpeg,
         );
-
         await cameraController!.initialize();
+        await cameraController?.setFlashMode(checkinController.flashing.value? FlashMode.torch: FlashMode.off);
         loading.value = false;
       }
     } catch (e) {
@@ -63,7 +60,6 @@ class FaceRecognitionController extends GetxController {
   Future<void> updateFlashMode(FlashMode mode) async {
     try {
       await cameraController?.setFlashMode(mode);
-      flashMode.value = mode;
     } catch (e) {
       print('Error setting flash mode: $e');
     }
@@ -71,16 +67,15 @@ class FaceRecognitionController extends GetxController {
 
   void switchCamera() async {
     if (cameras != null && cameras!.isNotEmpty) {
-      selectedCameraIndex = (selectedCameraIndex + 1) % cameras!.length;
-      await setCamera(selectedCameraIndex);
+      await setCamera(checkinController.facing ? 0 : 1);
+      checkinController.facing = !checkinController.facing;
     }
   }
 
   void toggleFlash() {
-    if (flashMode.value == FlashMode.off) {
-      updateFlashMode(FlashMode.torch);
-    } else {
-      updateFlashMode(FlashMode.off);
+    if (!checkinController.facing) {
+      updateFlashMode(checkinController.flashing.value? FlashMode.off :FlashMode.torch);
+      checkinController.flashing.value = !checkinController.flashing.value;
     }
   }
 
@@ -150,14 +145,16 @@ class FaceRecognitionController extends GetxController {
                       Text(
                         'Điểm danh thành công',
                         maxLines: 1,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: AppColors.secondary,
                             fontSize: THelperFunctions.screenWidth() * 0.04),
                       ),
                       Text(
-                        response.body,
+                        'MSSV: ${response.body}',
                         maxLines: 1,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: AppColors.secondary,
@@ -167,6 +164,7 @@ class FaceRecognitionController extends GetxController {
                   ),
                 ),
                 transitionDuration: const Duration(milliseconds: 200),
+                barrierDismissible: false,
               );
               return;
             } else {
@@ -176,9 +174,6 @@ class FaceRecognitionController extends GetxController {
         } else {
           Get.dialog(
             PopUpDialog(
-              function: () async {
-                await sendImageToAPI();
-              },
               seconds: 5,
               result: false,
               widget: Column(
@@ -194,6 +189,7 @@ class FaceRecognitionController extends GetxController {
                   Text(
                     'Lỗi API',
                     maxLines: 1,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: AppColors.secondary,
@@ -203,14 +199,13 @@ class FaceRecognitionController extends GetxController {
               ),
             ),
             transitionDuration: const Duration(milliseconds: 200),
+            barrierDismissible: false,
           );
+          return;
         }
       } catch (e) {
         Get.dialog(
           PopUpDialog(
-            function: () async {
-              await sendImageToAPI();
-            },
             seconds: 5,
             result: false,
             widget: Column(
@@ -235,16 +230,15 @@ class FaceRecognitionController extends GetxController {
             ),
           ),
           transitionDuration: const Duration(milliseconds: 200),
+          barrierDismissible: false,
         );
+        return;
       }
       attempt++;
       await Future.delayed(const Duration(seconds: 1));
     }
     Get.dialog(
       PopUpDialog(
-        function: () async {
-          await sendImageToAPI();
-        },
         seconds: 5,
         result: false,
         widget: Column(
@@ -259,7 +253,7 @@ class FaceRecognitionController extends GetxController {
             ),
             Text(
               'Chưa nhận diện được gương mặt',
-              maxLines: 1,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppColors.secondary,
@@ -267,7 +261,7 @@ class FaceRecognitionController extends GetxController {
             ),
             Text(
               'Vui lòng đưa gương mặt vào đúng ô quy định',
-              maxLines: 1,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppColors.secondary,
@@ -277,6 +271,7 @@ class FaceRecognitionController extends GetxController {
         ),
       ),
       transitionDuration: const Duration(milliseconds: 200),
+      barrierDismissible: false,
     );
   }
 

@@ -138,7 +138,7 @@ class _LogScreenState extends State<LogScreen> {
                                     MaterialStateProperty.all(AppColors.white),
                                 surfaceTintColor:
                                     MaterialStateProperty.all(AppColors.white)),
-                            initialSelection: controller.selected,
+                            initialSelection: controller.option.last,
                             leadingIcon: const Icon(Iconsax.calendar),
                             label: Text(
                               'Ngày (Buổi)',
@@ -148,7 +148,8 @@ class _LogScreenState extends State<LogScreen> {
                             ),
                             width: THelperFunctions.screenWidth() * 0.8,
                             onSelected: (String? value) {
-                              controller.selected = value ?? '';
+                              controller.selected =
+                                  'buoi_${value?.substring(5, value.length)}';
                             },
                             dropdownMenuEntries: controller.option
                                 .map<DropdownMenuEntry<String>>((String value) {
@@ -181,7 +182,9 @@ class _LogScreenState extends State<LogScreen> {
                                     MaterialStateProperty.all(AppColors.white),
                                 surfaceTintColor:
                                     MaterialStateProperty.all(AppColors.white)),
-                            initialSelection: controller.check,
+                            initialSelection: controller.check == 'check_in'
+                                ? 'Checkin'
+                                : 'Checkout',
                             leadingIcon: const Icon(Iconsax.calendar),
                             label: Text(
                               'Checkin/ Checkout',
@@ -191,9 +194,10 @@ class _LogScreenState extends State<LogScreen> {
                             ),
                             width: THelperFunctions.screenWidth() * 0.8,
                             onSelected: (String? value) {
-                              controller.check = value ?? '';
+                              controller.check =
+                                  value == 'Checkin' ? 'check_in' : 'check_out';
                             },
-                            dropdownMenuEntries: ['check_in', 'check_out']
+                            dropdownMenuEntries: ['Checkin', 'Checkout']
                                 .map<DropdownMenuEntry<String>>((String value) {
                               return DropdownMenuEntry<String>(
                                   value: value,
@@ -251,9 +255,13 @@ class _LogScreenState extends State<LogScreen> {
                         ),
                       );
                     }
-                    return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: LogDataTable(log: snapshot.data));
+                    return Scrollbar(
+                      thumbVisibility: true,
+                      radius: const Radius.circular(10.0),
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: LogDataTable(log: snapshot.data)),
+                    );
                   },
                 )
               ],
