@@ -1,7 +1,7 @@
-import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/appbar_profile.dart';
-import 'package:fe_attendance_app/utils/constants/text_strings.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fe_attendance_app/features/main_feature/controllers/profile/profile_controller.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/profile/widgets/infor_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AccountInfoScreen extends StatefulWidget {
   const AccountInfoScreen({super.key});
@@ -11,18 +11,13 @@ class AccountInfoScreen extends StatefulWidget {
 }
 
 class _AccountInfoScreen extends State<AccountInfoScreen> {
-  late final FirebaseAuth auth;
+  late ProfileController controller;
 
   @override
   void initState() {
     super.initState();
-
-    auth = FirebaseAuth.instance;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    Get.lazyPut(() => ProfileController());
+    controller = Get.find<ProfileController>();
   }
 
   @override
@@ -31,58 +26,36 @@ class _AccountInfoScreen extends State<AccountInfoScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            Stack(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const TAppBar(
-                  title: AppTexts.myProfileTitle,
+                Obx(
+                  () => TInforHeaderScreen(
+                    displayName: controller.displayName.value,
+                    jobTitle: controller.jobTitle.value,
+                  ),
                 ),
-                const SizedBox(height: 20),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 30.0, right: 10.0, top: 40.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Full Name',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: Text(
-                              'Tên người dùng: ${auth.currentUser?.displayName ?? 'N/A'}',
-                              style: const TextStyle(fontSize: 18),
-                              softWrap: true,
-                            ),
-                            
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            'Email Address',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: Text(
-                              'Tên người dùng: ${auth.currentUser?.email ?? 'N/A'}',
-                              style: const TextStyle(fontSize: 18),
-                              softWrap: true,
-                            ),
-                          ),
-                          
-                        ],
+                      Obx(
+                        () => TInforScreen(
+                          title: 'Tên người dùng',
+                          content: controller.displayName.value,
+                        ),
+                      ),
+                      Obx(
+                        () => TInforScreen(
+                          title: 'Địa chỉ mail',
+                          content: controller.mail.value,
+                        ),
+                      ),
+                      Obx(
+                        () => TInforScreen(
+                          title: 'Khoa',
+                          content: controller.jobTitle.value,
+                        ),
                       ),
                     ],
                   ),

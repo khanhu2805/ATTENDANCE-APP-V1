@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // padding: EdgeInsets.all(THelperFunctions.screenWidth() / 30),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
-                    color: AppColors.primaryBackground,
+                    color: isDark ? AppColors.primaryBackgroundDark : AppColors.primaryBackground,
                     // gradient: LinearGradient(
                     //   colors: [
                     //     AppColors.primary.withOpacity(0.5),
@@ -258,7 +258,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             gradient: LinearGradient(
-                              colors: [
+                              colors: isDark  ?[
+                                AppColors.accent.withOpacity(0.7),
+                                AppColors.black,
+                                AppColors.primary.withOpacity(0.7),
+                              ] : [
                                 AppColors.primary.withOpacity(0.5),
                                 AppColors.primaryBackground,
                                 AppColors.accent.withOpacity(0.5)
@@ -288,7 +292,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ?.copyWith(
                                               fontSize: THelperFunctions
                                                       .screenWidth() *
-                                                  0.04),
+                                                  0.04, 
+                                                  ),
+                                        
                                     ),
                                   );
                                 }
@@ -527,10 +533,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                         ),
                                                         const Spacer(),
-                                                        const Icon(
+                                                        Icon(
                                                           Iconsax.arrow_right,
-                                                          color: AppColors
-                                                              .secondary,
+                                                          color: isDark ? AppColors.white : AppColors.secondary,
                                                         )
                                                       ],
                                                     ),
@@ -538,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       height: THelperFunctions
                                                               .screenHeight() /
                                                           30,
-                                                      color: AppColors.secondary
+                                                      color: isDark ? AppColors.white.withOpacity(0.4) : AppColors.secondary
                                                           .withOpacity(0.4),
                                                     )
                                                   ],

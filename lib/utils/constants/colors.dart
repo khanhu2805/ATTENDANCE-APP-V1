@@ -11,9 +11,8 @@ class AppColors {
   // Icon colors
   static const Color iconPrimary = Color(0xFF8D8D8D);
   static const Color bkIconProfile = Color.fromARGB(52, 158, 158, 158);
-  static const Color bkIconProfileLogout = Color.fromARGB(59, 254, 60, 60);
   static const Color iconProfile = Color.fromARGB(255, 0, 0, 0);
-  static const Color iconProfileLogout = Color.fromARGB(255, 254, 60, 60);
+  static const Color iconProfileLogout = Color(0xFFFE3C3C);
   
   // Text colors
   static const Color textPrimary = Color(0xFF272727);
@@ -24,6 +23,8 @@ class AppColors {
   static const Color light = Color(0xFFF0EDE9);
   static const Color dark = Color(0xFF272727);
   static const Color primaryBackground = Color(0xFFF5F5F5);
+  static const Color primaryBackgroundDark = Color.fromARGB(37, 245, 245, 245);
+
 
   // Button colors
   static const Color buttonPrimary = Color(0xFF215696);
