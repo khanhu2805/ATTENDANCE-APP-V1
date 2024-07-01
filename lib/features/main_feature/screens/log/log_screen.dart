@@ -1,3 +1,4 @@
+import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,8 +44,22 @@ class _LogScreenState extends State<LogScreen> {
               height: THelperFunctions.screenHeight() / 6,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isDark ? Colors.blue : Colors.blue[200],
-                borderRadius: BorderRadius.only(
+                gradient: LinearGradient(
+                  colors: isDark
+                      ? [
+                          AppColors.accent.withOpacity(0.7),
+                          AppColors.black,
+                          AppColors.primary.withOpacity(0.7),
+                        ]
+                      : [
+                          AppColors.primary.withOpacity(0.5),
+                          AppColors.primaryBackground,
+                          AppColors.accent.withOpacity(0.5)
+                        ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(35.0),
                   bottomRight: Radius.circular(35.0),
                 ),
@@ -55,10 +70,10 @@ class _LogScreenState extends State<LogScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             DropdownMenu<String>(
               initialSelection: _options.first,
-              leadingIcon: Icon(Iconsax.book),
+              leadingIcon: const Icon(Iconsax.book),
               width: THelperFunctions.screenWidth() * 0.8,
               onSelected: (String? value) {
                 // This is called when the user selects an item.
@@ -69,17 +84,17 @@ class _LogScreenState extends State<LogScreen> {
                     value: value,
                     label: value,
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
+                      backgroundColor: WidgetStateProperty.all<Color>(
                           isDark ? Colors.black : Colors.white),
                     ));
               }).toList(),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             DropdownMenu<String>(
               initialSelection: _options.first,
-              leadingIcon: Icon(Iconsax.clock),
+              leadingIcon: const Icon(Iconsax.clock),
               width: THelperFunctions.screenWidth() * 0.8,
               onSelected: (String? value) {
                 // This is called when the user selects an item.
@@ -90,30 +105,49 @@ class _LogScreenState extends State<LogScreen> {
                     value: value,
                     label: value,
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
+                      backgroundColor: WidgetStateProperty.all<Color>(
                           isDark ? Colors.black : Colors.white),
                     ));
               }).toList(),
             ),
-            SizedBox(height: 20.0,),
-            MaterialButton(
-              onPressed: () => {},
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              color: Colors.blue[200],
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Iconsax.search_normal_1),
-                  SizedBox(width: 5.0,),
-                  Text(
-                    'Tìm kiếm',
-                  )
-                ],
-              ),
-            )
+            const SizedBox(
+              height: 20.0,
+            ),
+            Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.textSecondary.withOpacity(0.5),
+                      blurRadius: 30,
+                      spreadRadius: 0,
+                      offset: const Offset(5, 10),
+                    ),
+                  ],
+                ),
+                child: MaterialButton(
+                  onPressed: () => {},
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  color: AppColors.secondary,
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Iconsax.search_normal_1,
+                        color: AppColors.textWhite,
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        'Tìm kiếm',
+                        style: TextStyle(color: AppColors.textWhite),
+                      ),
+                    ],
+                  ),
+                ))
           ],
         ),
       ),

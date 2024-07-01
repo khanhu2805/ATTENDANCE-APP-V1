@@ -1,6 +1,7 @@
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face_recognition_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/navigation_menu.dart';
+import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class CompareScreen extends StatefulWidget {
 class _CompareScreenState extends State<CompareScreen>
     with SingleTickerProviderStateMixin {
   late CheckinController controller;
+  late bool isDark;
   late FaceRecognitionController faceRecognitionController;
   late NavigationController navigationController;
   @override
@@ -34,6 +36,7 @@ class _CompareScreenState extends State<CompareScreen>
 
   @override
   Widget build(BuildContext context) {
+    isDark = THelperFunctions.isDarkMode(context);
     return SafeArea(
       child: Scaffold(
           bottomSheet: BottomSheet(
@@ -44,38 +47,51 @@ class _CompareScreenState extends State<CompareScreen>
                   topRight: Radius.circular(180.0)),
             ),
             builder: (context) {
-              return SizedBox(
-                height: THelperFunctions.screenHeight() / 6, // Adjust as needed
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(() => Text(
-                          controller.screenIndex.value == 0
-                              ? 'Vui lòng quét thẻ sinh viên'
-                              : 'Mã sinh viên: ${controller.studentCode.value}',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                  fontSize:
-                                      THelperFunctions.screenWidth() * 0.038),
-                        )),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.offAll(() => const NavigationMenu(
-                              index: 1,
-                            ));
-                      },
-                      child: Text(
-                        'Kết thúc ca điểm danh',
-                        style: TextStyle(
-                            fontSize: THelperFunctions.screenWidth() * 0.04),
+              return Container(
+                height: THelperFunctions.screenHeight() / 6,
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.primaryBackgroundDark : AppColors.primaryBackground,
+                  borderRadius: BorderRadius.circular(14.0),
+                  border: Border.all(color: isDark ? AppColors.primaryBackgroundDark : Colors.grey), 
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  height:
+                      THelperFunctions.screenHeight() / 6,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(() => Text(
+                            controller.screenIndex.value == 0
+                                ? 'Vui lòng quét thẻ sinh viên'
+                                : 'Mã sinh viên: ${controller.studentCode.value}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    fontSize:
+                                        THelperFunctions.screenWidth() * 0.038),
+                          )),
+                      const SizedBox(
+                        height: 10.0,
                       ),
-                    ),
-                  ],
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.offAll(() => const NavigationMenu(
+                                index: 1,
+                              ));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondary,
+                        ),
+                        child: Text(
+                          'Kết thúc ca điểm danh',
+                          style: TextStyle(
+                              fontSize: THelperFunctions.screenWidth() * 0.04),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

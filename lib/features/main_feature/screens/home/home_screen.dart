@@ -338,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           .screenWidth() /
                                                                       30),
                                                       backgroundColor:
-                                                          AppColors.white,
+                                                          isDark ? AppColors.dark : AppColors.white,
                                                       shape:
                                                           RoundedRectangleBorder(
                                                               borderRadius:
