@@ -1,5 +1,4 @@
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
-import 'package:camera/camera.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face_recognition_controller.dart';
 import 'package:fe_attendance_app/utils/popups/loaders.dart';

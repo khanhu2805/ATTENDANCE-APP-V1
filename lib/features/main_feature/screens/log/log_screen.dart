@@ -233,6 +233,7 @@ class _LogScreenState extends State<LogScreen> {
                     }
                   },
                 ),
+                
                 SizedBox(
                   height: THelperFunctions.screenHeight() / 30,
                 ),
