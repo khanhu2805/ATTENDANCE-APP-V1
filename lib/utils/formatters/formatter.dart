@@ -11,6 +11,10 @@ class AppFormatter {
     return DateFormat(DateFormat.WEEKDAY).format(date ?? DateTime.now());
   }
 
+  static String formatTimeStampToDate(Timestamp timestamp) {
+    return DateFormat('dd/MM/yyyy hh:mm:ss a').format(timestamp.toDate());
+  }
+
   static Timestamp formatToTimeStamp(DateTime? date) {
     return Timestamp.fromDate(date ?? DateTime.now());
   }

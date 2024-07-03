@@ -3,6 +3,7 @@ import 'package:fe_attendance_app/features/main_feature/controllers/checkin/chec
 import 'package:fe_attendance_app/navigation_menu.dart';
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
+import 'package:fe_attendance_app/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -75,22 +76,36 @@ class _CompareScreenState extends State<CompareScreen>
                       const SizedBox(
                         height: 10.0,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Get.offAll(() => NavigationMenu(
-                                index: 1,
-                                id: controller.documentSnapshot?.id,
-                              ));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.secondary,
-                        ),
-                        child: Text(
-                          'Kết thúc ca điểm danh',
-                          style: TextStyle(
-                              fontSize: THelperFunctions.screenWidth() * 0.04),
-                        ),
-                      ),
+                      Obx(() => controller.screenIndex.value == 0
+                        ? ElevatedButton(
+                            onPressed: () {
+                              Get.offAll(() => NavigationMenu(
+                                    index: 1,
+                                    id: controller.documentSnapshot?.id,
+                                  ));
+                            },
+                            child: Text(
+                              'Kết thúc ca điểm danh',
+                              style: TextStyle(
+                                  fontSize:
+                                      THelperFunctions.screenWidth() * 0.04),
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              AppLoaders.showCircularLoader(),
+                              Text(
+                                'Đang tải hình ảnh ...',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                        fontSize:
+                                            THelperFunctions.screenWidth() *
+                                                0.035),
+                              ),
+                            ],
+                          ),)
                     ],
                   ),
                 ),

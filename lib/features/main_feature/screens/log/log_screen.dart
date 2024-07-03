@@ -3,9 +3,7 @@ import 'package:fe_attendance_app/features/main_feature/screens/log/widget/data_
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:fe_attendance_app/utils/popups/loaders.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -25,6 +23,9 @@ class _LogScreenState extends State<LogScreen> {
     // TODO: implement initState
     super.initState();
     controller = Get.put(LogController());
+    controller.getClassInfo(widget.id ?? '').then((value) {
+      controller.getLog();
+    });
   }
 
   @override
@@ -57,7 +58,7 @@ class _LogScreenState extends State<LogScreen> {
                           Row(
                             children: [
                               Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: Text(
                                   'Mã lớp học phần:',
                                   style: Theme.of(context)
@@ -70,7 +71,7 @@ class _LogScreenState extends State<LogScreen> {
                                 ),
                               ),
                               Expanded(
-                                flex: 3,
+                                flex: 1,
                                 child: Text(
                                   '${snapshot.data?.id}',
                                   textAlign: TextAlign.left,
@@ -89,7 +90,7 @@ class _LogScreenState extends State<LogScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: Text(
                                   'Tên lớp học phần:',
                                   style: Theme.of(context)
@@ -102,7 +103,7 @@ class _LogScreenState extends State<LogScreen> {
                                 ),
                               ),
                               Expanded(
-                                flex: 3,
+                                flex: 1,
                                 child: Text(
                                   '${snapshot.data?.get('name_of_class')}',
                                   textAlign: TextAlign.left,
@@ -117,118 +118,120 @@ class _LogScreenState extends State<LogScreen> {
                               )
                             ],
                           ),
+                          SizedBox(
+                            height: THelperFunctions.screenHeight() / 20,
+                          ),
+                          DropdownMenu<String>(
+                            inputDecorationTheme: InputDecorationTheme(
+                              constraints: BoxConstraints(
+                                maxHeight: THelperFunctions.screenHeight() / 12,
+                              ),
+                            ),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    fontSize:
+                                        THelperFunctions.screenWidth() * 0.04),
+                            menuStyle: MenuStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(AppColors.white),
+                                surfaceTintColor:
+                                    MaterialStateProperty.all(AppColors.white)),
+                            initialSelection: controller.option.last,
+                            leadingIcon: const Icon(Iconsax.calendar),
+                            label: Text(
+                              'Ngày (Buổi)',
+                              style: TextStyle(
+                                  fontSize:
+                                      THelperFunctions.screenWidth() * 0.045),
+                            ),
+                            width: THelperFunctions.screenWidth() * 0.8,
+                            onSelected: (String? value) {
+                              controller.selected =
+                                  'buoi_${value?.substring(5, value.length)}';
+                            },
+                            dropdownMenuEntries: controller.option
+                                .map<DropdownMenuEntry<String>>((String value) {
+                              return DropdownMenuEntry<String>(
+                                  value: value,
+                                  label: value,
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              AppColors.secondary)));
+                            }).toList(),
+                          ),
+                          SizedBox(
+                            height: THelperFunctions.screenHeight() / 30,
+                          ),
+                          DropdownMenu<String>(
+                            inputDecorationTheme: InputDecorationTheme(
+                              constraints: BoxConstraints(
+                                maxHeight: THelperFunctions.screenHeight() / 12,
+                              ),
+                            ),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    fontSize:
+                                        THelperFunctions.screenWidth() * 0.04),
+                            menuStyle: MenuStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(AppColors.white),
+                                surfaceTintColor:
+                                    MaterialStateProperty.all(AppColors.white)),
+                            initialSelection: controller.check == 'check_in'
+                                ? 'Checkin'
+                                : 'Checkout',
+                            leadingIcon: const Icon(Iconsax.calendar),
+                            label: Text(
+                              'Checkin/ Checkout',
+                              style: TextStyle(
+                                  fontSize:
+                                      THelperFunctions.screenWidth() * 0.045),
+                            ),
+                            width: THelperFunctions.screenWidth() * 0.8,
+                            onSelected: (String? value) {
+                              controller.check =
+                                  value == 'Checkin' ? 'check_in' : 'check_out';
+                            },
+                            dropdownMenuEntries: ['Checkin', 'Checkout']
+                                .map<DropdownMenuEntry<String>>((String value) {
+                              return DropdownMenuEntry<String>(
+                                  value: value,
+                                  label: value,
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              AppColors.secondary)));
+                            }).toList(),
+                          ),
+                          SizedBox(
+                            height: THelperFunctions.screenHeight() / 30,
+                          ),
+                          ElevatedButton(
+                            onPressed: () => {controller.getLog()},
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Iconsax.search_normal_1),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Text(
+                                  'Tìm kiếm',
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       );
                     } else {
                       return AppLoaders.showCircularLoader();
                     }
                   },
-                ),
-                SizedBox(
-                  height: THelperFunctions.screenHeight() / 20,
-                ),
-                Obx(() => controller.option[0] != ''
-                    ? Column(children: [
-                        DropdownMenu<String>(
-                          inputDecorationTheme: InputDecorationTheme(
-                            constraints: BoxConstraints(
-                              maxHeight: THelperFunctions.screenHeight() / 12,
-                            ),
-                          ),
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(
-                                  fontSize:
-                                      THelperFunctions.screenWidth() * 0.04),
-                          menuStyle: MenuStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(AppColors.white),
-                              surfaceTintColor:
-                                  MaterialStateProperty.all(AppColors.white)),
-                          initialSelection: controller.selected,
-                          leadingIcon: const Icon(Iconsax.calendar),
-                          label: Text(
-                            'Ngày (Buổi)',
-                            style: TextStyle(
-                                fontSize:
-                                    THelperFunctions.screenWidth() * 0.045),
-                          ),
-                          width: THelperFunctions.screenWidth() * 0.8,
-                          onSelected: (String? value) {
-                            controller.selected = value ?? '';
-                          },
-                          dropdownMenuEntries: controller.option
-                              .map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                                value: value,
-                                label: value,
-                                style: ButtonStyle(
-                                    foregroundColor: MaterialStateProperty.all(
-                                        AppColors.secondary)));
-                          }).toList(),
-                        ),
-                        SizedBox(
-                          height: THelperFunctions.screenHeight() / 30,
-                        ),
-                        DropdownMenu<String>(
-                          inputDecorationTheme: InputDecorationTheme(
-                            constraints: BoxConstraints(
-                              maxHeight: THelperFunctions.screenHeight() / 12,
-                            ),
-                          ),
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(
-                                  fontSize:
-                                      THelperFunctions.screenWidth() * 0.04),
-                          menuStyle: MenuStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(AppColors.white),
-                              surfaceTintColor:
-                                  MaterialStateProperty.all(AppColors.white)),
-                          initialSelection: controller.check,
-                          leadingIcon: const Icon(Iconsax.calendar),
-                          label: Text(
-                            'Checkin/ Checkout',
-                            style: TextStyle(
-                                fontSize:
-                                    THelperFunctions.screenWidth() * 0.045),
-                          ),
-                          width: THelperFunctions.screenWidth() * 0.8,
-                          onSelected: (String? value) {
-                            controller.check = value ?? '';
-                          },
-                          dropdownMenuEntries: ['check_in', 'check_out']
-                              .map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                                value: value,
-                                label: value,
-                                style: ButtonStyle(
-                                    foregroundColor: MaterialStateProperty.all(
-                                        AppColors.secondary)));
-                          }).toList(),
-                        ),
-                      ])
-                    : AppLoaders.showCircularLoader()),
-                SizedBox(
-                  height: THelperFunctions.screenHeight() / 30,
-                ),
-                ElevatedButton(
-                  onPressed: () => {controller.getLog()},
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Iconsax.search_normal_1),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Text(
-                        'Tìm kiếm',
-                      )
-                    ],
-                  ),
                 ),
                 SizedBox(
                   height: THelperFunctions.screenHeight() / 30,
@@ -252,9 +255,13 @@ class _LogScreenState extends State<LogScreen> {
                         ),
                       );
                     }
-                    return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: LogDataTable(log: snapshot.data));
+                    return Scrollbar(
+                      thumbVisibility: true,
+                      radius: const Radius.circular(10.0),
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: LogDataTable(log: snapshot.data)),
+                    );
                   },
                 )
               ],

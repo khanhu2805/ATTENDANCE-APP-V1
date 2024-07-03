@@ -66,6 +66,11 @@ dependencies:
   gmt: ^0.7.3
   flutter_markdown: ^0.7.2+1
 
+  #Excel
+  permission_handler: ^11.3.1
+  excel: ^4.0.3
+  flutter_file_dialog: ^3.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

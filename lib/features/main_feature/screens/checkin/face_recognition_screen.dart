@@ -1,5 +1,5 @@
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
-import 'package:camera/camera.dart';
+import 'package:fe_attendance_app/features/main_feature/controllers/checkin/checkin_controller.dart';
 import 'package:fe_attendance_app/features/main_feature/controllers/checkin/face_recognition_controller.dart';
 import 'package:fe_attendance_app/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
@@ -13,18 +13,18 @@ class FaceRecognitionScreen extends StatefulWidget {
 }
 
 class _FaceRecognitionState extends State<FaceRecognitionScreen> {
-  late FaceRecognitionController cameraController;
+  late FaceRecognitionController faceRecognitionController;
 
   @override
   void initState() {
     super.initState();
-    cameraController = Get.put(FaceRecognitionController(), permanent: true);
-    cameraController.initializeCamera();
+    faceRecognitionController = Get.put(FaceRecognitionController(), permanent: true);
+    faceRecognitionController.initializeCamera();
   }
 
   @override
   void dispose() {
-    cameraController.disposeCamera();
+    faceRecognitionController.disposeCamera();
     super.dispose();
   }
 
@@ -37,35 +37,35 @@ class _FaceRecognitionState extends State<FaceRecognitionScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                cameraController.switchCamera();
+                faceRecognitionController.switchCamera();
               },
               icon: const Icon(Icons.cameraswitch_rounded),
             ),
             Obx(() {
               return IconButton(
                 icon: Icon(
-                  cameraController.flashMode.value == FlashMode.torch
+                  CheckinController.instance.flashing.value
                       ? Icons.flashlight_on_rounded
                       : Icons.flashlight_off_rounded,
                 ),
                 onPressed: () {
-                  cameraController.toggleFlash();
+                  faceRecognitionController.toggleFlash();
                 },
               );
             }),
           ],
         ),
         body: Obx(() {
-          if (cameraController.loading.value ||
-              cameraController.cameraController == null ||
-              !cameraController.cameraController!.value.isInitialized) {
+          if (faceRecognitionController.loading.value ||
+              faceRecognitionController.cameraController == null ||
+              !faceRecognitionController.cameraController!.value.isInitialized) {
             return Center(child: AppLoaders.showCircularLoader());
           }
           return Stack(
             children: [
-              if (cameraController.cameraController != null &&
-                  cameraController.cameraController!.value.isInitialized)
-                cameraController.cameraController!.buildPreview(),
+              if (faceRecognitionController.cameraController != null &&
+                  faceRecognitionController.cameraController!.value.isInitialized)
+                faceRecognitionController.cameraController!.buildPreview(),
               Container(
                 decoration: ShapeDecoration(
                   shape: OverlayShape(

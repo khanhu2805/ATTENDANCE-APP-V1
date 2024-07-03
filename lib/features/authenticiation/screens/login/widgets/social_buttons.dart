@@ -2,11 +2,8 @@ import 'package:fe_attendance_app/features/authenticiation/controllers/login/mic
 import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/constants/image_strings.dart';
 import 'package:fe_attendance_app/utils/constants/sizes.dart';
-import 'package:fe_attendance_app/utils/constants/text_strings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class AppSocialButtons extends StatelessWidget {
   const AppSocialButtons({super.key});
