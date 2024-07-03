@@ -1,8 +1,6 @@
 import 'package:fe_attendance_app/utils/constants/colors.dart';
-import 'package:fe_attendance_app/utils/formatters/formatter.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class TextRow extends StatelessWidget {
   const TextRow(

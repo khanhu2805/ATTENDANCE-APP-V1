@@ -573,44 +573,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     );
                   })),
-              // GestureDetector(
-              //   onTap: () => navigationController.selectedIndex.value = 1,
-              //   child: Container(
-              //     alignment: Alignment.centerLeft,
-              //     padding: EdgeInsets.only(
-              //         left: THelperFunctions.screenWidth() / 30),
-              //     margin: EdgeInsets.all(THelperFunctions.screenWidth() / 30),
-              //     width: THelperFunctions.screenWidth(),
-              //     height: THelperFunctions.screenHeight() / 10,
-              //     decoration: BoxDecoration(
-              //         boxShadow: const [
-              //           BoxShadow(
-              //               spreadRadius: 2,
-              //               blurRadius: 7,
-              //               color: AppColors.grey,
-              //               offset: Offset(5, 2.0))
-              //         ],
-              //         borderRadius: BorderRadius.circular(20.0),
-              //         color: AppColors.primaryBackground,
-              //         border: Border.all(color: AppColors.accent)
-              //         // gradient: LinearGradient(
-              //         //   colors: [
-              //         //     AppColors.primary.withOpacity(0.5),
-              //         //     AppColors.primaryBackground,
-              //         //     AppColors.accent.withOpacity(0.5)
-              //         //   ],
-              //         //   begin: Alignment.topLeft,
-              //         //   end: Alignment.bottomRight,
-              //         // ),
-              //         ),
-              //     child: Text(
-              //       'Lịch sử điểm danh'.toUpperCase(),
-              //       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              //             fontSize: THelperFunctions.screenWidth() * 0.045,
-              //           ),
-              //     ),
-              //   ),
-              // )
+              GestureDetector(
+                onTap: () => navigationController.selectedIndex.value = 8,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(
+                      left: THelperFunctions.screenWidth() / 30),
+                  margin: EdgeInsets.all(THelperFunctions.screenWidth() / 30),
+                  width: THelperFunctions.screenWidth(),
+                  height: THelperFunctions.screenHeight() / 10,
+                  decoration: BoxDecoration(
+                      boxShadow: const [
+                        BoxShadow(
+                            spreadRadius: 2,
+                            blurRadius: 7,
+                            color: AppColors.grey,
+                            offset: Offset(5, 2.0))
+                      ],
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: AppColors.primaryBackground,
+                      border: Border.all(color: AppColors.accent)
+                      // gradient: LinearGradient(
+                      //   colors: [
+                      //     AppColors.primary.withOpacity(0.5),
+                      //     AppColors.primaryBackground,
+                      //     AppColors.accent.withOpacity(0.5)
+                      //   ],
+                      //   begin: Alignment.topLeft,
+                      //   end: Alignment.bottomRight,
+                      // ),
+                      ),
+                  child: Text(
+                    'Xuất file điểm danh'.toUpperCase(),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontSize: THelperFunctions.screenWidth() * 0.045,
+                        ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

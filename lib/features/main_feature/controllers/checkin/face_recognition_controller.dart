@@ -201,6 +201,7 @@ class FaceRecognitionController extends GetxController {
             transitionDuration: const Duration(milliseconds: 200),
             barrierDismissible: false,
           );
+          
           return;
         }
       } catch (e) {

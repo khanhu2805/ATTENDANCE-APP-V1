@@ -1,3 +1,4 @@
+import 'package:fe_attendance_app/features/main_feature/screens/export_excel/export_excel_screen.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/log/log_screen.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/notification/notification_screen.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/profile/account_information_screen.dart';
@@ -162,6 +163,7 @@ class NavigationController extends GetxController {
     const AccountInfoScreen(),//5
     const PrivacyPolicyScreen(),//6
     const TermsConditionScreen(),//7
+    const ExportExcelScreen()
   ];
 
   void changeToLogScreen(String id) {
