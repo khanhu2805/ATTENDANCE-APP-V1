@@ -71,6 +71,7 @@ dependencies:
   excel: ^4.0.3
   flutter_file_dialog: ^3.0.2
   firebase_messaging: ^15.0.2
+  device_info_plus: ^10.1.0
 
 dev_dependencies:
   flutter_test:
