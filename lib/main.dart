@@ -1,3 +1,4 @@
+import 'package:fe_attendance_app/features/main_feature/screens/notification/api/firebase_api.dart';
 import 'package:fe_attendance_app/utils/repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,11 @@ Future<void> main() async {
   if (!rememberMe) {
     await AuthenticationRepository.instance.logout();
   }
+
+  //Notification
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
 
   runApp(const App());
 }
