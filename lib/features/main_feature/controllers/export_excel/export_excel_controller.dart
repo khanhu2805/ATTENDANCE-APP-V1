@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:excel/excel.dart';
 import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/widgets/pop_up_dialog.dart';
@@ -45,13 +47,46 @@ class ExportExcelController extends GetxController {
     // return docu;
   }
 
+  Future<bool> storagePermission() async {
+    final DeviceInfoPlugin info = DeviceInfoPlugin();
+    bool havePermission;
+    if (Platform.isAndroid) {
+      final AndroidDeviceInfo androidInfo = await info.androidInfo;
+      debugPrint('releaseVersion : ${androidInfo.version.release}');
+      final int androidVersion = int.parse(androidInfo.version.release);
+      havePermission = false;
+
+      if (androidVersion >= 13) {
+        final request = await [
+          // Permission.videos,
+          // Permission.photos,
+          Permission.manageExternalStorage,
+        ].request();
+        havePermission = request.values
+            .every((status) => status == PermissionStatus.granted);
+      } else {
+        final status = await Permission.storage.request();
+        havePermission = status.isGranted;
+      }
+
+      if (!havePermission) {
+        // if no permission then open app-setting
+        await openAppSettings();
+      }
+    } else {
+      havePermission = true;
+    }
+
+    return havePermission;
+  }
+
   Future<void> exportToExcel() async {
     loading.value = true;
     cancel = false;
     DateTime? d = await GMT.now();
     DateTime dateTime = d!.toLocal();
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
+    var status = await storagePermission();
+    if (status) {
       var excel = Excel.createExcel();
       var query = _firestore
           .collection(FirebaseAuth.instance.currentUser!.uid)
