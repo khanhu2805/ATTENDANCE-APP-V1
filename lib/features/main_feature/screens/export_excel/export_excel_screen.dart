@@ -150,7 +150,8 @@ class _ExportExcelScreenState extends State<ExportExcelScreen> {
                             ),
                             width: THelperFunctions.screenWidth() * 0.8,
                             onSelected: (String? value) {
-                              controller.selected = value!.split('-')[0];
+                              controller.selected =
+                                  value!.split('-')[0].removeAllWhitespace;
                             },
                             dropdownMenuEntries: snapshot.data!
                                 .map<DropdownMenuEntry<String>>((String value) {
@@ -213,7 +214,7 @@ class _ExportExcelScreenState extends State<ExportExcelScreen> {
                           //   height: THelperFunctions.screenHeight() / 30,
                           // ),
                           ElevatedButton(
-                            onPressed: () => {},
+                            onPressed: controller.exportToExcel,
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -234,6 +235,29 @@ class _ExportExcelScreenState extends State<ExportExcelScreen> {
                     }
                   },
                 ),
+                SizedBox(
+                  height: THelperFunctions.screenHeight() / 25,
+                ),
+                Obx(() => Visibility(
+                    visible: controller.loading.value,
+                    child: Column(
+                      children: [
+                        AppLoaders.showCircularLoader(),
+                        const Text('Đang xử lý file ...'),
+                        SizedBox(height: THelperFunctions.screenHeight() / 50),
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.cancel = true;
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.error,
+                              side: BorderSide.none),
+                          child: const Text(
+                            'Cancel',
+                          ),
+                        )
+                      ],
+                    )))
               ],
             ),
           ),
