@@ -1,29 +1,35 @@
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class NotificationScreeen extends StatelessWidget {
+class NotificationScreeen extends StatefulWidget {
   const NotificationScreeen({super.key});
 
   static const route = '/notification_screen';
 
   @override
-  Widget build(BuildContext context) {
-    final message = ModalRoute.of(context)!.settings.arguments as RemoteMessage?;
+  State<NotificationScreeen> createState() => _NotificationScreeenState();
+}
 
-    return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        title: const Text('Thông báo'),
-      ),
+class _NotificationScreeenState extends State<NotificationScreeen> {
+  Map payload = {};
+  @override
+  Widget build(BuildContext context) {
+    final data = ModalRoute.of(context)!.settings.arguments;
+    if (data is RemoteMessage) {
+      payload = data.data;
+    }
+    if (data is NotificationResponse) {
+      payload = jsonDecode(data.payload!);
+    }
+    return Scaffold(
+      appBar: AppBar(title: const Text("Thông báo")),
       body: Center(
-        child: Padding( 
-          padding: const EdgeInsets.all(20.0),
-          // ignore: unnecessary_null_comparison
-          child: message != null 
-            ?  Text('${message.notification?.title}\n${message.notification?.body}\n${message.data}')
+      child: payload.isNotEmpty
+            ?  Text(payload.toString())
             : const Text("Không có thông báo nào."), 
         ),
-      ),
-    ),);
+    );
   }
 }
