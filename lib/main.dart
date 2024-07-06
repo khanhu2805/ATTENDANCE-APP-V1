@@ -1,5 +1,6 @@
 import 'package:fe_attendance_app/features/main_feature/screens/notification/api/firebase_api.dart';
 import 'package:fe_attendance_app/utils/repository/authentication_repository.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -7,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'firebase_options.dart';
+
+final navigationKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   final WidgetsBinding widgetsBinding =
@@ -25,8 +28,11 @@ Future<void> main() async {
 
   //Notification
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await FirebaseApi().initNotifications();
+  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
 
   runApp(const App());
 }
