@@ -157,7 +157,7 @@ class NavigationController extends GetxController {
   List<Widget> screens = [
     const HomeScreen(),
     const LogScreen(),
-    const NotificationScreeen(),
+    const NotificationScreen(),
     const ProfileScreen(),
     const CheckinScreen(),
     const AccountInfoScreen(),//5

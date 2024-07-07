@@ -28,18 +28,26 @@ class PushNotifications {
         token = await _firebaseMessaging.getToken(
             vapidKey:
                 "BJzRufH-VxRc7wLunA6WOaf-gVurFKhDluPRFB8644PQHw6OfWH8uzybtYsFBTA326_yy3PEG-L7OK_ojVsMmrI");
-        print("for web device token: $token");
+        if (kDebugMode) {
+          print("for web device token: $token");
+        }
       } else {
         // get the device fcm token
         token = await _firebaseMessaging.getToken();
-        print("for android device token: $token");
+        if (kDebugMode) {
+          print("for android device token: $token");
+        }
       }
       return token;
     } catch (e) {
-      print("failed to get device token");
+      if (kDebugMode) {
+        print("failed to get device token");
+      }
       if (maxRetires > 0) {
-        print("try after 10 sec");
-        await Future.delayed(Duration(seconds: 10));
+        if (kDebugMode) {
+          print("try after 10 sec");
+        }
+        await Future.delayed(const Duration(seconds: 10));
         return getFCMToken(maxRetires: maxRetires - 1);
       } else {
         return null;
@@ -52,9 +60,9 @@ class PushNotifications {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) => null,
+      onDidReceiveLocalNotification: (id, title, body, payload) {},
     );
-    final LinuxInitializationSettings initializationSettingsLinux =
+    const LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
     final InitializationSettings initializationSettings =
         InitializationSettings(

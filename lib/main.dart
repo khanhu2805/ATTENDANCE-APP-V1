@@ -12,11 +12,22 @@ import 'app.dart';
 import 'firebase_options.dart';
 
 final navigationKey = GlobalKey<NavigatorState>();
+  List<Map<String, dynamic>> notifications = [];
+
 Future _firebaseBackgroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
-    print("Some notification Received");
+    if (kDebugMode) {
+      print("Some notification Received");
+    }
   }
 }
+Future<void> _saveNotification(
+      String title, String body, DateTime time) async {
+    final prefs = await SharedPreferences.getInstance();
+    notifications.add({'title': title, 'body': body, 'time': time.toString()});
+    await prefs.setStringList(
+        'notifications', notifications.map((e) => jsonEncode(e)).toList());
+  }
 
 void showNotification({required String title, required String body}) {
   showDialog(
@@ -60,8 +71,11 @@ Future<void> main() async {
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     if (message.notification != null) {
-      print("Background Notification Tapped");
+      if (kDebugMode) {
+        print("Background Notification Tapped");
+      }
       navigationKey.currentState!.pushNamed("/notification_screen", arguments: message);
+      
     }
   });
 
@@ -73,7 +87,9 @@ Future<void> main() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     String payloadData = jsonEncode(message.data);
-    print("Got a message in foreground");
+    if (kDebugMode) {
+      print("Got a message in foreground");
+    }
     if (message.notification != null) {
       if (kIsWeb) {
         showNotification(
@@ -85,6 +101,10 @@ Future<void> main() async {
             body: message.notification!.body!,
             payload: payloadData);
       }
+      if (message.notification != null) {
+        _saveNotification(
+            message.notification?.title ?? '', message.notification?.body ?? '', DateTime.now());
+    } 
     }
   });
 
@@ -92,7 +112,9 @@ Future<void> main() async {
       await FirebaseMessaging.instance.getInitialMessage();
 
   if (message != null) {
-    print("Launched from terminated state");
+    if (kDebugMode) {
+      print("Launched from terminated state");
+    }
     Future.delayed(const Duration(seconds: 500), () {
       navigationKey.currentState!.pushNamed("/notification_screen", arguments: message);
     });

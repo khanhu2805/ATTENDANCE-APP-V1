@@ -1,35 +1,91 @@
 import 'dart:convert';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_slidable/flutter_slidable.dart'; 
 
-class NotificationScreeen extends StatefulWidget {
-  const NotificationScreeen({super.key});
+
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
   static const route = '/notification_screen';
 
   @override
-  State<NotificationScreeen> createState() => _NotificationScreeenState();
+  State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationScreeenState extends State<NotificationScreeen> {
-  Map payload = {};
+class _NotificationScreenState extends State<NotificationScreen> {
+  List<Map<String, dynamic>> notifications = [];
+
   @override
-  Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)!.settings.arguments;
-    if (data is RemoteMessage) {
-      payload = data.data;
-    }
-    if (data is NotificationResponse) {
-      payload = jsonDecode(data.payload!);
-    }
+  void initState() {
+    super.initState();
+    _loadNotifications();
+  }
+
+  Future<void> _loadNotifications() async {
+  final prefs = await SharedPreferences.getInstance();
+  final List<String>? notificationStrings = prefs.getStringList('notifications');
+  if (notificationStrings != null) {
+    setState(() {
+      notifications = notificationStrings
+          .map((notificationString) => jsonDecode(notificationString) as Map<String, dynamic>)
+          .toList();
+    });
+  }
+  notifications.sort((a, b) {
+      final timeA = DateTime.parse(a['time']);
+      final timeB = DateTime.parse(b['time']);
+      return timeB.compareTo(timeA); 
+    });
+}
+
+  @override
+  Widget build(BuildContext context) {  
     return Scaffold(
       appBar: AppBar(title: const Text("Thông báo")),
-      body: Center(
-      child: payload.isNotEmpty
-            ?  Text(payload.toString())
-            : const Text("Không có thông báo nào."), 
-        ),
+      body: ListView.builder(
+        itemCount: notifications.length,
+        itemBuilder: (context, index) {
+          final notification = notifications[index];
+          final time = DateTime.parse(notification['time']);
+          return Slidable(
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (context) {
+                    setState(() {
+                      notifications.removeAt(index);
+                      _saveNotificationsToPrefs();
+                    });
+                  },
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: 'Xóa',                  
+                ),    
+              ],
+            ),
+            child: Card(
+              child: ListTile(
+                title: Text(notification['title'],
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(notification['body']),
+                trailing: Text(
+                    DateFormat('yyyy-MM-dd HH:mm:ss').format(time.toLocal())),
+              ),
+            ),
+          );
+        },
+      ),
     );
+  }
+  Future<void> _saveNotificationsToPrefs() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList(
+    'notifications',
+    notifications.map((e) => jsonEncode(e)).toList(),
+  );
   }
 }
