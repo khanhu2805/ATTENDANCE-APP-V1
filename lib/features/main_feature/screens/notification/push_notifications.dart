@@ -1,10 +1,40 @@
+import 'dart:convert';
+import 'package:fe_attendance_app/features/main_feature/screens/notification/notification_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fe_attendance_app/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future _firebaseBackgroundMessage(RemoteMessage message) async {
+    if (message.notification != null) {
+      if (kDebugMode) {
+        print("Some notification Received");
+      }
+    }
+  }
 
 class PushNotifications {
   static final _firebaseMessaging = FirebaseMessaging.instance;
+  static List<Map<String, dynamic>> notifications = [];
+  static final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+
+  PushNotifications() {
+    _loadNotifications(); 
+  }
+  
+  Future<void> _loadNotifications() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? notificationStrings = prefs.getStringList('notifications');
+
+    if (notificationStrings != null) {
+      notifications = notificationStrings
+          .map((notificationString) => jsonDecode(notificationString))
+          .toList()
+          .cast<Map<String, dynamic>>();
+    }
+  }
+
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static Future init() async {
@@ -21,18 +51,43 @@ class PushNotifications {
     getFCMToken();
   }
 
+  static Future<void> _saveNotification(
+      String title, String body, DateTime time) async {
+    final prefs = await SharedPreferences
+        .getInstance(); 
+    notifications.add({
+      'title': title,
+      'body': body,
+      'time': time.toString()
+    });
+    await prefs.setStringList(
+        'notifications',
+        notifications
+            .map((e) => jsonEncode(e))
+            .toList()); 
+  }
+
+  void showNotification({required String title, required String body}) {
+    showDialog(
+      context: navigationKey.currentContext!,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Ok"))
+        ],
+      ),
+    );
+  }
+
   static Future getFCMToken({int maxRetires = 3}) async {
     try {
       String? token;
       if (kIsWeb) {
-        token = await _firebaseMessaging.getToken(
-            vapidKey:
-                "BJzRufH-VxRc7wLunA6WOaf-gVurFKhDluPRFB8644PQHw6OfWH8uzybtYsFBTA326_yy3PEG-L7OK_ojVsMmrI");
-        if (kDebugMode) {
-          print("for web device token: $token");
-        }
-      } else {
-        // get the device fcm token
         token = await _firebaseMessaging.getToken();
         if (kDebugMode) {
           print("for android device token: $token");
@@ -55,20 +110,76 @@ class PushNotifications {
     }
   }
 
+  Future<void> initializePushNotifications() async {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        if (kDebugMode) {
+          print("Background Notification Tapped");
+        }
+        navigationKey.currentState!
+            .pushNamed(NotificationScreen.route, arguments: message);
+      }
+    });
+
+    PushNotifications.init();
+    if (!kIsWeb) {
+      PushNotifications.localNotiInit();
+    }
+    FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      String payloadData = jsonEncode(message.data);
+      if (kDebugMode) {
+        print("Got a message in foreground");
+      }
+      if (message.notification != null) {
+        if (kIsWeb) {
+          showNotification(
+              title: message.notification!.title!,
+              body: message.notification!.body!);
+        } else {
+          PushNotifications.showSimpleNotification(
+              title: message.notification!.title!,
+              body: message.notification!.body!,
+              payload: payloadData);
+        }
+        if (message.notification != null) {
+          _saveNotification(message.notification?.title ?? '',
+              message.notification?.body ?? '', DateTime.now());
+        }
+      }
+    });
+
+    final RemoteMessage? message =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (message != null) {
+      if (kDebugMode) {
+        print("Launched from terminated state");
+      }
+      Future.delayed(const Duration(seconds: 10), () {
+        navigationKey.currentState!
+            .pushNamed(NotificationScreen.route, arguments: message);
+      });
+      await _saveNotification(
+          message.notification?.title ?? '',
+          message.notification?.body ?? '',
+          DateTime.now());
+
+      navigationKey.currentState!.pushNamed(
+        NotificationScreen.route,
+        arguments: null,
+      ); 
+    }
+  }
+
   static Future localNotiInit() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    final DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) {},
-    );
-    const LinuxInitializationSettings initializationSettingsLinux =
-        LinuxInitializationSettings(defaultActionName: 'Open notification');
-    final InitializationSettings initializationSettings =
+   
+    const InitializationSettings initializationSettings =
         InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsDarwin,
-            linux: initializationSettingsLinux);
+            android: initializationSettingsAndroid,);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: onNotificationTap,
         onDidReceiveBackgroundNotificationResponse: onNotificationTap);
@@ -76,7 +187,7 @@ class PushNotifications {
 
   static void onNotificationTap(NotificationResponse notificationResponse) {
     navigationKey.currentState!
-        .pushNamed("/notification_screen", arguments: notificationResponse);
+        .pushNamed(NotificationScreen.route, arguments: notificationResponse);
   }
 
   static Future showSimpleNotification({

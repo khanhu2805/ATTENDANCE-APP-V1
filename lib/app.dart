@@ -28,6 +28,7 @@ class App extends StatelessWidget {
         ),
       ),
       navigatorKey: navigationKey,
+      initialRoute: '/',
       routes: {
         NotificationScreen.route: (context) => const NotificationScreen(),
       },
