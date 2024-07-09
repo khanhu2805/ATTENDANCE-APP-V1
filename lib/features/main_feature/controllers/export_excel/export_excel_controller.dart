@@ -89,12 +89,20 @@ class ExportExcelController extends GetxController {
     List<String> studentCodeLs = [];
     if (status) {
       var excel = Excel.Excel.createExcel();
-      excel.rename('Sheet1', 'Tong_ket');
-      Excel.Sheet sheetTotal = excel['Tong_ket'];
+      excel.rename('Sheet1', 'Tổng kết');
+      Excel.Sheet sheetTotal = excel['Tổng kết'];
       sheetTotal.merge(Excel.CellIndex.indexByString('A1'),
           Excel.CellIndex.indexByString('F1'));
       Excel.CellStyle cellHeaderStyle = Excel.CellStyle(
         bold: true,
+        verticalAlign: Excel.VerticalAlign.Center,
+        horizontalAlign: Excel.HorizontalAlign.Center,
+        bottomBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        topBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        leftBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        rightBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+      );
+      Excel.CellStyle cellCheckStyle = Excel.CellStyle(
         verticalAlign: Excel.VerticalAlign.Center,
         horizontalAlign: Excel.HorizontalAlign.Center,
         bottomBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
@@ -189,6 +197,14 @@ class ExportExcelController extends GetxController {
                   Excel.IntCellValue(studentCodeLs.length),
                   Excel.TextCellValue(studentCode)
                 ]);
+                // var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+                //     columnIndex: 0, rowIndex: sheetTotal.maxRows - 1));
+                // cell.cellStyle = cellBorderStyle;
+                // cell.value = Excel.IntCellValue(studentCodeLs.length);
+                // var cell_1 = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+                //     columnIndex: 0, rowIndex: sheetTotal.maxRows - 1));
+                // cell_1.cellStyle = cellBorderStyle;
+                // cell_1.value = Excel.TextCellValue(studentCode);
               }
               await query
                   .collection('buoi_$i')
@@ -219,19 +235,28 @@ class ExportExcelController extends GetxController {
           }
         }
       }
-      // for (int rowIndex = 2; rowIndex < sheetTotal.maxRows; rowIndex++) {
-      //   for (int k = 6; k < sheetTotal.maxColumns; k++) {
-      //     var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
-      //         columnIndex: k, rowIndex: rowIndex));
-      //     // cell.value = Excel.TextCellValue('s');
-      //     // cell.value = Excel.FormulaCellValue('=A2');cell.value = Excel.FormulaCellValue(
-      //     cell.value = Excel.FormulaCellValue(
-      //         '=IF(AND(NOT(ISNA(MATCH(B3, "Buổi 2"!B:B, 0))), NOT(ISBLANK(INDEX("Buổi 2"!D:D, MATCH(B3, "Buổi 2"!B:B, 0))))), NOT(ISBLANK(INDEX("Buổi 2"!C:C, MATCH(B3, "Buổi 2"!B:B, 0)))), "x", "")');
-
-      //     // cell.value = Excel.FormulaCellValue(
-      //     //     "=IF(AND(NOT(ISNA(MATCH(B${rowIndex + 1}, 'Buổi ${k - 5}'!B:B, 0))), NOT(ISBLANK(INDEX('Buổi ${k - 5}'!D:D, MATCH(B${rowIndex + 1}, 'Buổi ${k - 5}'!B:B, 0)))), NOT(ISBLANK(INDEX('Buổi ${k - 5}'!C:C, MATCH(B${rowIndex + 1}, 'Buổi ${k - 5}'!B:B, 0))))), 'x, '')");
-      //   }
-      // }
+      for (int rowIndex = 2; rowIndex < sheetTotal.maxRows; rowIndex++) {
+        for (int columnIndex = 0;
+            columnIndex < sheetTotal.maxColumns;
+            columnIndex++) {
+          var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+              columnIndex: columnIndex, rowIndex: rowIndex));
+          if (columnIndex < 6) {
+            cell.cellStyle = cellBorderStyle;
+          } else {
+            cell.cellStyle = cellCheckStyle;
+          }
+        }
+      }
+      for (int rowIndex = 2; rowIndex < sheetTotal.maxRows; rowIndex++) {
+        for (int k = 6; k < sheetTotal.maxColumns; k++) {
+          var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+              columnIndex: k, rowIndex: rowIndex));
+          cell.value = Excel.FormulaCellValue(
+              '=IF(AND(NOT(ISNA(MATCH(B${rowIndex + 1}, \'Buổi ${k - 5}\'!B:B, 0))), NOT(ISBLANK(INDEX(\'Buổi ${k - 5}\'!D:D, MATCH(B${rowIndex + 1}, \'Buổi ${k - 5}\'!B:B, 0)))), NOT(ISBLANK(INDEX(\'Buổi ${k - 5}\'!C:C, MATCH(B${rowIndex + 1}, \'Buổi ${k - 5}\'!B:B, 0))))), "x", "")');
+          cell.cellStyle = cellCheckStyle;
+        }
+      }
       var fileBytes = excel.encode();
       Uint8List bytes = Uint8List.fromList(fileBytes!);
       final params = SaveFileDialogParams(
