@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:excel/excel.dart';
+import 'package:excel/excel.dart' as Excel;
 import 'package:fe_attendance_app/common/widgets/loaders/animation_loader.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/checkin/widgets/pop_up_dialog.dart';
 import 'package:fe_attendance_app/utils/constants/colors.dart';
@@ -86,8 +86,63 @@ class ExportExcelController extends GetxController {
     DateTime? d = await GMT.now();
     DateTime dateTime = d!.toLocal();
     var status = await storagePermission();
+    List<String> studentCodeLs = [];
     if (status) {
-      var excel = Excel.createExcel();
+      var excel = Excel.Excel.createExcel();
+      excel.rename('Sheet1', 'Tổng kết');
+      Excel.Sheet sheetTotal = excel['Tổng kết'];
+      sheetTotal.merge(Excel.CellIndex.indexByString('A1'),
+          Excel.CellIndex.indexByString('F1'));
+      Excel.CellStyle cellHeaderStyle = Excel.CellStyle(
+        bold: true,
+        verticalAlign: Excel.VerticalAlign.Center,
+        horizontalAlign: Excel.HorizontalAlign.Center,
+        bottomBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        topBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        leftBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        rightBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+      );
+      Excel.CellStyle cellCheckStyle = Excel.CellStyle(
+        verticalAlign: Excel.VerticalAlign.Center,
+        horizontalAlign: Excel.HorizontalAlign.Center,
+        bottomBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        topBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        leftBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        rightBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+      );
+      Excel.CellStyle cellDateBorderStyle = Excel.CellStyle(
+        numberFormat: const Excel.CustomDateTimeNumFormat(
+            formatCode: 'dd-MM-yyyy HH:mm:ss'),
+        bottomBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        topBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        leftBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        rightBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+      );
+      Excel.CellStyle cellBorderStyle = Excel.CellStyle(
+        bottomBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        topBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        leftBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+        rightBorder: Excel.Border(borderStyle: Excel.BorderStyle.Thin),
+      );
+      List<String> headers = [
+        'STT',
+        'Mã SV',
+        'Họ và tên đệm',
+        'Tên',
+        'Ngày sinh',
+        'Giới tính'
+      ];
+      for (int i = 0; i < headers.length; i++) {
+        var cell = sheetTotal.cell(
+            Excel.CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 1));
+        cell.value = Excel.TextCellValue(headers[i]);
+        cell.cellStyle = cellHeaderStyle;
+      }
+      sheetTotal.setColumnWidth(1, 21);
+      sheetTotal.setColumnWidth(2, 21);
+      sheetTotal.setColumnWidth(3, 21);
+      sheetTotal.setColumnWidth(4, 21);
+      sheetTotal.setColumnWidth(5, 15);
       var query = _firestore
           .collection(FirebaseAuth.instance.currentUser!.uid)
           .doc(selected);
@@ -99,44 +154,108 @@ class ExportExcelController extends GetxController {
           loading.value = false;
           return;
         }
-        Sheet sheetCheckin = excel['Buoi_${i}_Checkin'];
-        Sheet sheetCheckout = excel['Buoi_${i}_Checkout'];
-        sheetCheckin.appendRow([
-          const TextCellValue('STT'),
-          const TextCellValue('MSSV'),
-          const TextCellValue('Thời gian')
-        ]);
-        sheetCheckout.appendRow([
-          const TextCellValue('STT'),
-          const TextCellValue('MSSV'),
-          const TextCellValue('Thời gian')
-        ]);
-        await query.collection('buoi_$i').doc('check_in').get().then((value) {
+        sheetTotal.setColumnWidth(sheetTotal.maxColumns, 15);
+        var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+            columnIndex: sheetTotal.maxColumns, rowIndex: 0));
+        cell.value = Excel.TextCellValue('Buổi $i');
+        cell.cellStyle = cellHeaderStyle;
+        var cell_1 = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+            columnIndex: sheetTotal.maxColumns - 1, rowIndex: 1));
+        DateTime date = tempt.get('start_date').toDate();
+        cell_1.value = Excel.TextCellValue(
+            AppFormatter.formatDate(date.add(Duration(days: 7 * (i - 1)))));
+        cell_1.cellStyle = cellHeaderStyle;
+        Excel.Sheet sheetCheck = excel['Buổi $i'];
+        List<String> checkHeaders = ['STT', 'Mã SV', 'Check-in', 'Check-out'];
+        for (int j = 0; j < checkHeaders.length; j++) {
+          var cell = sheetCheck.cell(
+              Excel.CellIndex.indexByColumnRow(columnIndex: j, rowIndex: 0));
+          cell.value = Excel.TextCellValue(checkHeaders[j]);
+          cell.cellStyle = cellHeaderStyle;
+        }
+        sheetCheck.setColumnWidth(1, 21);
+        sheetCheck.setColumnWidth(2, 21);
+        sheetCheck.setColumnWidth(3, 21);
+        await query
+            .collection('buoi_$i')
+            .doc('check_in')
+            .get()
+            .then((value) async {
           var data = value.data();
           if (data != null && data.isNotEmpty) {
-            for (int i = 0; i < data.length; i++) {
-              var dateTime = data.entries.elementAt(i).value.toDate();
-              sheetCheckin.appendRow([
-                IntCellValue(i + 1),
-                TextCellValue(data.entries.elementAt(i).key),
-                DateCellValue.fromDateTime(dateTime)
+            for (int l = 0; l < data.length; l++) {
+              var studentCode = data.entries.elementAt(l).key;
+              var dateTime = data.entries.elementAt(l).value.toDate();
+              sheetCheck.appendRow([
+                Excel.IntCellValue(l + 1),
+                Excel.TextCellValue(data.entries.elementAt(l).key),
+                Excel.DateTimeCellValue.fromDateTime(dateTime),
               ]);
+              if (!studentCodeLs.contains(studentCode)) {
+                studentCodeLs.add(studentCode);
+                sheetTotal.appendRow([
+                  Excel.IntCellValue(studentCodeLs.length),
+                  Excel.TextCellValue(studentCode)
+                ]);
+                // var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+                //     columnIndex: 0, rowIndex: sheetTotal.maxRows - 1));
+                // cell.cellStyle = cellBorderStyle;
+                // cell.value = Excel.IntCellValue(studentCodeLs.length);
+                // var cell_1 = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+                //     columnIndex: 0, rowIndex: sheetTotal.maxRows - 1));
+                // cell_1.cellStyle = cellBorderStyle;
+                // cell_1.value = Excel.TextCellValue(studentCode);
+              }
+              await query
+                  .collection('buoi_$i')
+                  .doc('check_out')
+                  .get()
+                  .then((value) {
+                if (value.data()!.containsKey(studentCode)) {
+                  var cell = sheetCheck.cell(
+                      Excel.CellIndex.indexByString('D${sheetCheck.maxRows}'));
+                  cell.value = Excel.DateTimeCellValue.fromDateTime(
+                      value.get(studentCode).toDate());
+                }
+              });
             }
           }
         });
-        await query.collection('buoi_$i').doc('check_out').get().then((value) {
-          var data = value.data();
-          if (data != null && data.isNotEmpty) {
-            for (int i = 0; i < data.length; i++) {
-              var dateTime = data.entries.elementAt(i).value.toDate();
-              sheetCheckout.appendRow([
-                IntCellValue(i + 1),
-                TextCellValue(data.entries.elementAt(i).key),
-                DateCellValue.fromDateTime(dateTime)
-              ]);
+        for (int rowIndex = 1; rowIndex < sheetCheck.maxRows; rowIndex++) {
+          for (int columnIndex = 0;
+              columnIndex < sheetCheck.maxColumns;
+              columnIndex++) {
+            var cell = sheetCheck.cell(Excel.CellIndex.indexByColumnRow(
+                columnIndex: columnIndex, rowIndex: rowIndex));
+            if (columnIndex < 2) {
+              cell.cellStyle = cellBorderStyle;
+            } else {
+              cell.cellStyle = cellDateBorderStyle;
             }
           }
-        });
+        }
+      }
+      for (int rowIndex = 2; rowIndex < sheetTotal.maxRows; rowIndex++) {
+        for (int columnIndex = 0;
+            columnIndex < sheetTotal.maxColumns;
+            columnIndex++) {
+          var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+              columnIndex: columnIndex, rowIndex: rowIndex));
+          if (columnIndex < 6) {
+            cell.cellStyle = cellBorderStyle;
+          } else {
+            cell.cellStyle = cellCheckStyle;
+          }
+        }
+      }
+      for (int rowIndex = 2; rowIndex < sheetTotal.maxRows; rowIndex++) {
+        for (int k = 6; k < sheetTotal.maxColumns; k++) {
+          var cell = sheetTotal.cell(Excel.CellIndex.indexByColumnRow(
+              columnIndex: k, rowIndex: rowIndex));
+          cell.value = Excel.FormulaCellValue(
+              '=IF(AND(NOT(ISNA(MATCH(B${rowIndex + 1}, \'Buổi ${k - 5}\'!B:B, 0))), NOT(ISBLANK(INDEX(\'Buổi ${k - 5}\'!D:D, MATCH(B${rowIndex + 1}, \'Buổi ${k - 5}\'!B:B, 0)))), NOT(ISBLANK(INDEX(\'Buổi ${k - 5}\'!C:C, MATCH(B${rowIndex + 1}, \'Buổi ${k - 5}\'!B:B, 0))))), "x", "")');
+          cell.cellStyle = cellCheckStyle;
+        }
       }
       var fileBytes = excel.encode();
       Uint8List bytes = Uint8List.fromList(fileBytes!);
