@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fe_attendance_app/utils/constants/colors.dart';
 import 'package:fe_attendance_app/utils/constants/sizes.dart';
 import 'package:fe_attendance_app/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  late bool isDark;
   List<Map<String, dynamic>> notifications = [];
 
   @override
@@ -62,6 +64,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -73,6 +76,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             color: Colors.white,
           ),
         ),
+        backgroundColor: AppColors.secondary,
       ),
       body: ListView.builder(
         itemCount: notifications.length,
@@ -106,7 +110,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              color: Colors.white,
+              color: isDark ? AppColors.primaryBackgroundDark : AppColors.primaryBackground,
               child: ListTile(
                 title: Text(notification['title'],
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
