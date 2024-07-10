@@ -105,7 +105,7 @@ class FaceRecognitionController extends GetxController {
     DateTime? d = await GMT.now();
     DateTime now = d!.toLocal();
     const String apiUrl =
-        'http://113.161.88.238:81/'; // Replace with your API URL
+        'http://huflit.drayddns.com:81/'; 
     int attempt = 0;
 
     while (attempt < 3) {
