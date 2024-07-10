@@ -37,11 +37,7 @@ Future<void> main() async {
   if (!kIsWeb) {
     PushNotifications.localNotiInit();
   }
-  final pushNotifications = PushNotifications(); 
-  await pushNotifications.initializePushNotifications();
-  
-
-
+  await PushNotifications().initializePushNotifications();
 
   runApp(const App());
 }

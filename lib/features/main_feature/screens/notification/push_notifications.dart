@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future _firebaseBackgroundMessage(RemoteMessage message) async {
@@ -186,8 +188,7 @@ class PushNotifications {
   }
 
   static void onNotificationTap(NotificationResponse notificationResponse) {
-    navigationKey.currentState!
-        .pushNamed(NotificationScreen.route, arguments: notificationResponse);
+    Get.toNamed(NotificationScreen.route, arguments: notificationResponse);
   }
 
   static Future showSimpleNotification({
