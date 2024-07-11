@@ -152,16 +152,16 @@ class CheckinController extends GetxController {
         .collection(
             'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
         .get()
-        .then((value) {
+        .then((value) async {
       if (value.docs.isEmpty) {
-        _firestore
+        await _firestore
             .collection(_auth.uid)
             .doc(documentSnapshot!.id)
             .collection(
                 'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
             .doc('check_in')
             .set({});
-        _firestore
+        await _firestore
             .collection(_auth.uid)
             .doc(documentSnapshot!.id)
             .collection(
