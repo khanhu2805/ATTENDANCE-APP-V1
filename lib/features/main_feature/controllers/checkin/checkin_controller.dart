@@ -153,23 +153,7 @@ class CheckinController extends GetxController {
             'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
         .get()
         .then((value) {
-      if (value.docs.isNotEmpty) {
-        if (checkin) {
-          documentReference = _firestore
-              .collection(_auth.uid)
-              .doc(documentSnapshot!.id)
-              .collection(
-                  'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
-              .doc('check_in');
-        } else {
-          documentReference = _firestore
-              .collection(_auth.uid)
-              .doc(documentSnapshot!.id)
-              .collection(
-                  'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
-              .doc('check_out');
-        }
-      } else {
+      if (value.docs.isEmpty) {
         _firestore
             .collection(_auth.uid)
             .doc(documentSnapshot!.id)
@@ -184,6 +168,21 @@ class CheckinController extends GetxController {
                 'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
             .doc('check_out')
             .set({});
+      }
+      if (checkin) {
+        documentReference = _firestore
+            .collection(_auth.uid)
+            .doc(documentSnapshot!.id)
+            .collection(
+                'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
+            .doc('check_in');
+      } else {
+        documentReference = _firestore
+            .collection(_auth.uid)
+            .doc(documentSnapshot!.id)
+            .collection(
+                'buoi_${AppFormatter.numberOfWeek(documentSnapshot!.get('start_date').toDate(), dateTime)}')
+            .doc('check_out');
       }
     }, onError: (error) {
       print("Error when start checkin ${error.message}");
