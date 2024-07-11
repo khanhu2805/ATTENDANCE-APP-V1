@@ -5,29 +5,30 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future _firebaseBackgroundMessage(RemoteMessage message) async {
-    if (message.notification != null) {
-      if (kDebugMode) {
-        print("Some notification Received");
-      }
+  if (message.notification != null) {
+    if (kDebugMode) {
+      print("Some notification Received");
     }
   }
+}
 
 class PushNotifications {
   static final _firebaseMessaging = FirebaseMessaging.instance;
   static List<Map<String, dynamic>> notifications = [];
-  static final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigationKey =
+      GlobalKey<NavigatorState>();
 
   PushNotifications() {
-    _loadNotifications(); 
+    _loadNotifications();
   }
-  
+
   Future<void> _loadNotifications() async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? notificationStrings = prefs.getStringList('notifications');
+    final List<String>? notificationStrings =
+        prefs.getStringList('notifications');
 
     if (notificationStrings != null) {
       notifications = notificationStrings
@@ -55,18 +56,10 @@ class PushNotifications {
 
   static Future<void> _saveNotification(
       String title, String body, DateTime time) async {
-    final prefs = await SharedPreferences
-        .getInstance(); 
-    notifications.add({
-      'title': title,
-      'body': body,
-      'time': time.toString()
-    });
+    final prefs = await SharedPreferences.getInstance();
+    notifications.add({'title': title, 'body': body, 'time': time.toString()});
     await prefs.setStringList(
-        'notifications',
-        notifications
-            .map((e) => jsonEncode(e))
-            .toList()); 
+        'notifications', notifications.map((e) => jsonEncode(e)).toList());
   }
 
   void showNotification({required String title, required String body}) {
@@ -113,27 +106,9 @@ class PushNotifications {
   }
 
   Future<void> initializePushNotifications() async {
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        if (kDebugMode) {
-          print("Background Notification Tapped");
-        }
-        navigationKey.currentState!
-            .pushNamed(NotificationScreen.route, arguments: message);
-      }
-    });
-
-    PushNotifications.init();
-    if (!kIsWeb) {
-      PushNotifications.localNotiInit();
-    }
     FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      String payloadData = jsonEncode(message.data);
-      if (kDebugMode) {
-        print("Got a message in foreground");
-      }
       if (message.notification != null) {
         if (kIsWeb) {
           showNotification(
@@ -141,14 +116,12 @@ class PushNotifications {
               body: message.notification!.body!);
         } else {
           PushNotifications.showSimpleNotification(
-              title: message.notification!.title!,
-              body: message.notification!.body!,
-              payload: payloadData);
+            title: message.notification!.title!,
+            body: message.notification!.body!,
+          );
         }
-        if (message.notification != null) {
-          _saveNotification(message.notification?.title ?? '',
-              message.notification?.body ?? '', DateTime.now());
-        }
+        _saveNotification(message.notification?.title ?? '',
+            message.notification?.body ?? '', DateTime.now());
       }
     });
 
@@ -156,32 +129,26 @@ class PushNotifications {
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (message != null) {
-      if (kDebugMode) {
-        print("Launched from terminated state");
-      }
-      Future.delayed(const Duration(seconds: 10), () {
-        navigationKey.currentState!
-            .pushNamed(NotificationScreen.route, arguments: message);
-      });
-      await _saveNotification(
-          message.notification?.title ?? '',
-          message.notification?.body ?? '',
-          DateTime.now());
-
-      navigationKey.currentState!.pushNamed(
-        NotificationScreen.route,
-        arguments: null,
-      ); 
+      navigationKey.currentState!
+          .pushNamed(NotificationScreen.route, arguments: message);
+      await _saveNotification(message.notification?.title ?? '',
+          message.notification?.body ?? '', DateTime.now());
     }
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      navigationKey.currentState!
+          .pushNamed(NotificationScreen.route, arguments: message);
+    });
   }
 
   static Future localNotiInit() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-   
+
     const InitializationSettings initializationSettings =
         InitializationSettings(
-            android: initializationSettingsAndroid,);
+      android: initializationSettingsAndroid,
+    );
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: onNotificationTap,
         onDidReceiveBackgroundNotificationResponse: onNotificationTap);
@@ -194,7 +161,6 @@ class PushNotifications {
   static Future showSimpleNotification({
     required String title,
     required String body,
-    required String payload,
   }) async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails('your channel id', 'your channel name',
@@ -204,7 +170,7 @@ class PushNotifications {
             ticker: 'ticker');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await _flutterLocalNotificationsPlugin
-        .show(0, title, body, notificationDetails, payload: payload);
+    await _flutterLocalNotificationsPlugin.show(
+        0, title, body, notificationDetails);
   }
 }

@@ -30,7 +30,7 @@ class App extends StatelessWidget {
       navigatorKey: navigationKey,
       initialRoute: '/',
       routes: {
-        NotificationScreen.route: (context) => const NotificationScreen(),
+        '/notification_screen': (context) => const NotificationScreen(),
       },
     );
   }
