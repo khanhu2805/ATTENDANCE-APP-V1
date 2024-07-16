@@ -15,6 +15,7 @@ Future _firebaseBackgroundMessage(RemoteMessage message) async {
   }
 }
 
+
 class PushNotifications {
   static final _firebaseMessaging = FirebaseMessaging.instance;
   static List<Map<String, dynamic>> notifications = [];
@@ -54,7 +55,7 @@ class PushNotifications {
     getFCMToken();
   }
 
-  static Future<void> _saveNotification(
+  static Future<void> saveNotification(
       String title, String body, DateTime time) async {
     final prefs = await SharedPreferences.getInstance();
     notifications.add({'title': title, 'body': body, 'time': time.toString()});
@@ -120,7 +121,7 @@ class PushNotifications {
             body: message.notification!.body!,
           );
         }
-        _saveNotification(message.notification?.title ?? '',
+        saveNotification(message.notification?.title ?? '',
             message.notification?.body ?? '', DateTime.now());
       }
     });
@@ -131,7 +132,7 @@ class PushNotifications {
     if (message != null) {
       navigationKey.currentState!
           .pushNamed(NotificationScreen.route, arguments: message);
-      await _saveNotification(message.notification?.title ?? '',
+      await saveNotification(message.notification?.title ?? '',
           message.notification?.body ?? '', DateTime.now());
     }
 
@@ -154,9 +155,25 @@ class PushNotifications {
         onDidReceiveBackgroundNotificationResponse: onNotificationTap);
   }
 
-  static void onNotificationTap(NotificationResponse notificationResponse) {
-    Get.toNamed(NotificationScreen.route, arguments: notificationResponse);
+  static Future<void> onNotificationTap(NotificationResponse notificationResponse) async {
+    RemoteMessage? message = await _getNotificationForLater();
+    Get.toNamed(NotificationScreen.route, arguments: message);
   }
+  
+  static Future<void> _saveNotificationForLater(RemoteMessage message) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('notificationData', jsonEncode(message.data)); 
+}
+
+static Future<RemoteMessage?> _getNotificationForLater() async {
+  final prefs = await SharedPreferences.getInstance();
+  final notificationDataString = prefs.getString('notificationData');
+  if (notificationDataString != null) {
+    await prefs.remove('notificationData');
+    return RemoteMessage.fromMap(jsonDecode(notificationDataString));
+  }
+  return null;
+}
 
   static Future showSimpleNotification({
     required String title,
