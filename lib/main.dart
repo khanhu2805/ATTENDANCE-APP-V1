@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fe_attendance_app/features/main_feature/screens/notification/notification_screen.dart';
+import 'package:fe_attendance_app/features/main_feature/screens/notification/app_state_observer.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/notification/push_notifications.dart';
 import 'package:fe_attendance_app/utils/repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,16 +12,6 @@ import 'app.dart';
 import 'firebase_options.dart';
 
 final navigationKey = GlobalKey<NavigatorState>();
-
-Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
-  // Store the notification data temporarily (e.g., in SharedPreferences)
-  await _saveNotificationForLater(message);
-}
-
-Future<void> _saveNotificationForLater(RemoteMessage message) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('notificationData', jsonEncode(message.data));
-}
 
 Future<RemoteMessage?> _getNotificationForLater() async {
   final prefs = await SharedPreferences.getInstance();
@@ -49,12 +39,10 @@ Future<void> main() async {
   }
 
   //Notification
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await PushNotifications.init();
   await PushNotifications.localNotiInit();
   PushNotifications().initializePushNotifications();
-  // Retrieve the stored notification data, if any
   RemoteMessage? initialMessage = await _getNotificationForLater();
   WidgetsBinding.instance.addObserver(AppStateObserver());
   runApp(
@@ -64,27 +52,4 @@ Future<void> main() async {
   runApp(const App());
 }
 
-class AppStateObserver extends WidgetsBindingObserver {
-  static List<Map<String, dynamic>> notifications = [];
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // Kiểm tra xem ứng dụng có được mở từ thông báo hay không
-      FirebaseMessaging.instance.getInitialMessage().then((message) async {
-        if (message != null) {
-          await saveNotification(message.notification?.title ?? '',
-              message.notification?.body ?? '', DateTime.now());
-          navigationKey.currentState
-              ?.pushNamed(NotificationScreen.route, arguments: message);
-        }
-      });
-    }
-  }
-  static Future<void> saveNotification(
-      String title, String body, DateTime time) async {
-    final prefs = await SharedPreferences.getInstance();
-    notifications.add({'title': title, 'body': body, 'time': time.toString()});
-    await prefs.setStringList(
-        'notifications', notifications.map((e) => jsonEncode(e)).toList());
-  }
-}
+

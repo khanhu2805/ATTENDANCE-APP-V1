@@ -15,12 +15,13 @@ Future _firebaseBackgroundMessage(RemoteMessage message) async {
   }
 }
 
-
 class PushNotifications {
   static final _firebaseMessaging = FirebaseMessaging.instance;
   static List<Map<String, dynamic>> notifications = [];
   static final GlobalKey<NavigatorState> navigationKey =
       GlobalKey<NavigatorState>();
+  static final FlutterLocalNotificationsPlugin
+      _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   PushNotifications() {
     _loadNotifications();
@@ -39,8 +40,6 @@ class PushNotifications {
     }
   }
 
-  static final FlutterLocalNotificationsPlugin
-      _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static Future init() async {
     await _firebaseMessaging.requestPermission(
       alert: true,
@@ -58,7 +57,19 @@ class PushNotifications {
   static Future<void> saveNotification(
       String title, String body, DateTime time) async {
     final prefs = await SharedPreferences.getInstance();
-    notifications.add({'title': title, 'body': body, 'time': time.toString()});
+    final List<String>? notificationStrings =
+        prefs.getStringList('notifications');
+    if (notificationStrings != null) {
+      notifications = notificationStrings
+          .map((notificationString) => jsonDecode(notificationString))
+          .toList()
+          .cast<Map<String, dynamic>>();
+    }
+    notifications.add({
+      'title': title,
+      'body': body,
+      'time': time.toString()
+    }); //Thêm vào danh sách
     await prefs.setStringList(
         'notifications', notifications.map((e) => jsonEncode(e)).toList());
   }
@@ -155,25 +166,21 @@ class PushNotifications {
         onDidReceiveBackgroundNotificationResponse: onNotificationTap);
   }
 
-  static Future<void> onNotificationTap(NotificationResponse notificationResponse) async {
+  static Future<void> onNotificationTap(
+      NotificationResponse notificationResponse) async {
     RemoteMessage? message = await _getNotificationForLater();
     Get.toNamed(NotificationScreen.route, arguments: message);
   }
-  
-  static Future<void> _saveNotificationForLater(RemoteMessage message) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('notificationData', jsonEncode(message.data)); 
-}
 
-static Future<RemoteMessage?> _getNotificationForLater() async {
-  final prefs = await SharedPreferences.getInstance();
-  final notificationDataString = prefs.getString('notificationData');
-  if (notificationDataString != null) {
-    await prefs.remove('notificationData');
-    return RemoteMessage.fromMap(jsonDecode(notificationDataString));
+  static Future<RemoteMessage?> _getNotificationForLater() async {
+    final prefs = await SharedPreferences.getInstance();
+    final notificationDataString = prefs.getString('notificationData');
+    if (notificationDataString != null) {
+      await prefs.remove('notificationData');
+      return RemoteMessage.fromMap(jsonDecode(notificationDataString));
+    }
+    return null;
   }
-  return null;
-}
 
   static Future showSimpleNotification({
     required String title,
