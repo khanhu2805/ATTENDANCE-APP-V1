@@ -42,6 +42,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await PushNotifications.init();
   await PushNotifications.localNotiInit();
+  await FirebaseMessaging.instance.subscribeToTopic("GwSyv40uvpeubhQ08I98UheTSUI3");
   PushNotifications().initializePushNotifications();
   RemoteMessage? initialMessage = await _getNotificationForLater();
   WidgetsBinding.instance.addObserver(AppStateObserver());
