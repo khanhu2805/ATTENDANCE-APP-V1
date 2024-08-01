@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:fe_attendance_app/features/main_feature/screens/notification/app_state_observer.dart';
 import 'package:fe_attendance_app/features/main_feature/screens/notification/push_notifications.dart';
 import 'package:fe_attendance_app/utils/repository/authentication_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,16 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await PushNotifications.init();
   await PushNotifications.localNotiInit();
-  await FirebaseMessaging.instance.subscribeToTopic("GwSyv40uvpeubhQ08I98UheTSUI3");
+
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    final uid = user.uid;
+    print('User UID: $uid');
+    await FirebaseMessaging.instance.subscribeToTopic(uid);
+  } else {
+    print('No user is currently signed in.');
+  }
+  
   PushNotifications().initializePushNotifications();
   RemoteMessage? initialMessage = await _getNotificationForLater();
   WidgetsBinding.instance.addObserver(AppStateObserver());
