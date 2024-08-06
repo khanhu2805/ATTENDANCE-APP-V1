@@ -282,7 +282,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.done) {
-                                if (snapshot.data!.docs.isEmpty) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: Text(
+                                      'Tài khoản chưa có thông tin ca học',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontSize:
+                                                THelperFunctions.screenWidth() *
+                                                    0.04,
+                                          ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+                                } else if (snapshot.data!.docs.isEmpty) {
                                   return Center(
                                     child: TAnimationLoaderWidget(
                                       height:
@@ -340,8 +355,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   THelperFunctions
                                                                           .screenWidth() /
                                                                       30),
-                                                      backgroundColor:
-                                                          isDark ? AppColors.dark : AppColors.white,
+                                                      backgroundColor: isDark
+                                                          ? AppColors.dark
+                                                          : AppColors.white,
                                                       shape:
                                                           RoundedRectangleBorder(
                                                               borderRadius:
