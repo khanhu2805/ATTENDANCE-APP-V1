@@ -105,7 +105,7 @@ class FaceRecognitionController extends GetxController {
     DateTime? d = await GMT.now();
     DateTime now = d!.toLocal();
     const String apiUrl =
-        'http://huflit.drayddns.com:81/'; 
+        ' https://9511-123-21-240-120.ngrok-free.app'; 
     int attempt = 0;
 
     while (attempt < 3) {
@@ -120,7 +120,7 @@ class FaceRecognitionController extends GetxController {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: jsonEncode({'image': base64Image}),
+          body: jsonEncode({'student_code': checkinController.studentCode.value,'image': base64Image}),
         );
         if (response.statusCode == 200) {
           print('Image sent successfully');
