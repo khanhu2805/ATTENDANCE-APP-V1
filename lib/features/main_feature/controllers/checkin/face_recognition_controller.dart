@@ -48,7 +48,8 @@ class FaceRecognitionController extends GetxController {
           imageFormatGroup: ImageFormatGroup.jpeg,
         );
         await cameraController!.initialize();
-        await cameraController?.setFlashMode(checkinController.flashing.value? FlashMode.torch: FlashMode.off);
+        await cameraController?.setFlashMode(
+            checkinController.flashing.value ? FlashMode.torch : FlashMode.off);
         loading.value = false;
       }
     } catch (e) {
@@ -74,7 +75,8 @@ class FaceRecognitionController extends GetxController {
 
   void toggleFlash() {
     if (!checkinController.facing) {
-      updateFlashMode(checkinController.flashing.value? FlashMode.off :FlashMode.torch);
+      updateFlashMode(
+          checkinController.flashing.value ? FlashMode.off : FlashMode.torch);
       checkinController.flashing.value = !checkinController.flashing.value;
     }
   }
@@ -104,8 +106,7 @@ class FaceRecognitionController extends GetxController {
   Future<void> sendImageToAPI() async {
     DateTime? d = await GMT.now();
     DateTime now = d!.toLocal();
-    const String apiUrl =
-        ' https://9511-123-21-240-120.ngrok-free.app'; 
+    const String apiUrl = 'https://5e26-123-21-240-120.ngrok-free.app';
     int attempt = 0;
 
     while (attempt < 3) {
@@ -120,7 +121,10 @@ class FaceRecognitionController extends GetxController {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: jsonEncode({'student_code': checkinController.studentCode.value,'image': base64Image}),
+          body: jsonEncode({
+            'student_code': checkinController.studentCode.value,
+            'image': base64Image
+          }),
         );
         if (response.statusCode == 200) {
           print('Image sent successfully');
@@ -201,7 +205,7 @@ class FaceRecognitionController extends GetxController {
             transitionDuration: const Duration(milliseconds: 200),
             barrierDismissible: false,
           );
-          
+
           return;
         }
       } catch (e) {
