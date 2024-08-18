@@ -106,7 +106,7 @@ class FaceRecognitionController extends GetxController {
   Future<void> sendImageToAPI() async {
     DateTime? d = await GMT.now();
     DateTime now = d!.toLocal();
-    const String apiUrl = 'https://88c2-42-119-182-33.ngrok-free.app';
+    const String apiUrl = 'http://huflit.drayddns.com:81/';
     int attempt = 0;
 
     while (attempt < 3) {
